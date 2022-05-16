@@ -3,14 +3,16 @@ import {
   filterComponent,
   sortComponent,
   editFormComponent,
-  cardsListComponent,
+  infoComponent,
   cardComponent,
-} from './components/components';
+} from "./components/components";
 
-const tripControls = document.querySelector('.trip-controls');
-const tripEvents = document.querySelector('.trip-events');
+const tripMain = document.querySelector(".trip-main");
+const tripEventsList = document.querySelector(".trip-events__list");
+const tripControls = document.querySelector(".trip-controls__filters");
+const tripEvents = document.querySelector(".trip-events");
 
-const render = (container, adjHtml, position = 'beforeEnd') => {
+const render = (container, adjHtml, position = "beforeEnd") => {
   if (container) {
     container.insertAdjacentHTML(position, adjHtml);
   } else {
@@ -18,11 +20,9 @@ const render = (container, adjHtml, position = 'beforeEnd') => {
   }
 };
 
+render(tripMain, infoComponent(), "afterBegin");
 render(tripControls, navComponent());
 render(tripControls, filterComponent());
 render(tripEvents, sortComponent());
-render(tripEvents, editFormComponent());
-render(tripEvents, cardsListComponent());
-
-const tripEventList = document.querySelector('.trip-events__list');
-render(tripEventList, cardComponent());
+render(tripEventsList, editFormComponent());
+render(tripEventsList, cardComponent());
