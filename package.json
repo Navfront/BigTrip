@@ -12,6 +12,6 @@
     "eslint-config-htmlacademy": "0.5.2"
   },
   "engines": {
-    "node": "10"
+    "node": "18.1.0"
   }
 }
