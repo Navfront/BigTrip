@@ -1,19 +1,30 @@
-const filterComponent = () => {
+const getFilter = (filterName, isChecked = false) => {
+  return `
+  <div class="trip-filters__filter">
+  <input id="${
+    filterName ? "filter-" + filterName : null
+  }" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${
+    filterName ? filterName : null
+  }" ${isChecked ? "checked" : ""}>
+  <label class="trip-filters__filter-label" for="${
+    filterName ? "filter-" + filterName : null
+  }">${filterName ? filterName : "noName"}</label>
+  </div>
+`;
+};
+
+const filterComponent = (filters) => {
   return `<form class="trip-filters" action="#" method="get">
-  <div class="trip-filters__filter">
-    <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything">
-    <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
-  </div>
 
-  <div class="trip-filters__filter">
-    <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
-    <label class="trip-filters__filter-label" for="filter-future">Future</label>
-  </div>
-
-  <div class="trip-filters__filter">
-    <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past" checked>
-    <label class="trip-filters__filter-label" for="filter-past">Past</label>
-  </div>
+  ${
+    filters && filters.length > 0
+      ? filters
+          .map((it, index) => {
+            return getFilter(it, index === 0);
+          })
+          .join("\n")
+      : ""
+  }
 
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
