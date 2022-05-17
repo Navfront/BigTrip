@@ -7,6 +7,7 @@ import {
   cardComponent,
 } from "./components/components";
 import { FILTERS } from "./mock/filters";
+import { SORTS } from "./mock/sorts";
 
 const tripMain = document.querySelector(".trip-main");
 const tripEventsList = document.querySelector(".trip-events__list");
@@ -24,6 +25,6 @@ const render = (container, adjHtml, position = "beforeEnd") => {
 render(tripMain, infoComponent(), "afterBegin");
 render(tripControls, navComponent());
 render(tripControls, filterComponent(FILTERS));
-render(tripEvents, sortComponent());
+render(tripEvents, sortComponent(SORTS));
 render(tripEventsList, pointEditorComponent());
 render(tripEventsList, cardComponent());
