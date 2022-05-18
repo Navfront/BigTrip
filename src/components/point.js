@@ -3,7 +3,7 @@ import {
   humanizeDateDueDate,
   humanizeFromDueDate,
   humanizeToDueDate,
-} from "../../utils/utils";
+} from "../utils/utils";
 
 const getEventOffer = (offer) => {
   const { title, price } = offer;

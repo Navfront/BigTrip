@@ -1,18 +1,15 @@
-import {
-  navComponent,
-  filterComponent,
-  sortComponent,
-  pointEditorComponent,
-  infoComponent,
-  pointComponent,
-  pointsListComponent,
-} from "./components/components";
 import { FILTERS } from "./mock/filters";
 import { SORTS } from "./mock/sorts";
 import { POINT } from "./mock/events";
+import infoComponent from "./components/info";
+import navComponent from "./components/nav";
+import filterComponent from "./components/filter";
+import sortComponent from "./components/sort";
+import pointsListComponent from "./components/points-list";
+import pointComponent from "./components/point";
+import pointEditorComponent from "./components/point-editor";
 
 const tripMain = document.querySelector(".trip-main");
-
 const tripControls = document.querySelector(".trip-controls__filters");
 const tripEvents = document.querySelector(".trip-events");
 
