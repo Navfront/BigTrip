@@ -28,8 +28,7 @@ const getPointTemplate = (point = {}) => {
     destination,
   } = point;
 
-  return `<li class="trip-events__item">
-  <div class="event">
+  return `<div class="event">
     <time class="event__date" datetime="${event_date}">${humanizeDateDueDate(
     event_date
   )}</time>
@@ -86,7 +85,7 @@ const getPointTemplate = (point = {}) => {
       <span class="visually-hidden">Open event</span>
     </button>
   </div>
-</li>`;
+`;
 };
 
 export default class PointComponent {
@@ -103,6 +102,7 @@ export default class PointComponent {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
+
     return this._element;
   }
 
