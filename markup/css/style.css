@@ -1,36 +1,41 @@
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
-  src: local('Montserrat Regular'), local('Montserrat-Regular'), url('../fonts/Montserrat-Regular.woff2') format('woff2');
+  src: local("Montserrat Regular"), local("Montserrat-Regular"),
+    url("../fonts/Montserrat-Regular.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 500;
-  src: local('Montserrat Medium'), local('Montserrat-Medium'), url('../fonts/Montserrat-Medium.woff2') format('woff2');
+  src: local("Montserrat Medium"), local("Montserrat-Medium"),
+    url("../fonts/Montserrat-Medium.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 600;
-  src: local('Montserrat SemiBold'), local('Montserrat-SemiBold'), url('../fonts/Montserrat-SemiBold.woff2') format('woff2');
+  src: local("Montserrat SemiBold"), local("Montserrat-SemiBold"),
+    url("../fonts/Montserrat-SemiBold.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 700;
-  src: local('Montserrat Bold'), local('Montserrat-Bold'), url('../fonts/Montserrat-Bold.woff2') format('woff2');
+  src: local("Montserrat Bold"), local("Montserrat-Bold"),
+    url("../fonts/Montserrat-Bold.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 800;
-  src: local('Montserrat ExtraBold'), local('Montserrat-ExtraBold'), url('../fonts/Montserrat-ExtraBold.woff2') format('woff2');
+  src: local("Montserrat ExtraBold"), local("Montserrat-ExtraBold"),
+    url("../fonts/Montserrat-ExtraBold.woff2") format("woff2");
 }
 
 html {
@@ -179,8 +184,8 @@ main {
 }
 
 @media (-webkit-min-device-pixel-ratio: 1.5),
-(min-resolution: 144dpi),
-(min-resolution: 1.5dppx) {
+  (min-resolution: 144dpi),
+  (min-resolution: 1.5dppx) {
   .page-header {
     background-image: url("../img/header-bg@2x.png");
   }
@@ -369,12 +374,12 @@ main {
   opacity: 0.6;
 }
 
-.trip-filters__filter-input:checked+.trip-filters__filter-label {
+.trip-filters__filter-input:checked + .trip-filters__filter-label {
   opacity: 1;
   cursor: default;
 }
 
-.trip-filters__filter-input:disabled+.trip-filters__filter-label {
+.trip-filters__filter-input:disabled + .trip-filters__filter-label {
   opacity: 0.4;
   cursor: default;
 }
@@ -475,13 +480,13 @@ main {
   color: #000000;
 }
 
-.trip-sort__input:checked+.trip-sort__btn {
+.trip-sort__input:checked + .trip-sort__btn {
   position: relative;
   color: #000000;
   border-color: #000000;
 }
 
-.trip-sort__input:checked+.trip-sort__btn::before {
+.trip-sort__input:checked + .trip-sort__btn::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -494,11 +499,11 @@ main {
   transform: translateY(-50%);
 }
 
-.trip-sort__input:disabled+.trip-sort__btn {
+.trip-sort__input:disabled + .trip-sort__btn {
   opacity: 0.6;
 }
 
-.trip-sort__input:disabled+.trip-sort__btn:hover {
+.trip-sort__input:disabled + .trip-sort__btn:hover {
   color: #b4b4b4;
   cursor: default;
 }
@@ -594,7 +599,7 @@ main {
   border-radius: 4px;
 }
 
-.event__type-toggle:checked+.event__type-list {
+.event__type-toggle:checked + .event__type-list {
   display: block;
 }
 
@@ -657,6 +662,10 @@ main {
   background-image: url("../img/icons/ship.png");
 }
 
+.event__type-label--transport::before {
+  background-image: url("../img/icons/transport.png");
+}
+
 .event__type-label--drive::before {
   background-image: url("../img/icons/drive.png");
 }
@@ -681,12 +690,12 @@ main {
   color: #ffd054;
 }
 
-.event__type-input:checked+.event__type-label {
+.event__type-input:checked + .event__type-label {
   color: #000000;
   background-color: #ffd054;
 }
 
-.event__type-input:checked+.event__type-label::after {
+.event__type-input:checked + .event__type-label::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -1008,7 +1017,7 @@ main {
   text-transform: capitalize;
 }
 
-.event__offer-checkbox:checked+.event__offer-label {
+.event__offer-checkbox:checked + .event__offer-label {
   background-color: #0d8ae4;
 }
 

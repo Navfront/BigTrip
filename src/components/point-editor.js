@@ -1,14 +1,11 @@
 import {
-  EVENTS_TYPE,
-  ALL_POINTS,
-  ALL_DESTINATIONS_BY_TYPE,
-  OFFERS_BY_DESTINATIONS,
-  IMAGES_SRC,
+  EVENT_TYPES,
+  getDestinationByTypes,
+  getOffersByType,
+  getPicturesByDestination,
+  getDescriptionOfDestination,
 } from "../mock/events";
-const eventTypes = EVENTS_TYPE;
-const points = ALL_POINTS;
-const destinationsByType = ALL_DESTINATIONS_BY_TYPE;
-const offersByDestinations = OFFERS_BY_DESTINATIONS;
+const eventTypes = EVENT_TYPES;
 
 const getEventTypeItemTemplate = (eventType) => {
   return `
@@ -47,23 +44,25 @@ const getDestinationImage = (imgSrc) => {
 };
 
 const pointEditorComponent = () => {
-  let currentType = eventTypes[5];
-  let currentPoint = points[1];
-  let currentDestinationsByType = destinationsByType[0];
-  let currentDestination = currentDestinationsByType[currentType][1];
-  let currentDueDateFrom = "19/03/19 00:00";
-  let currentDueDateTo = "19/03/19 00:00";
-  let currentDescription =
-    "Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.";
-  let hasOffers = true;
-  let hasDestinations = true;
+  let choosenType = eventTypes[0];
+  let choosenDestination = "geneva";
+  let choosenDueDateFrom = "19/03/19 00:00";
+  let choosenDueDateTo = "19/03/19 00:00";
+
+  let currentDestinationOptions = getDestinationByTypes(choosenType);
+  let currentOffers = getOffersByType(choosenType);
+
+  let currentDescription = getDescriptionOfDestination(choosenDestination);
+
+  let hasOffers = currentOffers.length > 0;
+  let hasDestinations = currentDestinationOptions.length > 0;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
         <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/${currentType}.png" alt="Event type icon">
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${choosenType}.png" alt="Event type icon">
       </label>
       <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -86,7 +85,7 @@ const pointEditorComponent = () => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
       <datalist id="destination-list-1">
-      ${currentDestinationsByType[currentType]
+      ${currentDestinationOptions
         .map((it) => {
           return getDestinationOptionTemplate(it);
         })
@@ -96,10 +95,10 @@ const pointEditorComponent = () => {
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${currentDueDateFrom}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${choosenDueDateFrom}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${currentDueDateTo}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${choosenDueDateTo}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -107,9 +106,7 @@ const pointEditorComponent = () => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${
-        currentPoint.base_price
-      }">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${0}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -124,8 +121,8 @@ const pointEditorComponent = () => {
 
 ${
   hasOffers
-    ? OFFERS_BY_DESTINATIONS.find((it) => typeof it["geneva"] !== "undefined")
-        ["geneva"].map((it, index) => {
+    ? currentOffers
+        .map((it, index) => {
           return getOffer(it, index === 0 || index === 1);
         })
         .join("")
@@ -149,7 +146,9 @@ ${
 
          ${
            hasDestinations
-             ? IMAGES_SRC.map((it) => getDestinationImage(it))
+             ? getPicturesByDestination(choosenDestination).map((it) =>
+                 getDestinationImage(it.src)
+               )
              : ""
          }
          ${hasDestinations ? "</div></div></section>" : ""}
