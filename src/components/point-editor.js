@@ -5,6 +5,7 @@ import {
   getPicturesByDestination,
   getDescriptionOfDestination,
 } from "../mock/events";
+import { createElement } from "../utils/utils";
 const eventTypes = EVENT_TYPES;
 
 const getEventTypeItemTemplate = (eventType) => {
@@ -43,17 +44,15 @@ const getDestinationImage = (imgSrc) => {
   return `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 };
 
-const pointEditorComponent = () => {
-  let choosenType = eventTypes[0];
-  let choosenDestination = "geneva";
-  let choosenDueDateFrom = "19/03/19 00:00";
-  let choosenDueDateTo = "19/03/19 00:00";
-
-  let currentDestinationOptions = getDestinationByTypes(choosenType);
-  let currentOffers = getOffersByType(choosenType);
-
-  let currentDescription = getDescriptionOfDestination(choosenDestination);
-
+const getPointEditorTemplate = (
+  choosenType = eventTypes[0],
+  choosenDestination = "geneva",
+  choosenDueDateFrom = "19/03/19 00:00",
+  choosenDueDateTo = "19/03/19 00:00",
+  currentDestinationOptions = getDestinationByTypes(choosenType),
+  currentOffers = getOffersByType(choosenType),
+  currentDescription = getDescriptionOfDestination(choosenDestination)
+) => {
   let hasOffers = currentOffers.length > 0;
   let hasDestinations = currentDestinationOptions.length > 0;
 
@@ -156,4 +155,46 @@ ${
 </form>`;
 };
 
-export default pointEditorComponent;
+export default class PointEditorComponent {
+  constructor(
+    choosenType,
+    choosenDestination,
+    choosenDueDateFrom,
+    choosenDueDateTo,
+    currentDestinationOptions,
+    currentOffers,
+    currentDescription
+  ) {
+    this._choosenType = choosenType;
+    this._choosenDestination = choosenDestination;
+    this._choosenDueDateFrom = choosenDueDateFrom;
+    this._choosenDueDateTo = choosenDueDateTo;
+    this._currentDestinationOptions = currentDestinationOptions;
+    this._currentOffers = currentOffers;
+    this._currentDescription = currentDescription;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return getPointEditorTemplate(
+      this._choosenType,
+      this._choosenDestination,
+      this._choosenDueDateFrom,
+      this._choosenDueDateTo,
+      this._currentDestinationOptions,
+      this._currentOffers,
+      this._currentDescription
+    );
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

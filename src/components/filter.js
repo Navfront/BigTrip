@@ -1,3 +1,5 @@
+import { createElement } from "./../utils/utils";
+
 const getFilter = (filterName, isChecked = false) => {
   return `
   <div class="trip-filters__filter">
@@ -13,9 +15,8 @@ const getFilter = (filterName, isChecked = false) => {
 `;
 };
 
-const filterComponent = (filters) => {
+const getFiltersTemplate = (filters) => {
   return `<form class="trip-filters" action="#" method="get">
-
   ${
     filters && filters.length > 0
       ? filters
@@ -25,9 +26,28 @@ const filterComponent = (filters) => {
           .join("\n")
       : ""
   }
-
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
 };
 
-export default filterComponent;
+export default class FilterComponent {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return getFiltersTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-const infoComponent = () => {
+import { createElement } from "./../utils/utils";
+
+const getInfoTemplate = () => {
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
@@ -12,4 +14,22 @@ const infoComponent = () => {
 </section>`;
 };
 
-export default infoComponent;
+export default class InfoComponent {
+  constructor() {
+    this._element = null;
+  }
+  getTemplate() {
+    return getInfoTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(getInfoTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

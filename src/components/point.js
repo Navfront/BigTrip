@@ -1,4 +1,5 @@
 import {
+  createElement,
   getDiffTime,
   humanizeDateDueDate,
   humanizeFromDueDate,
@@ -16,7 +17,7 @@ const getEventOffer = (offer) => {
 `;
 };
 
-const pointComponent = (point = {}) => {
+const getPointTemplate = (point = {}) => {
   const {
     type,
     base_price,
@@ -38,7 +39,7 @@ const pointComponent = (point = {}) => {
       }.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${type ? type : "?"} ${
-    destination ? destination.name : "???"
+    destination ? destination : "???"
   }</h3>
     <div class="event__schedule">
       <p class="event__time">
@@ -88,4 +89,24 @@ const pointComponent = (point = {}) => {
 </li>`;
 };
 
-export default pointComponent;
+export default class PointComponent {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return getPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
