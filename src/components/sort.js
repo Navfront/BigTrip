@@ -1,3 +1,5 @@
+import { createElement } from "./../utils/utils";
+
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   return `
   <div class="trip-sort__item  ${
@@ -15,9 +17,9 @@ const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   `;
 };
 
-const sortComponent = (sorts) => {
+const getSortTemplate = (sorts) => {
   return sorts
-    ? ` <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+    ? `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${sorts
     .map((it) => {
       return getSortItem(it.sortName, it.isDisabled, it.isChecked);
@@ -28,4 +30,25 @@ const sortComponent = (sorts) => {
     : "";
 };
 
-export default sortComponent;
+export default class SortComponent {
+  constructor(sorts) {
+    this._element = null;
+    this._sorts = sorts;
+  }
+
+  getTemplate() {
+    return getSortTemplate(this._sorts);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
