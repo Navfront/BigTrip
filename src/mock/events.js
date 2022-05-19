@@ -204,7 +204,7 @@ export const POINT = {
       price: 50,
     },
   ],
-  type: "bus",
+  type: "taxi",
 };
 
 export const EVENT_TYPES = Object.keys(EVENTS);
@@ -239,4 +239,64 @@ export const IMAGES_SRC = [
   "img/photos/3.jpg",
   "img/photos/4.jpg",
   "img/photos/5.jpg",
+];
+
+export const TEST_POINTS = [
+  {
+    base_price: 1100,
+    date_from: "2019-07-10T22:55:56.845Z",
+    date_to: "2019-07-11T11:22:13.375Z",
+    destination: "amsterdam",
+    id: "0",
+    is_favorite: false,
+    offers: [
+      {
+        title: "Choose meal",
+        price: 180,
+      },
+      {
+        title: "Upgrade to comfort class",
+        price: 50,
+      },
+    ],
+    type: "taxi",
+  },
+  {
+    base_price: 4100,
+    date_from: "2019-07-11T22:55:56.845Z",
+    date_to: "2019-07-12T11:22:13.375Z",
+    destination: "geneva",
+    id: "1",
+    is_favorite: true,
+    offers: [
+      {
+        title: "Choose meal",
+        price: 280,
+      },
+      {
+        title: "Upgrade to comfort class",
+        price: 150,
+      },
+    ],
+    type: "train",
+  },
+  {
+    base_price: 2100,
+    date_from: "2019-07-12T22:55:56.845Z",
+    date_to: "2019-07-13T11:22:13.375Z",
+    destination: "chamonix",
+    id: "2",
+    is_favorite: true,
+    offers: [
+      {
+        title: "Choose meal",
+        price: 1280,
+      },
+      {
+        title: "Upgrade to comfort class",
+        price: 4150,
+      },
+    ],
+    type: "flight",
+  },
 ];
