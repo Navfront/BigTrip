@@ -14,13 +14,13 @@ const tripMain = document.querySelector(".trip-main");
 const tripControls = document.querySelector(".trip-controls__filters");
 const tripEvents = document.querySelector(".trip-events");
 
-const render = (container, adjHtml, position = "beforeEnd") => {
-  if (container) {
-    container.insertAdjacentHTML(position, adjHtml);
-  } else {
-    console.log(null);
-  }
-};
+// const render = (container, adjHtml, position = "beforeEnd") => {
+//   if (container) {
+//     container.insertAdjacentHTML(position, adjHtml);
+//   } else {
+//     console.log(null);
+//   }
+// };
 
 const renderComponent = (container, component, position) => {
   switch (position) {
@@ -53,7 +53,6 @@ renderComponent(tripEvents, pointsList.getElement());
 
 const tripEventsList = document.querySelector(".trip-events__list");
 
-// render(tripEventsList, pointEditorComponent());
 const pointEditor = new PointEditorComponent();
 renderComponent(
   tripEventsList,

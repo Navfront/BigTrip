@@ -165,6 +165,7 @@ export default class PointEditorComponent {
     currentOffers,
     currentDescription
   ) {
+    this._choosenType = choosenType;
     this._choosenDestination = choosenDestination;
     this._choosenDueDateFrom = choosenDueDateFrom;
     this._choosenDueDateTo = choosenDueDateTo;
@@ -176,6 +177,7 @@ export default class PointEditorComponent {
 
   getTemplate() {
     return getPointEditorTemplate(
+      this._choosenType,
       this._choosenDestination,
       this._choosenDueDateFrom,
       this._choosenDueDateTo,
