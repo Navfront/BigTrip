@@ -35,7 +35,7 @@ const renderPointItem = (pointData) => {
   const tripEventsList = document.querySelector(".trip-events__list");
   const pointItem = createElement(getPointItemTemplate());
   const eventPoint = new PointComponent(pointData).getElement();
-  const eventPointEditor = new PointEditorComponent().getElement();
+  const eventPointEditor = new PointEditorComponent(pointData).getElement();
   const rollUpButton = eventPoint.querySelector(".event__rollup-btn");
   const saveEditorButton = eventPointEditor.querySelector(".event__save-btn");
 

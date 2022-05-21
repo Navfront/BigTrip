@@ -17,20 +17,13 @@ const getEventOffer = (offer) => {
 `;
 };
 
-const getPointTemplate = (point = {}) => {
-  const {
-    type,
-    base_price,
-    event_date,
-    is_favorite,
-    date_from,
-    date_to,
-    destination,
-  } = point;
+const getPointDataTemplate = (pointData = {}) => {
+  const { type, basePrice, isFavorite, dateFrom, dateTo, destination } =
+    pointData;
 
   return `<div class="event">
-    <time class="event__date" datetime="${event_date}">${humanizeDateDueDate(
-    event_date
+    <time class="event__date" datetime="${dateFrom}">${humanizeDateDueDate(
+    dateFrom
   )}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${
@@ -42,38 +35,38 @@ const getPointTemplate = (point = {}) => {
   }</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="${date_from}">${
-    date_from ? humanizeFromDueDate(date_from) : ""
+        <time class="event__start-time" datetime="${dateFrom}">${
+    dateFrom ? humanizeFromDueDate(dateFrom) : ""
   }</time>
         &mdash;
-        <time class="event__end-time" datetime="${date_to}">${
-    date_to ? humanizeToDueDate(date_to) : ""
+        <time class="event__end-time" datetime="${dateTo}">${
+    dateTo ? humanizeToDueDate(dateTo) : ""
   }</time>
       </p>
-      <p class="event__duration">${getDiffTime(date_from, date_to)}</p>
+      <p class="event__duration">${getDiffTime(dateFrom, dateTo)}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${
-        base_price ? base_price : ""
+        basePrice ? basePrice : ""
       }</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     ${
-      point.offers && point.offers.length > 0
+      pointData.offers && pointData.offers.length > 0
         ? '<ul class="event__selected-offers">'
         : ""
     }
     ${
-      point.offers &&
-      point.offers
+      pointData.offers &&
+      pointData.offers
         .map((it) => {
           return getEventOffer(it);
         })
         .join("")
     }
-      ${point.offers && point.offers.length > 0 ? "</ul>" : ""}
+      ${pointData.offers && pointData.offers.length > 0 ? "</ul>" : ""}
     <button class="event__favorite-btn ${
-      is_favorite ? "event__favorite-btn--active" : ""
+      isFavorite ? "event__favorite-btn--active" : ""
     } " type="button">
       <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -88,14 +81,14 @@ const getPointTemplate = (point = {}) => {
 `;
 };
 
-export default class PointComponent {
-  constructor(point) {
-    this._point = point;
+export default class PointDataComponent {
+  constructor(pointData) {
+    this._pointData = pointData;
     this._element = null;
   }
 
   getTemplate() {
-    return getPointTemplate(this._point);
+    return getPointDataTemplate(this._pointData);
   }
 
   getElement() {

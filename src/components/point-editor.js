@@ -44,15 +44,18 @@ const getDestinationImage = (imgSrc) => {
   return `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 };
 
-const getPointEditorTemplate = (
-  choosenType = eventTypes[0],
-  choosenDestination = "geneva",
-  choosenDueDateFrom = "19/03/19 00:00",
-  choosenDueDateTo = "19/03/19 00:00",
-  currentDestinationOptions = getDestinationByTypes(choosenType),
-  currentOffers = getOffersByType(choosenType),
-  currentDescription = getDescriptionOfDestination(choosenDestination)
-) => {
+const getPointEditorTemplate = (pointData = {}) => {
+  const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
+  let choosenDestination = destination || "geneva";
+  let choosenDueDateFrom = dateFrom;
+  let choosenDueDateTo = dateTo;
+  let choosenType = type || eventTypes[0];
+
+  let currentPrice = basePrice || 0;
+  let currentDestinationOptions = getDestinationByTypes(choosenType);
+  let currentOffers = offers || getOffersByType(choosenType);
+  let currentDescription = getDescriptionOfDestination(choosenDestination);
+
   let hasOffers = currentOffers.length > 0;
   let hasDestinations = currentDestinationOptions.length > 0;
 
@@ -105,7 +108,7 @@ const getPointEditorTemplate = (
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${0}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${currentPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
