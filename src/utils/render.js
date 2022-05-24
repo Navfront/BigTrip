@@ -36,8 +36,6 @@ export const renderPointItem = (pointData) => {
   const eventPoint = point.getElement();
   const pointEditor = new PointEditorComponent(pointData);
   const eventPointEditor = pointEditor.getElement();
-  // const rollUpButton = eventPoint.querySelector(".event__rollup-btn");
-  const saveEditorButton = eventPointEditor.querySelector(".event__save-btn");
 
   const openEditor = () => {
     pointItem.replaceChild(eventPointEditor, eventPoint);
