@@ -1,6 +1,7 @@
 import { getPointItemTemplate } from "./../components/point-item.js";
 import PointComponent from "../components/point.js";
 import PointEditorComponent from "../components/point-editor.js";
+import PointsListComponent from "../components/points-list";
 
 export const POSITION_TYPES = {
   APPEND: "append",
@@ -66,4 +67,20 @@ export const renderPointItem = (pointData) => {
 
   pointItem.append(eventPoint);
   tripEventsList.append(pointItem);
+};
+
+export const renderAllPointItems = (
+  container,
+  pointsData,
+  isLoading = false
+) => {
+  let isEmpty = true;
+  if (pointsData) {
+    if (pointsData.length > 0) isEmpty = false;
+  }
+  const pointsList = new PointsListComponent(isEmpty, isLoading);
+  renderComponent(container, pointsList.getElement());
+  if (!isEmpty) {
+    pointsData.forEach((it) => renderPointItem(it));
+  }
 };
