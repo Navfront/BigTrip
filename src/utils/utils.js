@@ -8,8 +8,11 @@ export const getRandomInteger = (a = 0, b = 1) => {
 };
 
 export const dayNow = dayjs().format(); //WIP
+
 export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format("D MMM");
+
 export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
+
 export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
 
 export const getDiffTime = (date1, date2) => {

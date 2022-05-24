@@ -190,4 +190,16 @@ export default class PointEditorComponent extends AbstractComponent {
       this._currentDescription
     );
   }
+
+  setOnSaveHandler(callback) {
+    this.getElement()
+      .querySelector(".event__save-btn")
+      .addEventListener("click", callback);
+  }
+
+  setOnResetHandler(callback) {
+    this.getElement()
+      .querySelector(".event__reset-btn")
+      .addEventListener("click", callback);
+  }
 }

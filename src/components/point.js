@@ -90,4 +90,10 @@ export default class PointComponent extends AbstractComponent {
   getTemplate() {
     return getPointTemplate(this._pointData);
   }
+
+  setOnRollUpHandler(callback) {
+    this.getElement()
+      .querySelector(".event__rollup-btn")
+      .addEventListener("click", callback);
+  }
 }

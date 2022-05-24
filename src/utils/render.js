@@ -32,9 +32,11 @@ export const renderComponent = (container, component, position) => {
 export const renderPointItem = (pointData) => {
   const tripEventsList = document.querySelector(".trip-events__list");
   const pointItem = createElement(getPointItemTemplate());
-  const eventPoint = new PointComponent(pointData).getElement();
-  const eventPointEditor = new PointEditorComponent(pointData).getElement();
-  const rollUpButton = eventPoint.querySelector(".event__rollup-btn");
+  const point = new PointComponent(pointData);
+  const eventPoint = point.getElement();
+  const pointEditor = new PointEditorComponent(pointData);
+  const eventPointEditor = pointEditor.getElement();
+  // const rollUpButton = eventPoint.querySelector(".event__rollup-btn");
   const saveEditorButton = eventPointEditor.querySelector(".event__save-btn");
 
   const openEditor = () => {
@@ -62,8 +64,8 @@ export const renderPointItem = (pointData) => {
     document.removeEventListener("keydown", onEscKeyDownHandler);
   };
 
-  rollUpButton.onclick = onRollUpClickHandler;
-  saveEditorButton.onclick = onSaveClickHandler;
+  point.setOnRollUpHandler(onRollUpClickHandler);
+  pointEditor.setOnSaveHandler(onSaveClickHandler);
 
   pointItem.append(eventPoint);
   tripEventsList.append(pointItem);
