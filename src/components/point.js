@@ -17,7 +17,7 @@ const getEventOffer = (offer) => {
 `;
 };
 
-const getPointDataTemplate = (pointData = {}) => {
+const getPointTemplate = (pointData = {}) => {
   const { type, basePrice, isFavorite, dateFrom, dateTo, destination } =
     pointData;
 
@@ -81,13 +81,13 @@ const getPointDataTemplate = (pointData = {}) => {
 `;
 };
 
-export default class PointDataComponent extends AbstractComponent {
+export default class PointComponent extends AbstractComponent {
   constructor(pointData) {
     super();
     this._pointData = pointData;
   }
 
   getTemplate() {
-    return getPointDataTemplate(this._pointData);
+    return getPointTemplate(this._pointData);
   }
 }
