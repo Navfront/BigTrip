@@ -1,10 +1,10 @@
 import {
-  createElement,
   getDiffTime,
   humanizeDateDueDate,
   humanizeFromDueDate,
   humanizeToDueDate,
 } from "../utils/utils";
+import AbstractComponent from "./Abstract-component.js";
 
 const getEventOffer = (offer) => {
   const { title, price } = offer;
@@ -81,25 +81,13 @@ const getPointDataTemplate = (pointData = {}) => {
 `;
 };
 
-export default class PointDataComponent {
+export default class PointDataComponent extends AbstractComponent {
   constructor(pointData) {
+    super();
     this._pointData = pointData;
-    this._element = null;
   }
 
   getTemplate() {
     return getPointDataTemplate(this._pointData);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

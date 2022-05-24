@@ -5,7 +5,8 @@ import {
   getPicturesByDestination,
   getDescriptionOfDestination,
 } from "../mock/events";
-import { createElement } from "../utils/utils";
+import AbstractComponent from "./Abstract-component.js";
+
 const eventTypes = EVENT_TYPES;
 
 const getEventTypeItemTemplate = (eventType) => {
@@ -158,7 +159,7 @@ ${
 </form>`;
 };
 
-export default class PointEditorComponent {
+export default class PointEditorComponent extends AbstractComponent {
   constructor(
     choosenType,
     choosenDestination,
@@ -168,6 +169,7 @@ export default class PointEditorComponent {
     currentOffers,
     currentDescription
   ) {
+    super();
     this._choosenType = choosenType;
     this._choosenDestination = choosenDestination;
     this._choosenDueDateFrom = choosenDueDateFrom;
@@ -175,7 +177,6 @@ export default class PointEditorComponent {
     this._currentDestinationOptions = currentDestinationOptions;
     this._currentOffers = currentOffers;
     this._currentDescription = currentDescription;
-    this._element = null;
   }
 
   getTemplate() {
@@ -188,16 +189,5 @@ export default class PointEditorComponent {
       this._currentOffers,
       this._currentDescription
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

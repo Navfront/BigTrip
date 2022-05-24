@@ -1,5 +1,5 @@
 import { FILTERS } from "../mock/filters";
-import { createElement } from "./../utils/utils";
+import AbstractComponent from "./Abstract-component.js";
 
 // Значение отображаемого текста зависит от выбранного фильтра:
 // * Everthing – 'Click New Event to create your first point'
@@ -33,12 +33,12 @@ const getPointsListTemplate = (isEmpty, isLoading, choosenFilter) => {
   return `${result}`;
 };
 
-export default class PointsListComponent {
+export default class PointsListComponent extends AbstractComponent {
   constructor(isEmpty = false, isLoading = false, choosenFilter = FILTERS[0]) {
+    super();
     this._isEmpty = isEmpty;
     this._isLoading = isLoading;
     this._choosenFilter = choosenFilter;
-    this._element = null;
   }
 
   getTemplate() {
@@ -47,16 +47,5 @@ export default class PointsListComponent {
       this._isLoading,
       this._choosenFilter
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
