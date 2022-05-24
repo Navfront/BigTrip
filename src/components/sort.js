@@ -7,7 +7,9 @@ const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   } ">
     <input id="${
       sortName ? "sort-" + sortName : ""
-    }" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${
+    }" class="trip-sort__input  visually-hidden" data-sort-name='${
+    sortName ? sortName : ""
+  }' type="radio" name="trip-sort" value="${
     sortName ? "sort-" + sortName : ""
   }" ${isChecked ? "checked" : ""} ${isDisabled ? "disabled" : ""}>
     <label class="trip-sort__btn" for="${sortName ? "sort-" + sortName : ""}">${
@@ -38,5 +40,13 @@ export default class SortComponent extends AbstractComponent {
 
   getTemplate() {
     return getSortTemplate(this._sorts);
+  }
+
+  setOnSortClickHandler(callback) {
+    this._sorts.forEach((it) => {
+      this.getElement()
+        .querySelector(`#sort-${it.sortName}`)
+        .addEventListener("click", callback);
+    });
   }
 }
