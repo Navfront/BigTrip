@@ -263,8 +263,8 @@ export const TEST_POINTS = [
   },
   {
     basePrice: 4100,
-    dateFrom: "2019-07-11T22:55:56.845Z",
-    dateTo: "2019-07-12T11:22:13.375Z",
+    dateFrom: "2019-07-11T12:55:56.845Z",
+    dateTo: "2019-07-12T11:12:13.375Z",
     destination: "geneva",
     id: "1",
     isFavorite: true,
@@ -283,7 +283,7 @@ export const TEST_POINTS = [
   {
     basePrice: 2100,
     dateFrom: "2019-07-12T22:55:56.845Z",
-    dateTo: "2019-07-13T11:22:13.375Z",
+    dateTo: "2019-07-13T15:22:13.375Z",
     destination: "chamonix",
     id: "2",
     isFavorite: true,

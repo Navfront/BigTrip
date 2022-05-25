@@ -11,7 +11,7 @@ export const SORTS = [
   },
   {
     sortName: "time",
-    isDisabled: true,
+    isDisabled: false,
     isChecked: false,
   },
   {

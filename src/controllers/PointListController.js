@@ -6,10 +6,12 @@ import SortComponent from "../components/sort";
 import { SORTS } from "../mock/sorts";
 import { POSITION_TYPES } from "../utils/render";
 import { createElement } from "../utils/render";
+import { sortPointsData } from "./../utils/sort";
 
 export default class PointListController {
   constructor(container) {
     this._container = container;
+    this._sorts = SORTS.slice();
     this._points = [];
   }
 
@@ -68,7 +70,7 @@ export default class PointListController {
     tripEventsList.append(pointItem);
   }
 
-  render(pointsData, isLoading = false) {
+  render(pointsData, isLoading = false, currentSortType = "day") {
     let isEmpty = true;
     if (pointsData) {
       if (pointsData.length > 0) isEmpty = false;
@@ -77,11 +79,25 @@ export default class PointListController {
     //обработчик клика по сортировке
     const onSortClickHandler = (evt) => {
       const sortType = evt.currentTarget.dataset.sortName;
-      console.log(sortType);
+      let sortedPointsData = pointsData;
+      if (currentSortType !== sortType) {
+        this._sorts.forEach((it) => {
+          if (it.sortName === currentSortType) {
+            it.isChecked = false;
+          }
+          if (it.sortName === sortType) {
+            it.isChecked = true;
+          }
+        });
+        sortedPointsData = sortPointsData(pointsData, sortType);
+        this._container.innerHTML = "";
+        // второй ререндер
+        this.render(sortedPointsData, false, sortType);
+      }
     };
 
     //рендерим сортировку
-    const sort = new SortComponent(SORTS);
+    const sort = new SortComponent(this._sorts);
     this.#renderComponent(this._container, sort.getElement());
     sort.setOnSortClickHandler(onSortClickHandler);
 
