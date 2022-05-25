@@ -1,10 +1,5 @@
 import dayjs from "dayjs";
 
-export const POSITION_TYPES = {
-  APPEND: "append",
-  PREPEND: "prepend",
-};
-
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -12,8 +7,12 @@ export const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
+export const dayNow = dayjs().format(); //WIP
+
 export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format("D MMM");
+
 export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
+
 export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
 
 export const getDiffTime = (date1, date2) => {
@@ -30,10 +29,4 @@ export const getDiffTime = (date1, date2) => {
     diffTime = `${day}D ${hour}H`;
   }
   return diffTime;
-};
-
-export const createElement = (template) => {
-  const createdElement = document.createElement("div");
-  createdElement.innerHTML = template;
-  return createdElement.firstChild;
 };

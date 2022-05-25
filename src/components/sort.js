@@ -1,4 +1,4 @@
-import { createElement } from "./../utils/utils";
+import AbstractComponent from "./Abstract-component";
 
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   return `
@@ -7,7 +7,9 @@ const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   } ">
     <input id="${
       sortName ? "sort-" + sortName : ""
-    }" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${
+    }" class="trip-sort__input  visually-hidden" data-sort-name='${
+    sortName ? sortName : ""
+  }' type="radio" name="trip-sort" value="${
     sortName ? "sort-" + sortName : ""
   }" ${isChecked ? "checked" : ""} ${isDisabled ? "disabled" : ""}>
     <label class="trip-sort__btn" for="${sortName ? "sort-" + sortName : ""}">${
@@ -30,9 +32,9 @@ const getSortTemplate = (sorts) => {
     : "";
 };
 
-export default class SortComponent {
+export default class SortComponent extends AbstractComponent {
   constructor(sorts) {
-    this._element = null;
+    super();
     this._sorts = sorts;
   }
 
@@ -40,15 +42,11 @@ export default class SortComponent {
     return getSortTemplate(this._sorts);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setOnSortClickHandler(callback) {
+    this._sorts.forEach((it) => {
+      this.getElement()
+        .querySelector(`#sort-${it.sortName}`)
+        .addEventListener("click", callback);
+    });
   }
 }

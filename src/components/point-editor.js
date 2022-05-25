@@ -5,7 +5,8 @@ import {
   getPicturesByDestination,
   getDescriptionOfDestination,
 } from "../mock/events";
-import { createElement } from "../utils/utils";
+import AbstractComponent from "./Abstract-component.js";
+
 const eventTypes = EVENT_TYPES;
 
 const getEventTypeItemTemplate = (eventType) => {
@@ -44,15 +45,18 @@ const getDestinationImage = (imgSrc) => {
   return `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 };
 
-const getPointEditorTemplate = (
-  choosenType = eventTypes[0],
-  choosenDestination = "geneva",
-  choosenDueDateFrom = "19/03/19 00:00",
-  choosenDueDateTo = "19/03/19 00:00",
-  currentDestinationOptions = getDestinationByTypes(choosenType),
-  currentOffers = getOffersByType(choosenType),
-  currentDescription = getDescriptionOfDestination(choosenDestination)
-) => {
+const getPointEditorTemplate = (pointData = {}) => {
+  const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
+  let choosenDestination = destination || "geneva";
+  let choosenDueDateFrom = dateFrom;
+  let choosenDueDateTo = dateTo;
+  let choosenType = type || eventTypes[0];
+
+  let currentPrice = basePrice || 0;
+  let currentDestinationOptions = getDestinationByTypes(choosenType);
+  let currentOffers = offers || getOffersByType(choosenType);
+  let currentDescription = getDescriptionOfDestination(choosenDestination);
+
   let hasOffers = currentOffers.length > 0;
   let hasDestinations = currentDestinationOptions.length > 0;
 
@@ -105,7 +109,7 @@ const getPointEditorTemplate = (
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${0}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${currentPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -155,7 +159,7 @@ ${
 </form>`;
 };
 
-export default class PointEditorComponent {
+export default class PointEditorComponent extends AbstractComponent {
   constructor(
     choosenType,
     choosenDestination,
@@ -165,6 +169,7 @@ export default class PointEditorComponent {
     currentOffers,
     currentDescription
   ) {
+    super();
     this._choosenType = choosenType;
     this._choosenDestination = choosenDestination;
     this._choosenDueDateFrom = choosenDueDateFrom;
@@ -172,7 +177,6 @@ export default class PointEditorComponent {
     this._currentDestinationOptions = currentDestinationOptions;
     this._currentOffers = currentOffers;
     this._currentDescription = currentDescription;
-    this._element = null;
   }
 
   getTemplate() {
@@ -187,14 +191,15 @@ export default class PointEditorComponent {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  setOnSaveHandler(callback) {
+    this.getElement()
+      .querySelector(".event__save-btn")
+      .addEventListener("click", callback);
   }
 
-  removeElement() {
-    this._element = null;
+  setOnResetHandler(callback) {
+    this.getElement()
+      .querySelector(".event__reset-btn")
+      .addEventListener("click", callback);
   }
 }

@@ -132,7 +132,7 @@ export const EVENTS = {
 
 export const EVENT_DESTINATIONS = {
   chamonix: {
-    base_price: 1300,
+    basePrice: 1300,
     description:
       "Chamonix, is a beautiful city, a true asian pearl, with crowded streets.",
     name: "Chamonix",
@@ -148,7 +148,7 @@ export const EVENT_DESTINATIONS = {
     ],
   },
   geneva: {
-    base_price: 999,
+    basePrice: 999,
     description: "Geneva is beautiful.",
     name: "Geneva",
     pictures: [
@@ -167,7 +167,7 @@ export const EVENT_DESTINATIONS = {
     ],
   },
   amsterdam: {
-    base_price: 1500,
+    basePrice: 1500,
     description: "Amsterdam is nice.",
     name: "Amsterdam",
     pictures: [
@@ -188,12 +188,12 @@ export const EVENT_DESTINATIONS = {
 };
 
 export const POINT = {
-  base_price: 1100,
-  date_from: "2019-07-10T22:55:56.845Z",
-  date_to: "2019-07-11T11:22:13.375Z",
+  basePrice: 1100,
+  dateFrom: "2019-07-10T22:55:56.845Z",
+  dateTo: "2019-07-11T11:22:13.375Z",
   destination: "amsterdam",
   id: "0",
-  is_favorite: false,
+  isFavorite: false,
   offers: [
     {
       title: "Choose meal",
@@ -243,12 +243,12 @@ export const IMAGES_SRC = [
 
 export const TEST_POINTS = [
   {
-    base_price: 1100,
-    date_from: "2019-07-10T22:55:56.845Z",
-    date_to: "2019-07-11T11:22:13.375Z",
+    basePrice: 1100,
+    dateFrom: "2019-07-10T22:55:56.845Z",
+    dateTo: "2019-07-11T11:22:13.375Z",
     destination: "amsterdam",
     id: "0",
-    is_favorite: false,
+    isFavorite: false,
     offers: [
       {
         title: "Choose meal",
@@ -262,12 +262,12 @@ export const TEST_POINTS = [
     type: "taxi",
   },
   {
-    base_price: 4100,
-    date_from: "2019-07-11T22:55:56.845Z",
-    date_to: "2019-07-12T11:22:13.375Z",
+    basePrice: 4100,
+    dateFrom: "2019-07-11T12:55:56.845Z",
+    dateTo: "2019-07-12T11:12:13.375Z",
     destination: "geneva",
     id: "1",
-    is_favorite: true,
+    isFavorite: true,
     offers: [
       {
         title: "Choose meal",
@@ -281,12 +281,12 @@ export const TEST_POINTS = [
     type: "train",
   },
   {
-    base_price: 2100,
-    date_from: "2019-07-12T22:55:56.845Z",
-    date_to: "2019-07-13T11:22:13.375Z",
+    basePrice: 2100,
+    dateFrom: "2019-07-12T22:55:56.845Z",
+    dateTo: "2019-07-13T15:22:13.375Z",
     destination: "chamonix",
     id: "2",
-    is_favorite: true,
+    isFavorite: true,
     offers: [
       {
         title: "Choose meal",
