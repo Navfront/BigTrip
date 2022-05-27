@@ -1,4 +1,4 @@
-import AbstractComponent from "./Abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getInfoTemplate = () => {
   return `<section class="trip-main__trip-info  trip-info">

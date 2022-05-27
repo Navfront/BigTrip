@@ -1,4 +1,4 @@
-import AbstractComponent from "./Abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getNavTemplate = () => {
   return `<nav class="trip-controls__trip-tabs  trip-tabs">

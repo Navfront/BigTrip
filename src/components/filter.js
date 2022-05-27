@@ -1,4 +1,4 @@
-import AbstractComponent from "./Abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getFilter = (filterName, isChecked = false) => {
   return `
