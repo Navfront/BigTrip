@@ -1,59 +1,26 @@
-import PointComponent from "../components/point";
-import PointEditorComponent from "../components/point-editor";
-import { getPointItemTemplate } from "../components/point-item";
 import PointsListComponent from "../components/points-list";
 import SortComponent from "../components/sort";
+import { TEST_POINTS } from "../mock/events";
 import { SORTS } from "../mock/sorts";
 import { renderComponent } from "../utils/render";
-import { createElement } from "../utils/render";
 import { sortPointsData } from "../utils/sort-utils";
+import PointController from "./point-controller";
 
 export default class TripController {
   constructor(container) {
     this._container = container;
     this._sorts = SORTS.slice();
-    this._points = [];
+    this._pointData = TEST_POINTS;
+    this._sortedData = this._pointData;
+    this._pointControllers = new Map();
+    this._onDataChange = this._onDataChange.bind(this);
   }
 
-  _renderPointItem(container, pointData) {
-    const tripEventsList = container;
-    const pointItem = createElement(getPointItemTemplate());
-    const point = new PointComponent(pointData);
-    const pointElement = point.getElement();
-    const pointEditor = new PointEditorComponent(pointData);
-    const editorElement = pointEditor.getElement();
-
-    const openEditor = () => {
-      pointItem.replaceChild(editorElement, pointElement);
-    };
-
-    const saveAndCloseEditor = () => {
-      pointItem.replaceChild(pointElement, editorElement);
-    };
-
-    const onEscKeyDownHandler = (evt) => {
-      if (evt.key === "Escape" || evt.key === "Esc") {
-        onSaveClickHandler();
-        document.removeEventListener("keydown", onEscKeyDownHandler);
-      }
-    };
-
-    const onRollUpClickHandler = () => {
-      document.addEventListener("keydown", onEscKeyDownHandler);
-      openEditor();
-    };
-
-    const onSaveClickHandler = () => {
-      saveAndCloseEditor();
-      document.removeEventListener("keydown", onEscKeyDownHandler);
-    };
-
-    // устанавливаем cb в обработчики
-    point.setOnRollUpHandler(onRollUpClickHandler);
-    pointEditor.setOnSaveHandler(onSaveClickHandler);
-
-    pointItem.append(pointElement);
-    tripEventsList.append(pointItem);
+  _onDataChange(oldData, newData) {
+    const index = this._sortedData.indexOf(oldData);
+    this._sortedData[index] = { ...newData };
+    console.log(this._sortedData);
+    this._pointControllers.get(newData.id).render(newData);
   }
 
   render(pointsData, isLoading = false, currentSortType = "day") {
@@ -65,7 +32,7 @@ export default class TripController {
     //обработчик клика по сортировке
     const onSortClickHandler = (evt) => {
       const sortType = evt.currentTarget.dataset.sortName;
-      let sortedPointsData = pointsData;
+
       if (currentSortType !== sortType) {
         this._sorts.forEach((it) => {
           if (it.sortName === currentSortType) {
@@ -75,10 +42,11 @@ export default class TripController {
             it.isChecked = true;
           }
         });
-        sortedPointsData = sortPointsData(pointsData, sortType);
+        const sortedData = sortPointsData(pointsData, sortType);
+
         this._container.innerHTML = "";
         // второй ререндер
-        this.render(sortedPointsData, false, sortType);
+        this.render(sortedData, false, sortType);
       }
     };
 
@@ -90,10 +58,18 @@ export default class TripController {
     //рендерим point-list с точками
     const pointsList = new PointsListComponent(isEmpty, isLoading);
     renderComponent(this._container, pointsList.getElement());
+
+    //рендерим все точки если pointsData не пустой
+    this._pointControllers.clear();
     if (!isEmpty) {
-      pointsData.forEach((it) =>
-        this._renderPointItem(pointsList.getElement(), it)
-      );
+      pointsData.forEach((it) => {
+        const pointController = new PointController(
+          pointsList.getElement(),
+          this._onDataChange
+        );
+        this._pointControllers.set(it.id, pointController);
+        pointController.render(it);
+      });
     }
   }
 }

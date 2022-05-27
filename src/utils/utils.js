@@ -30,3 +30,15 @@ export const getDiffTime = (date1, date2) => {
   }
   return diffTime;
 };
+
+export const objectsEqual = (objectOne, objectTwo) =>
+  typeof objectOne === "object" && Object.keys(objectOne).length > 0
+    ? Object.keys(objectOne).length === Object.keys(objectTwo).length &&
+      Object.keys(objectOne).every((p) =>
+        objectsEqual(objectOne[p], objectTwo[p])
+      )
+    : objectOne === objectTwo;
+
+export const arraysEqual = (arrayOne, arrayTwo) =>
+  arrayOne.length === arrayTwo.length &&
+  arrayOne.every((o, idx) => objectsEqual(o, arrayTwo[idx]));

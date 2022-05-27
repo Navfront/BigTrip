@@ -96,4 +96,10 @@ export default class PointComponent extends AbstractComponent {
       .querySelector(".event__rollup-btn")
       .addEventListener("click", callback);
   }
+
+  setOnFavoriteHandler(callback) {
+    this.getElement()
+      .querySelector(".event__favorite-btn")
+      .addEventListener("click", callback);
+  }
 }
