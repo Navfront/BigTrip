@@ -5,7 +5,7 @@ import {
   getPicturesByDestination,
   getDescriptionOfDestination,
 } from "../mock/events";
-import AbstractComponent from "./Abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 const eventTypes = EVENT_TYPES;
 

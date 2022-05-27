@@ -4,7 +4,7 @@ import {
   humanizeFromDueDate,
   humanizeToDueDate,
 } from "../utils/utils";
-import AbstractComponent from "./Abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getEventOffer = (offer) => {
   const { title, price } = offer;

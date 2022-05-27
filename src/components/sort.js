@@ -1,4 +1,4 @@
-import AbstractComponent from "./Abstract-component";
+import AbstractComponent from "./abstract-component";
 
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   return `

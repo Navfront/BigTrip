@@ -1,5 +1,5 @@
 import { FILTERS } from "../mock/filters";
-import AbstractComponent from "./Abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 // Значение отображаемого текста зависит от выбранного фильтра:
 // * Everthing – 'Click New Event to create your first point'
