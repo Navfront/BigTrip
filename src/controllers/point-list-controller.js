@@ -6,7 +6,7 @@ import SortComponent from "../components/sort";
 import { SORTS } from "../mock/sorts";
 import { POSITION_TYPES } from "../utils/render";
 import { createElement } from "../utils/render";
-import { sortPointsData } from "./../utils/sort";
+import { sortPointsData } from "../utils/sort-utils";
 
 export default class PointListController {
   constructor(container) {
@@ -15,7 +15,7 @@ export default class PointListController {
     this._points = [];
   }
 
-  #renderComponent(container, component, position) {
+  _renderComponent(container, component, position) {
     switch (position) {
       case POSITION_TYPES.APPEND:
         container.append(component);
@@ -30,7 +30,7 @@ export default class PointListController {
     }
   }
 
-  #renderPointItem(container, pointData) {
+  _renderPointItem(container, pointData) {
     const tripEventsList = container;
     const pointItem = createElement(getPointItemTemplate());
     const point = new PointComponent(pointData);
@@ -98,15 +98,15 @@ export default class PointListController {
 
     //рендерим сортировку
     const sort = new SortComponent(this._sorts);
-    this.#renderComponent(this._container, sort.getElement());
+    this._renderComponent(this._container, sort.getElement());
     sort.setOnSortClickHandler(onSortClickHandler);
 
     //рендерим point-list с точками
     const pointsList = new PointsListComponent(isEmpty, isLoading);
-    this.#renderComponent(this._container, pointsList.getElement());
+    this._renderComponent(this._container, pointsList.getElement());
     if (!isEmpty) {
       pointsData.forEach((it) =>
-        this.#renderPointItem(pointsList.getElement(), it)
+        this._renderPointItem(pointsList.getElement(), it)
       );
     }
   }
