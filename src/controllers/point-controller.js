@@ -1,7 +1,7 @@
 import { getPointItemTemplate } from './../components/point-item';
 import PointComponent from '../components/point';
 import PointEditorComponent from '../components/point-editor';
-import { createElement, remove } from '../utils/render';
+import { createElement } from '../utils/render';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -39,8 +39,6 @@ export default class PointController {
     this._pointData = pointData;
     this._point = new PointComponent(pointData);
     this._pointEdit = new PointEditorComponent(pointData);
-    const elem = this._point.getElement();
-    const edit = this._point.getElement();
 
 
     const onEscKeyDownHandler = (evt) => {
@@ -99,13 +97,11 @@ export default class PointController {
 
 
     //добавляем к родителю элементы
-    if (prevPoint === null || prevEdit === null) {
-      this._pointItem.append(this._point.getElement());
-      this._container.append(this._pointItem);
-    }
-
     if (prevPoint && prevEdit) {
       this._pointItem.replaceChild( this._point.getElement(),prevPoint.getElement());
+    } else {
+      this._pointItem.append(this._point.getElement());
+      this._container.append(this._pointItem);
     }
   }
 }
