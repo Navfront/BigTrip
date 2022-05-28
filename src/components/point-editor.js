@@ -5,7 +5,8 @@ import {
   getPicturesByDestination,
   getDescriptionOfDestination,
 } from "../mock/events";
-import AbstractComponent from "./abstract-component.js";
+
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const eventTypes = EVENT_TYPES;
 
@@ -159,7 +160,7 @@ ${
 </form>`;
 };
 
-export default class PointEditorComponent extends AbstractComponent {
+export default class PointEditorComponent extends AbstractSmartComponent {
   constructor(
     choosenType,
     choosenDestination,
@@ -170,6 +171,8 @@ export default class PointEditorComponent extends AbstractComponent {
     currentDescription
   ) {
     super();
+    this._onSaveHandler = null;
+    this._onResetHandler = null;
     this._choosenType = choosenType;
     this._choosenDestination = choosenDestination;
     this._choosenDueDateFrom = choosenDueDateFrom;
@@ -177,6 +180,11 @@ export default class PointEditorComponent extends AbstractComponent {
     this._currentDestinationOptions = currentDestinationOptions;
     this._currentOffers = currentOffers;
     this._currentDescription = currentDescription;
+  }
+
+  recoveryListeners() {
+    this.setOnSaveHandler(this._onSaveHandler);
+    this.setOnResetHandler(this._onResetHandler);
   }
 
   getTemplate() {
@@ -191,15 +199,21 @@ export default class PointEditorComponent extends AbstractComponent {
     );
   }
 
+  rerender() {
+    super.rerender();
+  }
+
   setOnSaveHandler(callback) {
+    this._onSaveHandler = callback;
     this.getElement()
       .querySelector(".event__save-btn")
-      .addEventListener("click", callback);
+      .addEventListener("click", this._onSaveHandler);
   }
 
   setOnResetHandler(callback) {
+    this._onResetHandler = callback;
     this.getElement()
       .querySelector(".event__reset-btn")
-      .addEventListener("click", callback);
+      .addEventListener("click", this._onResetHandler);
   }
 }

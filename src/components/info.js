@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 const getInfoTemplate = () => {
   return `<section class="trip-main__trip-info  trip-info">
@@ -14,7 +14,7 @@ const getInfoTemplate = () => {
 </section>`;
 };
 
-export default class InfoComponent extends AbstractComponent {
+export default class InfoComponent extends AbstractSmartComponent {
   getTemplate() {
     return getInfoTemplate();
   }

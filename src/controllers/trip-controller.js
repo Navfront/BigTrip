@@ -18,9 +18,7 @@ export default class TripController {
 
   _onDataChange(oldData, newData) {
     const index = this._sortedData.indexOf(oldData);
-    this._sortedData[index] = { ...newData };
-    console.log(this._sortedData);
-    this._pointControllers.get(newData.id).render(newData);
+    if (index >= 0) this._sortedData[index] = { ...newData };
   }
 
   render(pointsData, isLoading = false, currentSortType = "day") {

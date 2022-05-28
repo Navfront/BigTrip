@@ -1,5 +1,6 @@
 import { FILTERS } from "../mock/filters";
-import AbstractComponent from "./abstract-component.js";
+
+import AbstractSmartComponent from "./abstract-smart-component";
 
 // Значение отображаемого текста зависит от выбранного фильтра:
 // * Everthing – 'Click New Event to create your first point'
@@ -33,7 +34,7 @@ const getPointsListTemplate = (isEmpty, isLoading, choosenFilter) => {
   return `${result}`;
 };
 
-export default class PointsListComponent extends AbstractComponent {
+export default class PointsListComponent extends AbstractSmartComponent {
   constructor(isEmpty = false, isLoading = false, choosenFilter = FILTERS[0]) {
     super();
     this._isEmpty = isEmpty;

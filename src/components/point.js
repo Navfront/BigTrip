@@ -4,7 +4,8 @@ import {
   humanizeFromDueDate,
   humanizeToDueDate,
 } from "../utils/utils";
-import AbstractComponent from "./abstract-component.js";
+
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const getEventOffer = (offer) => {
   const { title, price } = offer;
@@ -81,25 +82,38 @@ const getPointTemplate = (pointData = {}) => {
 `;
 };
 
-export default class PointComponent extends AbstractComponent {
+export default class PointComponent extends AbstractSmartComponent {
   constructor(pointData) {
     super();
     this._pointData = pointData;
+    this._onRollUpHandler = null;
+    this._onFavoriteHandler = null;
   }
 
   getTemplate() {
     return getPointTemplate(this._pointData);
   }
 
+  recoveryListeners() {
+    this.setOnFavoriteHandler(this._onFavoriteHandler);
+    this.setOnRollUpHandler(this._onRollUpHandler);
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
   setOnRollUpHandler(callback) {
+    this._onRollUpHandler = callback;
     this.getElement()
       .querySelector(".event__rollup-btn")
-      .addEventListener("click", callback);
+      .addEventListener("click", this._onRollUpHandler);
   }
 
   setOnFavoriteHandler(callback) {
+    this._onFavoriteHandler = callback;
     this.getElement()
       .querySelector(".event__favorite-btn")
-      .addEventListener("click", callback);
+      .addEventListener("click", this._onFavoriteHandler);
   }
 }

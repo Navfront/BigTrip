@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 const getNavTemplate = () => {
   return `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -7,7 +7,7 @@ const getNavTemplate = () => {
   </nav>`;
 };
 
-export default class NavComponent extends AbstractComponent {
+export default class NavComponent extends AbstractSmartComponent {
   getTemplate() {
     return getNavTemplate(this._element);
   }

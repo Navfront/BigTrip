@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 const getFilter = (filterName, isChecked = false) => {
   return `
@@ -30,7 +30,7 @@ const getFiltersTemplate = (filters) => {
 </form>`;
 };
 
-export default class FilterComponent extends AbstractComponent {
+export default class FilterComponent extends AbstractSmartComponent {
   constructor(filters) {
     super();
     this._filters = filters;

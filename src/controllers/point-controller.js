@@ -15,9 +15,7 @@ export default class PointController {
     const tripEventsList = this._container;
     const pointItem = createElement(getPointItemTemplate());
     const point = new PointComponent(pointData);
-    const pointElement = point.getElement();
     const pointEditor = new PointEditorComponent(pointData);
-    const editorElement = pointEditor.getElement();
 
     const onEscKeyDownHandler = (evt) => {
       if (evt.key === "Escape" || evt.key === "Esc") {
@@ -28,11 +26,11 @@ export default class PointController {
 
     const handleRollUpClick = () => {
       document.addEventListener("keydown", onEscKeyDownHandler);
-      pointItem.replaceChild(editorElement, pointElement);
+      pointItem.replaceChild(pointEditor.getElement(), point.getElement());
     };
 
     const handleSaveClick = () => {
-      pointItem.replaceChild(pointElement, editorElement);
+      pointItem.replaceChild(point.getElement(), pointEditor.getElement());
       document.removeEventListener("keydown", onEscKeyDownHandler);
     };
 
@@ -41,6 +39,8 @@ export default class PointController {
         ...pointData,
         isFavorite: !pointData.isFavorite,
       });
+      this._pointData.isFavorite = !this._pointData.isFavorite; //меняем данные внутри поинта для отрисовки favorite
+      point.rerender();
     };
 
     // устанавливаем cb в обработчики
@@ -48,7 +48,7 @@ export default class PointController {
     point.setOnFavoriteHandler(handleFavoriteClick);
     pointEditor.setOnSaveHandler(handleSaveClick);
 
-    pointItem.append(pointElement);
+    pointItem.append(point.getElement());
     tripEventsList.append(pointItem);
   }
 }

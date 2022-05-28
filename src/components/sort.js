@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => {
   return `
@@ -32,7 +32,7 @@ const getSortTemplate = (sorts) => {
     : "";
 };
 
-export default class SortComponent extends AbstractComponent {
+export default class SortComponent extends AbstractSmartComponent {
   constructor(sorts) {
     super();
     this._sorts = sorts;
