@@ -1,10 +1,10 @@
-import PointsListComponent from "../components/points-list";
-import SortComponent from "../components/sort";
-import { TEST_POINTS } from "../mock/events";
-import { SORTS } from "../mock/sorts";
-import { renderComponent } from "../utils/render";
-import { sortPointsData } from "../utils/sort-utils";
-import PointController from "./point-controller";
+import PointsListComponent from '../components/points-list';
+import SortComponent from '../components/sort';
+import { TEST_POINTS } from '../mock/events';
+import { SORTS } from '../mock/sorts';
+import { renderComponent } from '../utils/render';
+import { sortPointsData } from '../utils/sort-utils';
+import PointController from './point-controller';
 
 export default class TripController {
   constructor(container) {
@@ -19,17 +19,21 @@ export default class TripController {
 
   _onDataChange(oldData, newData) {
     const index = this._sortedData.indexOf(oldData);
-    if (index >= 0) this._sortedData[index] = { ...newData };
+    if (index >= 0) {
+      this._sortedData[index] = { ...newData };
+    }
   }
 
   _onViewChange() {
     this._pointControllers.forEach((controller) => controller.resetMode());
   }
 
-  render(pointsData, isLoading = false, currentSortType = "day") {
+  render(pointsData, isLoading = false, currentSortType = 'day') {
     let isEmpty = true;
     if (pointsData) {
-      if (pointsData.length > 0) isEmpty = false;
+      if (pointsData.length > 0) {
+        isEmpty = false;
+      }
     }
 
     //обработчик клика по сортировке
@@ -47,7 +51,7 @@ export default class TripController {
         });
         const sortedData = sortPointsData(pointsData, sortType);
 
-        this._container.innerHTML = "";
+        this._container.innerHTML = '';
         // второй ререндер
         this.render(sortedData, false, sortType);
       }

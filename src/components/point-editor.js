@@ -4,35 +4,31 @@ import {
   getOffersByType,
   getPicturesByDestination,
   getDescriptionOfDestination,
-} from "../mock/events";
+} from '../mock/events';
 
-import AbstractSmartComponent from "./abstract-smart-component";
+import AbstractSmartComponent from './abstract-smart-component';
 
 const eventTypes = EVENT_TYPES;
 
-const getEventTypeItemTemplate = (eventType) => {
-  return `
+const getEventTypeItemTemplate = (eventType) => `
   <div class="event__type-item">
   <input id="event-type-${eventType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType}">
   <label class="event__type-label  event__type-label--${eventType}" for="event-type-${eventType}-1">${eventType}</label>
 </div>
   `;
-};
 
-const getDestinationOptionTemplate = (destination) => {
-  return `
+const getDestinationOptionTemplate = (destination) => `
   <option value="${destination}"></option>
   `;
-};
 
 const getOffer = (offer, isChecked = false) => {
-  const offerName = offer.title.split(" ").join("-");
+  const offerName = offer.title.split(' ').join('-');
 
   return `
   <div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerName}-1" type="checkbox" name="event-offer-${offerName}" ${
-    isChecked ? "checked" : ""
-  }>
+  isChecked ? 'checked' : ''
+}>
   <label class="event__offer-label" for="event-offer-${offerName}-1">
     <span class="event__offer-title">${offer.title}</span>
     &plus;&euro;&nbsp;
@@ -42,24 +38,22 @@ const getOffer = (offer, isChecked = false) => {
   `;
 };
 
-const getDestinationImage = (imgSrc) => {
-  return `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
-};
+const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (pointData = {}) => {
   const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
-  let choosenDestination = destination || "geneva";
-  let choosenDueDateFrom = dateFrom;
-  let choosenDueDateTo = dateTo;
-  let choosenType = type || eventTypes[0];
+  const choosenDestination = destination || 'geneva';
+  const choosenDueDateFrom = dateFrom;
+  const choosenDueDateTo = dateTo;
+  const choosenType = type || eventTypes[0];
 
-  let currentPrice = basePrice || 0;
-  let currentDestinationOptions = getDestinationByTypes(choosenType);
-  let currentOffers = offers || getOffersByType(choosenType);
-  let currentDescription = getDescriptionOfDestination(choosenDestination);
+  const currentPrice = basePrice || 0;
+  const currentDestinationOptions = getDestinationByTypes(choosenType);
+  const currentOffers = offers || getOffersByType(choosenType);
+  const currentDescription = getDescriptionOfDestination(choosenDestination);
 
-  let hasOffers = currentOffers.length > 0;
-  let hasDestinations = currentDestinationOptions.length > 0;
+  const hasOffers = currentOffers.length > 0;
+  const hasDestinations = currentDestinationOptions.length > 0;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -75,10 +69,8 @@ const getPointEditorTemplate = (pointData = {}) => {
           <legend class="visually-hidden">Event type</legend>
 
          ${eventTypes
-           .map((it) => {
-             return getEventTypeItemTemplate(it);
-           })
-           .join("")}
+    .map((it) => getEventTypeItemTemplate(it))
+    .join('')}
         </fieldset>
       </div>
     </div>
@@ -90,10 +82,8 @@ const getPointEditorTemplate = (pointData = {}) => {
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${choosenDestination}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${currentDestinationOptions
-        .map((it) => {
-          return getDestinationOptionTemplate(it);
-        })
-        .join("")}
+    .map((it) => getDestinationOptionTemplate(it))
+    .join('')}
       </datalist>
     </div>
 
@@ -117,45 +107,43 @@ const getPointEditorTemplate = (pointData = {}) => {
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
   ${
-    hasOffers
-      ? '<section class="event__details"><section class="event__section  event__section--offers"><h3 class="event__section-title  event__section-title--offers">Offers</h3><div class="event__available-offers"> '
-      : ""
-  }
+  hasOffers
+    ? '<section class="event__details"><section class="event__section  event__section--offers"><h3 class="event__section-title  event__section-title--offers">Offers</h3><div class="event__available-offers"> '
+    : ''
+}
 
 
 ${
   hasOffers
     ? currentOffers
-        .map((it, index) => {
-          return getOffer(it, index === 0 || index === 1);
-        })
-        .join("")
-    : ""
+      .map((it, index) => getOffer(it, index === 0 || index === 1))
+      .join('')
+    : ''
 }
 
   </div>
-  ${hasOffers ? "</section>" : ""}
+  ${hasOffers ? '</section>' : ''}
 
   ${
-    hasDestinations
-      ? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">'
-      : ""
-  }
-    ${hasDestinations ? currentDescription : ""}
+  hasDestinations
+    ? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">'
+    : ''
+}
+    ${hasDestinations ? currentDescription : ''}
       ${
-        hasDestinations
-          ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
-          : ""
-      }
+  hasDestinations
+    ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
+    : ''
+}
 
          ${
-           hasDestinations
-             ? getPicturesByDestination(choosenDestination)
-                 .map((it) => getDestinationImage(it.src))
-                 .join("")
-             : ""
-         }
-         ${hasDestinations ? "</div></div></section>" : ""}
+  hasDestinations
+    ? getPicturesByDestination(choosenDestination)
+      .map((it) => getDestinationImage(it.src))
+      .join('')
+    : ''
+}
+         ${hasDestinations ? '</div></div></section>' : ''}
   </section>
 </form>`;
 };
@@ -211,21 +199,21 @@ export default class PointEditorComponent extends AbstractSmartComponent {
   setOnSaveHandler(callback) {
     this._onSaveHandler = callback;
     this.getElement()
-      .querySelector(".event__save-btn")
-      .addEventListener("click", this._onSaveHandler);
+      .querySelector('.event__save-btn')
+      .addEventListener('click', this._onSaveHandler);
   }
 
   setOnCancelHandler(callback) {
     this._onCancelHandler = callback;
     this.getElement()
-      .querySelector(".event__reset-btn")
-      .addEventListener("click", this._onCancelHandler);
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._onCancelHandler);
   }
 
   setOnChooseEventHandler(callback) {
     this._onChooseEventTypeHandler = callback;
     this.getElement()
-      .querySelector(".event__type-toggle")
-      .addEventListener("change", this._onChooseEventTypeHandler);
+      .querySelector('.event__type-toggle')
+      .addEventListener('change', this._onChooseEventTypeHandler);
   }
 }

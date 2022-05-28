@@ -1,11 +1,11 @@
-import { getPointItemTemplate } from "./../components/point-item";
-import PointComponent from "../components/point";
-import PointEditorComponent from "../components/point-editor";
-import { createElement } from "../utils/render";
+import { getPointItemTemplate } from './../components/point-item';
+import PointComponent from '../components/point';
+import PointEditorComponent from '../components/point-editor';
+import { createElement } from '../utils/render';
 
 const Mode = {
-  DEFAULT: "DEFAULT",
-  EDIT: "EDIT",
+  DEFAULT: 'DEFAULT',
+  EDIT: 'EDIT',
 };
 
 export default class PointController {
@@ -37,18 +37,18 @@ export default class PointController {
     this._pointEdit = new PointEditorComponent(pointData);
 
     const onEscKeyDownHandler = (evt) => {
-      if (evt.key === "Escape" || evt.key === "Esc") {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
         this._pointItem.replaceChild(
           this._point.getElement(),
           this._pointEdit.getElement()
         );
-        document.removeEventListener("keydown", onEscKeyDownHandler);
+        document.removeEventListener('keydown', onEscKeyDownHandler);
         this._mode = Mode.DEFAULT;
       }
     };
 
     const handleRollUpClick = () => {
-      document.addEventListener("keydown", onEscKeyDownHandler);
+      document.addEventListener('keydown', onEscKeyDownHandler);
       this._pointItem.replaceChild(
         this._pointEdit.getElement(),
         this._point.getElement()
@@ -62,7 +62,7 @@ export default class PointController {
         this._point.getElement(),
         this._pointEdit.getElement()
       );
-      document.removeEventListener("keydown", onEscKeyDownHandler);
+      document.removeEventListener('keydown', onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
     };
 
@@ -71,7 +71,7 @@ export default class PointController {
         this._point.getElement(),
         this._pointEdit.getElement()
       );
-      document.removeEventListener("keydown", onEscKeyDownHandler);
+      document.removeEventListener('keydown', onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
     };
 
