@@ -1,7 +1,7 @@
 import { getPointItemTemplate } from './../components/point-item';
 import PointComponent from '../components/point';
 import PointEditorComponent from '../components/point-editor';
-import { createElement } from '../utils/render';
+import { createElement, remove } from '../utils/render';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -31,10 +31,17 @@ export default class PointController {
   }
 
   render(pointData) {
+    //для ререндера
+    const prevPoint = this._point;
+    const prevEdit = this._pointEdit;
+
+
     this._pointData = pointData;
-    const tripEventsList = this._container;
     this._point = new PointComponent(pointData);
     this._pointEdit = new PointEditorComponent(pointData);
+    const elem = this._point.getElement();
+    const edit = this._point.getElement();
+
 
     const onEscKeyDownHandler = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -76,7 +83,7 @@ export default class PointController {
     };
 
     const handleFavoriteClick = () => {
-      this._onDataChange(pointData, {
+      this._onDataChange({
         ...pointData,
         isFavorite: !pointData.isFavorite,
       });
@@ -89,7 +96,16 @@ export default class PointController {
     this._point.setOnFavoriteHandler(handleFavoriteClick);
     this._pointEdit.setOnSaveHandler(handleSaveClick);
     this._pointEdit.setOnCancelHandler(handleCancelClick);
-    this._pointItem.append(this._point.getElement());
-    tripEventsList.append(this._pointItem);
+
+
+    //добавляем к родителю элементы
+    if (prevPoint === null || prevEdit === null) {
+      this._pointItem.append(this._point.getElement());
+      this._container.append(this._pointItem);
+    }
+
+    if (prevPoint && prevEdit) {
+      this._pointItem.replaceChild( this._point.getElement(),prevPoint.getElement());
+    }
   }
 }

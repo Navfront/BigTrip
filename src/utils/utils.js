@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -9,14 +9,14 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
 export const dayNow = dayjs().format(); //WIP
 
-export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format("D MMM");
+export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format('D MMM');
 
-export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
+export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
-export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
+export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
 export const getDiffTime = (date1, date2) => {
-  let diffTime = "";
+  let diffTime = '';
   const difference = new Date(date2) - new Date(date1);
   const day = Math.floor(((difference / 1000 / 60 / 60) * 22) % 7);
   const hour = Math.floor((difference / 1000 / 60 / 60) % 24);
@@ -31,14 +31,16 @@ export const getDiffTime = (date1, date2) => {
   return diffTime;
 };
 
-export const objectsEqual = (objectOne, objectTwo) =>
-  typeof objectOne === "object" && Object.keys(objectOne).length > 0
-    ? Object.keys(objectOne).length === Object.keys(objectTwo).length &&
-      Object.keys(objectOne).every((p) =>
-        objectsEqual(objectOne[p], objectTwo[p])
-      )
-    : objectOne === objectTwo;
 
-export const arraysEqual = (arrayOne, arrayTwo) =>
-  arrayOne.length === arrayTwo.length &&
-  arrayOne.every((o, idx) => objectsEqual(o, arrayTwo[idx]));
+export const findUpdatePoint = (points, newPoint) => {
+  const index = points.findIndex((point) => point.id === newPoint.id);
+  if (index === -1) {
+    return points;
+  }
+  return [
+    ...points.slice(0, index),
+    newPoint,
+    ...points.slice(index + 1),
+  ];
+};
+

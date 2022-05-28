@@ -4,6 +4,7 @@ import { SORTS } from '../mock/sorts';
 import { renderComponent } from '../utils/render';
 import { sortPointsData } from '../utils/sort-utils';
 import PointController from './point-controller';
+import { findUpdatePoint } from './../utils/utils';
 
 export default class TripController {
   constructor(container) {
@@ -18,12 +19,11 @@ export default class TripController {
     this._onViewChange = this._onViewChange.bind(this);
   }
 
-  _onDataChange(oldData, newData) {
-    const index = this._sortedData.indexOf(oldData);
-    if (index >= 0) {
-      this._sortedData[index] = { ...newData };
-    }
+  _onDataChange(newDataPoint) {
+    this._sortedData = findUpdatePoint(this._sortedData, newDataPoint);
+    this._pointControllers.get(newDataPoint.id).render(newDataPoint);
   }
+
 
   _onViewChange() {
     this._pointControllers.forEach((controller) => controller.resetMode());
@@ -31,6 +31,7 @@ export default class TripController {
 
   render(pointsData, isLoading = false, currentSortType = 'day') {
     this._pointData = pointsData;
+    this._sortedData = pointsData;
     let isEmpty = true;
     if ( this._pointData) {
       if (this._pointData.length > 0) {
@@ -51,7 +52,7 @@ export default class TripController {
             it.isChecked = true;
           }
         });
-        this._sortedData = sortPointsData( this._pointData, sortType);
+        this._sortedData = sortPointsData( this._sortedData, sortType);
 
         this._container.innerHTML = '';
         // второй ререндер
