@@ -14,11 +14,16 @@ export default class TripController {
     this._sortedData = this._pointData;
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
   }
 
   _onDataChange(oldData, newData) {
     const index = this._sortedData.indexOf(oldData);
     if (index >= 0) this._sortedData[index] = { ...newData };
+  }
+
+  _onViewChange() {
+    this._pointControllers.forEach((controller) => controller.resetMode());
   }
 
   render(pointsData, isLoading = false, currentSortType = "day") {
@@ -63,7 +68,8 @@ export default class TripController {
       pointsData.forEach((it) => {
         const pointController = new PointController(
           pointsList.getElement(),
-          this._onDataChange
+          this._onDataChange,
+          this._onViewChange
         );
         this._pointControllers.set(it.id, pointController);
         pointController.render(it);

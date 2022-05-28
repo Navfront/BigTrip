@@ -171,8 +171,12 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     currentDescription
   ) {
     super();
+
+    // handlers cb
     this._onSaveHandler = null;
-    this._onResetHandler = null;
+    this._onCancelHandler = null;
+    this._onChooseEventTypeHandler = null;
+    // choosen data
     this._choosenType = choosenType;
     this._choosenDestination = choosenDestination;
     this._choosenDueDateFrom = choosenDueDateFrom;
@@ -185,6 +189,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
   recoveryListeners() {
     this.setOnSaveHandler(this._onSaveHandler);
     this.setOnResetHandler(this._onResetHandler);
+    this.setOnChooseEventHandler(this._onChooseEventTypeHandler);
   }
 
   getTemplate() {
@@ -210,10 +215,17 @@ export default class PointEditorComponent extends AbstractSmartComponent {
       .addEventListener("click", this._onSaveHandler);
   }
 
-  setOnResetHandler(callback) {
-    this._onResetHandler = callback;
+  setOnCancelHandler(callback) {
+    this._onCancelHandler = callback;
     this.getElement()
       .querySelector(".event__reset-btn")
-      .addEventListener("click", this._onResetHandler);
+      .addEventListener("click", this._onCancelHandler);
+  }
+
+  setOnChooseEventHandler(callback) {
+    this._onChooseEventTypeHandler = callback;
+    this.getElement()
+      .querySelector(".event__type-toggle")
+      .addEventListener("change", this._onChooseEventTypeHandler);
   }
 }

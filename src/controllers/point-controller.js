@@ -3,35 +3,76 @@ import PointComponent from "../components/point";
 import PointEditorComponent from "../components/point-editor";
 import { createElement } from "../utils/render";
 
+const Mode = {
+  DEFAULT: "DEFAULT",
+  EDIT: "EDIT",
+};
+
 export default class PointController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._pointItem = createElement(getPointItemTemplate());
     this._pointData = null;
+    this._point = null;
+    this._pointEdit = null;
+    this._mode = Mode.DEFAULT;
+  }
+
+  resetMode() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._pointItem.replaceChild(
+        this._point.getElement(),
+        this._pointEdit.getElement()
+      );
+      this._mode = Mode.DEFAULT;
+    }
   }
 
   render(pointData) {
     this._pointData = pointData;
     const tripEventsList = this._container;
-    const pointItem = createElement(getPointItemTemplate());
-    const point = new PointComponent(pointData);
-    const pointEditor = new PointEditorComponent(pointData);
+    this._point = new PointComponent(pointData);
+    this._pointEdit = new PointEditorComponent(pointData);
 
     const onEscKeyDownHandler = (evt) => {
       if (evt.key === "Escape" || evt.key === "Esc") {
-        pointItem.replaceChild(pointElement, editorElement);
+        this._pointItem.replaceChild(
+          this._point.getElement(),
+          this._pointEdit.getElement()
+        );
         document.removeEventListener("keydown", onEscKeyDownHandler);
+        this._mode = Mode.DEFAULT;
       }
     };
 
     const handleRollUpClick = () => {
       document.addEventListener("keydown", onEscKeyDownHandler);
-      pointItem.replaceChild(pointEditor.getElement(), point.getElement());
+      this._pointItem.replaceChild(
+        this._pointEdit.getElement(),
+        this._point.getElement()
+      );
+      this._onViewChange();
+      this._mode = Mode.EDIT;
     };
 
     const handleSaveClick = () => {
-      pointItem.replaceChild(point.getElement(), pointEditor.getElement());
+      this._pointItem.replaceChild(
+        this._point.getElement(),
+        this._pointEdit.getElement()
+      );
       document.removeEventListener("keydown", onEscKeyDownHandler);
+      this._mode = Mode.DEFAULT;
+    };
+
+    const handleCancelClick = () => {
+      this._pointItem.replaceChild(
+        this._point.getElement(),
+        this._pointEdit.getElement()
+      );
+      document.removeEventListener("keydown", onEscKeyDownHandler);
+      this._mode = Mode.DEFAULT;
     };
 
     const handleFavoriteClick = () => {
@@ -39,16 +80,16 @@ export default class PointController {
         ...pointData,
         isFavorite: !pointData.isFavorite,
       });
-      this._pointData.isFavorite = !this._pointData.isFavorite; //меняем данные внутри поинта для отрисовки favorite
-      point.rerender();
+
+      this._point.rerender();
     };
 
     // устанавливаем cb в обработчики
-    point.setOnRollUpHandler(handleRollUpClick);
-    point.setOnFavoriteHandler(handleFavoriteClick);
-    pointEditor.setOnSaveHandler(handleSaveClick);
-
-    pointItem.append(point.getElement());
-    tripEventsList.append(pointItem);
+    this._point.setOnRollUpHandler(handleRollUpClick);
+    this._point.setOnFavoriteHandler(handleFavoriteClick);
+    this._pointEdit.setOnSaveHandler(handleSaveClick);
+    this._pointEdit.setOnCancelHandler(handleCancelClick);
+    this._pointItem.append(this._point.getElement());
+    tripEventsList.append(this._pointItem);
   }
 }
