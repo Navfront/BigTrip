@@ -1,6 +1,5 @@
 import PointsListComponent from '../components/points-list';
 import SortComponent from '../components/sort';
-import { TEST_POINTS } from '../mock/events';
 import { SORTS } from '../mock/sorts';
 import { renderComponent } from '../utils/render';
 import { sortPointsData } from '../utils/sort-utils';
@@ -10,7 +9,9 @@ export default class TripController {
   constructor(container) {
     this._container = container;
     this._sorts = SORTS.slice();
-    this._pointData = TEST_POINTS;
+    this._isLoading = null;
+    this._currentSortType = null;
+    this._pointData = null;
     this._sortedData = this._pointData;
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
@@ -29,9 +30,10 @@ export default class TripController {
   }
 
   render(pointsData, isLoading = false, currentSortType = 'day') {
+    this._pointData = pointsData;
     let isEmpty = true;
-    if (pointsData) {
-      if (pointsData.length > 0) {
+    if ( this._pointData) {
+      if (this._pointData.length > 0) {
         isEmpty = false;
       }
     }
@@ -49,11 +51,11 @@ export default class TripController {
             it.isChecked = true;
           }
         });
-        const sortedData = sortPointsData(pointsData, sortType);
+        this._sortedData = sortPointsData( this._pointData, sortType);
 
         this._container.innerHTML = '';
         // второй ререндер
-        this.render(sortedData, false, sortType);
+        this.render(this._sortedData, false, sortType);
       }
     };
 
