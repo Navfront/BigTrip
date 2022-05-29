@@ -7,13 +7,13 @@ import PointController from './point-controller';
 import { findUpdatePoint } from './../utils/utils';
 
 export default class TripController {
-  constructor(container) {
+  constructor(container, dataModel) {
     this._container = container;
     this._sorts = SORTS.slice();
     this._isLoading = null;
     this._currentSortType = null;
-    this._pointData = null;
-    this._sortedData = this._pointData;
+    this._pointsData = dataModel.getPoints();
+    this._sortedData = this._pointsData;
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -29,12 +29,10 @@ export default class TripController {
     this._pointControllers.forEach((controller) => controller.resetMode());
   }
 
-  render(pointsData, isLoading = false, currentSortType = 'day') {
-    this._pointData = pointsData;
-    this._sortedData = pointsData;
+  render(isLoading = false, currentSortType = 'day') {
     let isEmpty = true;
-    if ( this._pointData) {
-      if (this._pointData.length > 0) {
+    if ( this._pointsData) {
+      if (this._pointsData.length > 0) {
         isEmpty = false;
       }
     }
@@ -72,7 +70,7 @@ export default class TripController {
     //рендерим все точки если pointsData не пустой
     this._pointControllers.clear();
     if (!isEmpty) {
-      pointsData.forEach((it) => {
+      this._pointsData.forEach((it) => {
         const pointController = new PointController(
           pointsList.getElement(),
           this._onDataChange,
