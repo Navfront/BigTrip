@@ -1,15 +1,31 @@
+export const FILTERS = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
+};
 
 export default class PointsModel {
   constructor() {
     this._pointsData = null;
+    this._currentFilter = FILTERS.EVERYTHING;
+    //Подписчики
     this._dataChangeHandlers = [];
+    this._filterChangeHandlers = [];
   }
 
   /**
    *
-   * @returns Возвращает данные всех точек
+   * @returns Возвращает отфильтрованные данные всех точек
    */
   getPoints() {
+    return  this._filterPointsData(this._pointsData);
+  }
+
+  /**
+   *
+   * @returns Возвращает оригинальные данные
+   */
+  getOriginalPoints() {
     return this._pointsData;
   }
 
@@ -19,8 +35,8 @@ export default class PointsModel {
    */
   setPointsData(newPointsData) {
     this._pointsData = newPointsData;
+    this._filtredData = this._filterPointsData(newPointsData);
   }
-
 
   /**
    *
@@ -36,7 +52,6 @@ export default class PointsModel {
     return true;
   }
 
-
   /**
    *
    * Observer. Подписка на обновление данных
@@ -46,11 +61,51 @@ export default class PointsModel {
     this._dataChangeHandlers.push(handler);
   }
 
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
+  }
 
   /**
-   * Notify all. Вызов функций подписчиков
+  * Массив колбэков
+  * @param {Array} Handlers
+  */
+  _callHandlers(Handlers) {
+    Handlers.forEach((it)=>it());
+  }
+
+  /**
+   *'everything' || 'future' || 'past'
+   * @param {string} filterType
    */
-  _callHandlers() {
-    this._dataChangeHandlers.forEach((it)=>it());
+  setActiveFilter(filterType) {
+    switch (filterType) {
+      case FILTERS.FUTURE:
+        this._currentFilter = FILTERS.FUTURE;
+        break;
+      case FILTERS.PAST:
+        this._currentFilter = FILTERS.PAST;
+        break;
+      default:
+        this._currentFilter = FILTERS.EVERYTHING;
+        break;
+    }
+    this._callHandlers(this._filterChangeHandlers);
+  }
+
+  /**
+   * Принимает массив данных для фильтрации
+   * @param {Array} pointsData
+   */
+  _filterPointsData(pointsData) {
+    if(!pointsData){return null;}
+
+    switch (this._currentFilter) {
+      case FILTERS.FUTURE:
+        return pointsData.slice().filter((it) => (new Date(it.dateFrom).valueOf() > Date.now()));
+      case FILTERS.PAST:
+        return pointsData.slice().filter((it) => (new Date(it.dateFrom).valueOf() < Date.now()));
+      default:
+        return pointsData;
+    }
   }
 }

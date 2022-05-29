@@ -4,15 +4,16 @@ import PointEditorComponent from '../views/point-editor';
 import { createElement } from '../utils/render';
 import { EVENTS } from '../mock/events';
 import dayjs from 'dayjs';
+import AbstractController from './abstract-controller';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDIT: 'EDIT',
 };
 
-export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
-    this._container = container;
+export default class PointController extends AbstractController{
+  constructor(container, dataModel, onDataChange, onViewChange) {
+    super(...arguments);
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._pointItem = createElement(getPointItemTemplate());
@@ -84,11 +85,11 @@ export default class PointController {
     };
 
     const handleFavoriteClick = () => {
+
       this._onDataChange({
         ...pointData,
         isFavorite: !pointData.isFavorite,
       });
-
       this._point.rerender();
     };
 

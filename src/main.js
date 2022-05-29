@@ -24,5 +24,6 @@ renderComponent(tripControls, navigation.getElement());
 // контроллеры:
 const filterController = new FilterController(tripControls, pointsModel);
 filterController.render();
-const pointsList = new TripController(tripEvents, pointsModel);
-pointsList.render();
+const tripController = new TripController(tripEvents, pointsModel);
+tripController.render();
+
