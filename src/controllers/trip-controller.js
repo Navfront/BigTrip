@@ -12,7 +12,8 @@ export default class TripController {
     this._sorts = SORTS.slice();
     this._isLoading = null;
     this._currentSortType = null;
-    this._pointsData = dataModel.getPoints();
+    this._dataModel = dataModel;
+    this._pointsData = this._dataModel.getPoints();
     this._sortedData = this._pointsData;
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
