@@ -27,6 +27,7 @@ export const sortPointsData = (pointsData, sortType) => {
       sortedPointsData = pointsData
         .slice()
         .sort((a, b) => b.basePrice - a.basePrice);
+
       break;
     case "offer":
       sortedPointsData = pointsData.slice().sort(

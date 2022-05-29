@@ -5,7 +5,7 @@ import InfoComponent from "./components/info";
 import NavComponent from "./components/nav";
 import FilterComponent from "./components/filter";
 import { renderComponent } from "./utils/render";
-import PointListController from "./controllers/point-list-controller";
+import TripController from "./controllers/trip-controller";
 
 const tripMain = document.querySelector(".trip-main");
 const tripControls = document.querySelector(".trip-controls__filters");
@@ -20,5 +20,5 @@ renderComponent(tripControls, navigation.getElement());
 const filter = new FilterComponent(FILTERS);
 renderComponent(tripControls, filter.getElement());
 
-const pointsList = new PointListController(tripEvents);
+const pointsList = new TripController(tripEvents);
 pointsList.render(TEST_POINTS);

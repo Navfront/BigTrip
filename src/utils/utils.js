@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -9,14 +9,18 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
 export const dayNow = dayjs().format(); //WIP
 
-export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format("D MMM");
+export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format('D MMM');
 
-export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
+export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
-export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format("HH:mm");
+export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
+
+export const humanizeForEdit = (dueDate) => dayjs(dueDate).format('DD/MM/YY HH:mm');
+
+export const dateToPickr = (date) => dayjs(date).format('YYYY-MM-DD HH:mm');
 
 export const getDiffTime = (date1, date2) => {
-  let diffTime = "";
+  let diffTime = '';
   const difference = new Date(date2) - new Date(date1);
   const day = Math.floor(((difference / 1000 / 60 / 60) * 22) % 7);
   const hour = Math.floor((difference / 1000 / 60 / 60) % 24);
@@ -30,3 +34,17 @@ export const getDiffTime = (date1, date2) => {
   }
   return diffTime;
 };
+
+
+export const findUpdatePoint = (points, newPoint) => {
+  const index = points.findIndex((point) => point.id === newPoint.id);
+  if (index === -1) {
+    return points;
+  }
+  return [
+    ...points.slice(0, index),
+    newPoint,
+    ...points.slice(index + 1),
+  ];
+};
+

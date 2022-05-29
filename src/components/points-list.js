@@ -1,5 +1,6 @@
-import { FILTERS } from "../mock/filters";
-import AbstractComponent from "./abstract-component.js";
+import { FILTERS } from '../mock/filters';
+
+import AbstractSmartComponent from './abstract-smart-component';
 
 // Значение отображаемого текста зависит от выбранного фильтра:
 // * Everthing – 'Click New Event to create your first point'
@@ -7,33 +8,33 @@ import AbstractComponent from "./abstract-component.js";
 // * Future — 'There are no future events now'.
 
 const getPointsListTemplate = (isEmpty, isLoading, choosenFilter) => {
-  let result = "";
+  let result = '';
   switch (choosenFilter) {
     case FILTERS[1]:
-      result = `<p class="trip-events__msg">There are no future events now</p>`;
+      result = '<p class="trip-events__msg">There are no future events now</p>';
       break;
 
     case FILTERS[2]:
-      result = `<p class="trip-events__msg">There are no past events now</p>`;
+      result = '<p class="trip-events__msg">There are no past events now</p>';
       break;
 
     default:
-      result = `<p class="trip-events__msg">Click New Event to create your first point</p>`;
+      result = '<p class="trip-events__msg">Click New Event to create your first point</p>';
       break;
   }
 
   if (!isEmpty && !isLoading) {
-    result = `<ul class="trip-events__list"></ul>`;
+    result = '<ul class="trip-events__list"></ul>';
   }
 
   if (isLoading) {
-    result = `<p class="trip-events__msg">Loading...</p>`;
+    result = '<p class="trip-events__msg">Loading...</p>';
   }
 
   return `${result}`;
 };
 
-export default class PointsListComponent extends AbstractComponent {
+export default class PointsListComponent extends AbstractSmartComponent {
   constructor(isEmpty = false, isLoading = false, choosenFilter = FILTERS[0]) {
     super();
     this._isEmpty = isEmpty;

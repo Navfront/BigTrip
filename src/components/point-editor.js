@@ -4,34 +4,34 @@ import {
   getOffersByType,
   getPicturesByDestination,
   getDescriptionOfDestination,
-} from "../mock/events";
-import AbstractComponent from "./abstract-component.js";
+} from '../mock/events';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+
+import AbstractSmartComponent from './abstract-smart-component';
+import { humanizeForEdit } from '../utils/utils';
 
 const eventTypes = EVENT_TYPES;
 
-const getEventTypeItemTemplate = (eventType) => {
-  return `
+const getEventTypeItemTemplate = (eventType) => `
   <div class="event__type-item">
   <input id="event-type-${eventType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType}">
   <label class="event__type-label  event__type-label--${eventType}" for="event-type-${eventType}-1">${eventType}</label>
 </div>
   `;
-};
 
-const getDestinationOptionTemplate = (destination) => {
-  return `
+const getDestinationOptionTemplate = (destination) => `
   <option value="${destination}"></option>
   `;
-};
 
 const getOffer = (offer, isChecked = false) => {
-  const offerName = offer.title.split(" ").join("-");
+  const offerName = offer.title.split(' ').join('-');
 
   return `
   <div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerName}-1" type="checkbox" name="event-offer-${offerName}" ${
-    isChecked ? "checked" : ""
-  }>
+  isChecked ? 'checked' : ''
+}>
   <label class="event__offer-label" for="event-offer-${offerName}-1">
     <span class="event__offer-title">${offer.title}</span>
     &plus;&euro;&nbsp;
@@ -41,24 +41,22 @@ const getOffer = (offer, isChecked = false) => {
   `;
 };
 
-const getDestinationImage = (imgSrc) => {
-  return `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
-};
+const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (pointData = {}) => {
   const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
-  let choosenDestination = destination || "geneva";
-  let choosenDueDateFrom = dateFrom;
-  let choosenDueDateTo = dateTo;
-  let choosenType = type || eventTypes[0];
+  const choosenDestination = destination || '';
+  const choosenDueDateFrom = humanizeForEdit(dateFrom);
+  const choosenDueDateTo = humanizeForEdit(dateTo);
+  const choosenType = type || eventTypes[0];
 
-  let currentPrice = basePrice || 0;
-  let currentDestinationOptions = getDestinationByTypes(choosenType);
-  let currentOffers = offers || getOffersByType(choosenType);
-  let currentDescription = getDescriptionOfDestination(choosenDestination);
+  const currentPrice = basePrice || 0;
+  const currentDestinationOptions = getDestinationByTypes(choosenType);
+  const currentOffers = offers || getOffersByType(choosenType);
+  const currentDescription = getDescriptionOfDestination(choosenDestination);
 
-  let hasOffers = currentOffers.length > 0;
-  let hasDestinations = currentDestinationOptions.length > 0;
+  const hasOffers = currentOffers.length > 0;
+  const hasDestination = destination.length > 0;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -74,25 +72,21 @@ const getPointEditorTemplate = (pointData = {}) => {
           <legend class="visually-hidden">Event type</legend>
 
          ${eventTypes
-           .map((it) => {
-             return getEventTypeItemTemplate(it);
-           })
-           .join("")}
+    .map((it) => getEventTypeItemTemplate(it))
+    .join('')}
         </fieldset>
       </div>
     </div>
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        Flight
+      ${choosenType}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${choosenDestination}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${currentDestinationOptions
-        .map((it) => {
-          return getDestinationOptionTemplate(it);
-        })
-        .join("")}
+    .map((it) => getDestinationOptionTemplate(it))
+    .join('')}
       </datalist>
     </div>
 
@@ -116,90 +110,128 @@ const getPointEditorTemplate = (pointData = {}) => {
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
   ${
-    hasOffers
-      ? '<section class="event__details"><section class="event__section  event__section--offers"><h3 class="event__section-title  event__section-title--offers">Offers</h3><div class="event__available-offers"> '
-      : ""
-  }
+  hasOffers
+    ? '<section class="event__details"><section class="event__section  event__section--offers"><h3 class="event__section-title  event__section-title--offers">Offers</h3><div class="event__available-offers"> '
+    : ''
+}
 
 
 ${
   hasOffers
     ? currentOffers
-        .map((it, index) => {
-          return getOffer(it, index === 0 || index === 1);
-        })
-        .join("")
-    : ""
+      .map((it, index) => getOffer(it, index === 0 || index === 1))
+      .join('')
+    : ''
 }
 
   </div>
-  ${hasOffers ? "</section>" : ""}
+  ${hasOffers ? '</section>' : ''}
 
   ${
-    hasDestinations
-      ? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">'
-      : ""
-  }
-    ${hasDestinations ? currentDescription : ""}
+  hasDestination? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
+}
+    ${hasDestination ? currentDescription : ''}
       ${
-        hasDestinations
-          ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
-          : ""
-      }
+  hasDestination
+    ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
+    : ''
+}
 
          ${
-           hasDestinations
-             ? getPicturesByDestination(choosenDestination)
-                 .map((it) => getDestinationImage(it.src))
-                 .join("")
-             : ""
-         }
-         ${hasDestinations ? "</div></div></section>" : ""}
+  hasDestination
+    ? getPicturesByDestination(choosenDestination)
+      .map((it) => getDestinationImage(it.src))
+      .join('')
+    : ''
+}
+         ${hasDestination ? '</div></div></section>' : ''}
   </section>
 </form>`;
 };
 
-export default class PointEditorComponent extends AbstractComponent {
+export default class PointEditorComponent extends AbstractSmartComponent {
   constructor(
-    choosenType,
-    choosenDestination,
-    choosenDueDateFrom,
-    choosenDueDateTo,
-    currentDestinationOptions,
-    currentOffers,
-    currentDescription
+    pointData,
   ) {
     super();
-    this._choosenType = choosenType;
-    this._choosenDestination = choosenDestination;
-    this._choosenDueDateFrom = choosenDueDateFrom;
-    this._choosenDueDateTo = choosenDueDateTo;
-    this._currentDestinationOptions = currentDestinationOptions;
-    this._currentOffers = currentOffers;
-    this._currentDescription = currentDescription;
+
+    // handlers cb
+    this._onSaveHandler = null;
+    this._onCancelHandler = null;
+    this._onToggleEventTypeHandler = null;
+    this._onChangeDestinationHandler = null;
+    this._onTimeInputHandler = null;
+    // choosen data
+    this._pointData = pointData;
+  }
+
+  recoveryListeners() {
+    this.setOnSaveHandler(this._onSaveHandler);
+    this.setOnCancelHandler(this._onCancelHandler);
+    this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
+    this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
+    this.setOnTimeInputHandler(this._onTimeInputHandler);
   }
 
   getTemplate() {
     return getPointEditorTemplate(
-      this._choosenType,
-      this._choosenDestination,
-      this._choosenDueDateFrom,
-      this._choosenDueDateTo,
-      this._currentDestinationOptions,
-      this._currentOffers,
-      this._currentDescription
+      this._pointData,
     );
   }
 
-  setOnSaveHandler(callback) {
-    this.getElement()
-      .querySelector(".event__save-btn")
-      .addEventListener("click", callback);
+  rerender() {
+    super.rerender();
   }
 
-  setOnResetHandler(callback) {
-    this.getElement()
-      .querySelector(".event__reset-btn")
-      .addEventListener("click", callback);
+  _initFlatPickr() {
+    return flatpickr('.event__field-group--time',{
+      dateFormat: 'Y-m-d H:i',
+      enableTime: true,
+      minDate: 'today',
+      maxDate: new Date().fp_incr(14),
+      // eslint-disable-next-line camelcase
+      time_24hr: true
+    });
   }
+
+  setOnSaveHandler(callback) {
+    this._onSaveHandler = callback;
+    this.getElement()
+      .querySelector('.event__save-btn')
+      .addEventListener('click', this._onSaveHandler);
+  }
+
+  setOnCancelHandler(callback) {
+    this._onCancelHandler = callback;
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._onCancelHandler);
+  }
+
+  setOnToggleEventTypeHandler(callback) {
+    this._onToggleEventTypeHandler = callback;
+    const radios = this.getElement().querySelectorAll('.event__type-input');
+    radios.forEach((it) => it.addEventListener('change', this._onToggleEventTypeHandler));
+  }
+
+  setOnChangeDestinationHandler(callback) {
+    this._onChangeDestinationHandler = callback;
+    const element = this.getElement().querySelector('.event__input--destination');
+    element.addEventListener('click', (evt)=>{evt.target.value = '';});
+    element.addEventListener('change', callback);
+  }
+
+  setOnTimeInputHandler(callback) {
+    this._onTimeInputHandler = callback;
+    const timeInputs = this.getElement().querySelectorAll('.event__input--time');
+    timeInputs.forEach((it) => it.addEventListener('click', () => {
+      if (it.id.includes('end')) { this._onTimeInputHandler(this._initFlatPickr(), false); } else {
+        this._onTimeInputHandler(this._initFlatPickr(), true);
+      }
+    }));
+
+  }
+
 }
+
+
