@@ -1,5 +1,5 @@
-import PointsListComponent from '../components/points-list';
-import SortComponent from '../components/sort';
+import PointsListComponent from '../views/points-list';
+import SortComponent from '../views/sort';
 import { SORTS } from '../mock/sorts';
 import { renderComponent } from '../utils/render';
 import { sortPointsData } from '../utils/sort-utils';

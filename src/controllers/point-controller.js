@@ -1,6 +1,6 @@
-import { getPointItemTemplate } from './../components/point-item';
-import PointComponent from '../components/point';
-import PointEditorComponent from '../components/point-editor';
+import { getPointItemTemplate } from '../views/point-item';
+import PointComponent from '../views/point';
+import PointEditorComponent from '../views/point-editor';
 import { createElement } from '../utils/render';
 import { EVENTS } from '../mock/events';
 import dayjs from 'dayjs';
