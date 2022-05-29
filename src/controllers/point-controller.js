@@ -2,6 +2,7 @@ import { getPointItemTemplate } from './../components/point-item';
 import PointComponent from '../components/point';
 import PointEditorComponent from '../components/point-editor';
 import { createElement } from '../utils/render';
+import { EVENTS } from '../mock/events';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -15,6 +16,7 @@ export default class PointController {
     this._onViewChange = onViewChange;
     this._pointItem = createElement(getPointItemTemplate());
     this._pointData = null;
+    this._editData = null;
     this._point = null;
     this._pointEdit = null;
     this._mode = Mode.DEFAULT;
@@ -34,12 +36,10 @@ export default class PointController {
     //для ререндера
     const prevPoint = this._point;
     const prevEdit = this._pointEdit;
-
-
     this._pointData = pointData;
-    this._point = new PointComponent(pointData);
-    this._pointEdit = new PointEditorComponent(pointData);
-
+    this._editData = Object.assign({}, this._pointData);
+    this._point = new PointComponent(this._pointData);
+    this._pointEdit = new PointEditorComponent( this._editData);
 
     const onEscKeyDownHandler = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -62,7 +62,8 @@ export default class PointController {
       this._mode = Mode.EDIT;
     };
 
-    const handleSaveClick = () => {
+    const handleSaveClick = (evt) => {
+      evt.preventDefault();
       this._pointItem.replaceChild(
         this._point.getElement(),
         this._pointEdit.getElement()
@@ -89,11 +90,31 @@ export default class PointController {
       this._point.rerender();
     };
 
+    const handleTypeToggle = (evt) => {
+      this._editData.type = evt.target.value; //меняем тип
+      this._editData.offers = EVENTS[this._editData.type].offers; //меняем оферы по типу
+
+      this._pointEdit.rerender();
+    };
+
+    const handleDestinationChange = (evt) => {
+      //проверяем на пустое поле ина неверные данные
+      if (evt.target.value && EVENTS[this._editData.type].destinations.includes(evt.target.value)) {
+        this._editData.destination = evt.target.value;
+      } else {
+        this._editData.destination = '';
+      }
+
+      this._pointEdit.rerender();
+    };
+
     // устанавливаем cb в обработчики
     this._point.setOnRollUpHandler(handleRollUpClick);
     this._point.setOnFavoriteHandler(handleFavoriteClick);
     this._pointEdit.setOnSaveHandler(handleSaveClick);
     this._pointEdit.setOnCancelHandler(handleCancelClick);
+    this._pointEdit.setOnToggleEventTypeHandler(handleTypeToggle);
+    this._pointEdit.setOnChangeDestinationHandler(handleDestinationChange);
 
 
     //добавляем к родителю элементы

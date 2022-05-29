@@ -109,7 +109,6 @@ export default class PointComponent extends AbstractSmartComponent {
   }
 
   setOnFavoriteHandler(callback) {
-    // this._pointData.isFavorite = !this._pointData.isFavorite; //меняем данные внутри поинта для отрисовки favorite
     this._onFavoriteHandler = callback;
     this.getElement()
       .querySelector('.event__favorite-btn')

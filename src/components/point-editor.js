@@ -42,7 +42,7 @@ const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc
 
 const getPointEditorTemplate = (pointData = {}) => {
   const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
-  const choosenDestination = destination || 'geneva';
+  const choosenDestination = destination || '';
   const choosenDueDateFrom = dateFrom;
   const choosenDueDateTo = dateTo;
   const choosenType = type || eventTypes[0];
@@ -53,7 +53,7 @@ const getPointEditorTemplate = (pointData = {}) => {
   const currentDescription = getDescriptionOfDestination(choosenDestination);
 
   const hasOffers = currentOffers.length > 0;
-  const hasDestinations = currentDestinationOptions.length > 0;
+  const hasDestination = destination.length > 0;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -77,7 +77,7 @@ const getPointEditorTemplate = (pointData = {}) => {
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        Flight
+      ${choosenType}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${choosenDestination}" list="destination-list-1">
       <datalist id="destination-list-1">
@@ -125,25 +125,23 @@ ${
   ${hasOffers ? '</section>' : ''}
 
   ${
-  hasDestinations
-    ? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">'
-    : ''
+  hasDestination? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
 }
-    ${hasDestinations ? currentDescription : ''}
+    ${hasDestination ? currentDescription : ''}
       ${
-  hasDestinations
+  hasDestination
     ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
     : ''
 }
 
          ${
-  hasDestinations
+  hasDestination
     ? getPicturesByDestination(choosenDestination)
       .map((it) => getDestinationImage(it.src))
       .join('')
     : ''
 }
-         ${hasDestinations ? '</div></div></section>' : ''}
+         ${hasDestination ? '</div></div></section>' : ''}
   </section>
 </form>`;
 };
@@ -163,7 +161,8 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     // handlers cb
     this._onSaveHandler = null;
     this._onCancelHandler = null;
-    this._onChooseEventTypeHandler = null;
+    this._onToggleEventTypeHandler = null;
+    this._onChangeDestinationHandler = null;
     // choosen data
     this._choosenType = choosenType;
     this._choosenDestination = choosenDestination;
@@ -176,8 +175,9 @@ export default class PointEditorComponent extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setOnSaveHandler(this._onSaveHandler);
-    this.setOnResetHandler(this._onResetHandler);
-    this.setOnChooseEventHandler(this._onChooseEventTypeHandler);
+    this.setOnCancelHandler(this._onCancelHandler);
+    this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
+    this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
   }
 
   getTemplate() {
@@ -210,10 +210,15 @@ export default class PointEditorComponent extends AbstractSmartComponent {
       .addEventListener('click', this._onCancelHandler);
   }
 
-  setOnChooseEventHandler(callback) {
-    this._onChooseEventTypeHandler = callback;
-    this.getElement()
-      .querySelector('.event__type-toggle')
-      .addEventListener('change', this._onChooseEventTypeHandler);
+  setOnToggleEventTypeHandler(callback) {
+    this._onToggleEventTypeHandler = callback;
+    const radios = this.getElement().querySelectorAll('.event__type-input');
+    radios.forEach((it) => it.addEventListener('change', this._onToggleEventTypeHandler));
   }
+
+  setOnChangeDestinationHandler(callback) {
+    this._onChangeDestinationHandler = callback;
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', callback);
+  }
+
 }
