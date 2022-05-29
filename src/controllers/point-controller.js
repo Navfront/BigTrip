@@ -3,6 +3,7 @@ import PointComponent from '../components/point';
 import PointEditorComponent from '../components/point-editor';
 import { createElement } from '../utils/render';
 import { EVENTS } from '../mock/events';
+import dayjs from 'dayjs';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -79,6 +80,7 @@ export default class PointController {
       );
       document.removeEventListener('keydown', onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
+
     };
 
     const handleFavoriteClick = () => {
@@ -108,6 +110,18 @@ export default class PointController {
       this._pointEdit.rerender();
     };
 
+    const handleTimeClick = (pickr, isFrom) => {
+      pickr.config.onChange.push((selectedDates, dateStr) => {
+        if (isFrom) { this._editData.dateFrom = dayjs(dateStr).toISOString(); } else { this._editData.dateTo = dayjs(dateStr).toISOString(); }
+        this._pointEdit.rerender();
+      });
+      pickr.config.onClose.push((selectedDates, dateStr, instance) => {
+        instance.destroy();
+      });
+
+    };
+
+
     // устанавливаем cb в обработчики
     this._point.setOnRollUpHandler(handleRollUpClick);
     this._point.setOnFavoriteHandler(handleFavoriteClick);
@@ -115,6 +129,7 @@ export default class PointController {
     this._pointEdit.setOnCancelHandler(handleCancelClick);
     this._pointEdit.setOnToggleEventTypeHandler(handleTypeToggle);
     this._pointEdit.setOnChangeDestinationHandler(handleDestinationChange);
+    this._pointEdit.setOnTimeInputHandler(handleTimeClick);
 
 
     //добавляем к родителю элементы
@@ -124,5 +139,7 @@ export default class PointController {
       this._pointItem.append(this._point.getElement());
       this._container.append(this._pointItem);
     }
+
+
   }
 }

@@ -15,6 +15,10 @@ export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
 export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
+export const humanizeForEdit = (dueDate) => dayjs(dueDate).format('DD/MM/YY HH:mm');
+
+export const dateToPickr = (date) => dayjs(date).format('YYYY-MM-DD HH:mm');
+
 export const getDiffTime = (date1, date2) => {
   let diffTime = '';
   const difference = new Date(date2) - new Date(date1);

@@ -5,8 +5,11 @@ import {
   getPicturesByDestination,
   getDescriptionOfDestination,
 } from '../mock/events';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 import AbstractSmartComponent from './abstract-smart-component';
+import { humanizeForEdit } from '../utils/utils';
 
 const eventTypes = EVENT_TYPES;
 
@@ -43,8 +46,8 @@ const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc
 const getPointEditorTemplate = (pointData = {}) => {
   const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
   const choosenDestination = destination || '';
-  const choosenDueDateFrom = dateFrom;
-  const choosenDueDateTo = dateTo;
+  const choosenDueDateFrom = humanizeForEdit(dateFrom);
+  const choosenDueDateTo = humanizeForEdit(dateTo);
   const choosenType = type || eventTypes[0];
 
   const currentPrice = basePrice || 0;
@@ -148,13 +151,7 @@ ${
 
 export default class PointEditorComponent extends AbstractSmartComponent {
   constructor(
-    choosenType,
-    choosenDestination,
-    choosenDueDateFrom,
-    choosenDueDateTo,
-    currentDestinationOptions,
-    currentOffers,
-    currentDescription
+    pointData,
   ) {
     super();
 
@@ -163,14 +160,9 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     this._onCancelHandler = null;
     this._onToggleEventTypeHandler = null;
     this._onChangeDestinationHandler = null;
+    this._onTimeInputHandler = null;
     // choosen data
-    this._choosenType = choosenType;
-    this._choosenDestination = choosenDestination;
-    this._choosenDueDateFrom = choosenDueDateFrom;
-    this._choosenDueDateTo = choosenDueDateTo;
-    this._currentDestinationOptions = currentDestinationOptions;
-    this._currentOffers = currentOffers;
-    this._currentDescription = currentDescription;
+    this._pointData = pointData;
   }
 
   recoveryListeners() {
@@ -178,22 +170,28 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     this.setOnCancelHandler(this._onCancelHandler);
     this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
     this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
+    this.setOnTimeInputHandler(this._onTimeInputHandler);
   }
 
   getTemplate() {
     return getPointEditorTemplate(
-      this._choosenType,
-      this._choosenDestination,
-      this._choosenDueDateFrom,
-      this._choosenDueDateTo,
-      this._currentDestinationOptions,
-      this._currentOffers,
-      this._currentDescription
+      this._pointData,
     );
   }
 
   rerender() {
     super.rerender();
+  }
+
+  _initFlatPickr() {
+    return flatpickr('.event__field-group--time',{
+      dateFormat: 'Y-m-d H:i',
+      enableTime: true,
+      minDate: 'today',
+      maxDate: new Date().fp_incr(14),
+      // eslint-disable-next-line camelcase
+      time_24hr: true
+    });
   }
 
   setOnSaveHandler(callback) {
@@ -218,7 +216,22 @@ export default class PointEditorComponent extends AbstractSmartComponent {
 
   setOnChangeDestinationHandler(callback) {
     this._onChangeDestinationHandler = callback;
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', callback);
+    const element = this.getElement().querySelector('.event__input--destination');
+    element.addEventListener('click', (evt)=>{evt.target.value = '';});
+    element.addEventListener('change', callback);
+  }
+
+  setOnTimeInputHandler(callback) {
+    this._onTimeInputHandler = callback;
+    const timeInputs = this.getElement().querySelectorAll('.event__input--time');
+    timeInputs.forEach((it) => it.addEventListener('click', () => {
+      if (it.id.includes('end')) { this._onTimeInputHandler(this._initFlatPickr(), false); } else {
+        this._onTimeInputHandler(this._initFlatPickr(), true);
+      }
+    }));
+
   }
 
 }
+
+
