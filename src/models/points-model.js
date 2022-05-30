@@ -21,11 +21,7 @@ export default class PointsModel {
    * Восстанавливает оригинал sortsData
    */
   restoreSorts() {
-
-    console.log('restore sorts...', this);
-
-    const s =  SORTS.slice();
-    this._sortsData = s;
+    this._sortsData = JSON.parse(JSON.stringify(SORTS));
     return this._sortsData;
   }
 
@@ -34,7 +30,9 @@ export default class PointsModel {
    * @returns object
    */
   getSorts() {
-    if(this._sortsData){ return this._sortsData; }
+    if (this._sortsData) {
+      return this._sortsData;
+    }
     else {
       return this.restoreSorts();
     }
@@ -135,7 +133,6 @@ export default class PointsModel {
   * @param {Array} Handlers
   */
   _callHandlers(handlers) {
-    console.log('notify', handlers);
     if(handlers.length>0){handlers.forEach((it) => it());}
   }
 

@@ -4,13 +4,6 @@ import { sortPointsData } from '../utils/sort-utils';
 import PointController from './point-controller';
 import AbstractController from './abstract-controller';
 
-function renderCounter() {
-  let c = 0;
-  return (() => { c += 1;
-    return c;});
-}
-const rC = renderCounter();
-
 export default class TripController extends AbstractController {
   constructor() {
     super(...arguments);
@@ -20,8 +13,11 @@ export default class TripController extends AbstractController {
     this._pointsData = this._dataModel.getPoints();
     this._isDataLoading = false;
     this._isDataEmpty = this._pointsData.length === 0;
-    this._sort = new SortComponent(this._sorts);
-    this._pointListComponent = new PointsListComponent(this._isDataEmpty, this._isDataLoading);
+    this._sort = new SortComponent(this._dataModel);
+    this._pointListComponent = new PointsListComponent(
+      this._isDataEmpty,
+      this._isDataLoading
+    );
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -32,13 +28,14 @@ export default class TripController extends AbstractController {
     //подписываемся на изменение фильтра
     this._dataModel.setFilterChangeHandler(this._onFilterChange);
     this._dataModel.setSortsChangeHandler(this._onSortChange);
+
+
   }
 
   _onSortChange() {
-    this._pointsData = sortPointsData( this._pointsData, this._dataModel.getCurrentSort());
+    this._pointsData = sortPointsData(this._pointsData,this._dataModel.getCurrentSort());
     this.render();
   }
-
 
   _onDataChange(newDataPoint) {
     const pointId = this._dataModel.updatePoint(newDataPoint);
@@ -54,17 +51,19 @@ export default class TripController extends AbstractController {
   _onFilterChange() {
     this._pointsData = this._dataModel.getPoints();
     this._dataModel.restoreSorts();
+    this._sort.rerender();
     this.render();
   }
 
   _cleanBeforeRender() {
-    this._pointControllers.forEach((it) => { it.destroy(); });
+    this._pointControllers.forEach((it) => {
+      it.destroy();
+    });
   }
 
   _onSortClickHandler(evt) {
     this._dataModel.changeCurrentSort(evt.currentTarget.dataset.sortName);
   }
-
 
   render() {
     this._cleanBeforeRender();
@@ -74,9 +73,10 @@ export default class TripController extends AbstractController {
     this._sort.setOnSortClickHandler(this._onSortClickHandler);
 
     //рендерим point-list с точками
-    this._renderComponent(this._container, this._pointListComponent.getElement());
-
-    console.log('render counts:',rC());
+    this._renderComponent(
+      this._container,
+      this._pointListComponent.getElement()
+    );
 
     //рендерим все точки если pointsData не пустой
     this._pointControllers.clear();
