@@ -28,8 +28,7 @@ const getDestinationOptionTemplate = (destination) => `
 const getOffer = (offer, isChecked = false) => {
   const offerName = offer.title.split(' ').join('-');
 
-  return `
-  <div class="event__offer-selector">
+  return `<div class="event__offer-selector">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerName}-1" type="checkbox" name="event-offer-${offerName}" ${
   isChecked ? 'checked' : ''
 }>
@@ -203,9 +202,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
 
   setOnSaveHandler(callback) {
     this._onSaveHandler = callback;
-    this.getElement()
-      .querySelector('.event__save-btn')
-      .addEventListener('click', this._onSaveHandler);
+    this.getElement().onsubmit = this._onSaveHandler;
   }
 
   setOnCancelHandler(callback) {

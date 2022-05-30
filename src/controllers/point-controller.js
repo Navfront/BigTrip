@@ -72,6 +72,18 @@ export default class PointController extends AbstractController{
 
     const handleSaveClick = (evt) => {
       evt.preventDefault();
+      const formData = new FormData(evt.target);
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0] }, ${  pair[1]}`);
+      }
+      //  event-destination, amsterdam
+      //  event-start-time, 22/06/22 01:55
+      //  event-end-time, 22/06/22 14:22
+      //  event-price, 1100
+      //  event-offer-Choose-meal, on
+      //  event-offer-Upgrade-to-comfort-class, on
+
+
       this._pointItem.replaceChild(
         this._point.getElement(),
         this._pointEdit.getElement()
