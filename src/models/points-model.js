@@ -69,8 +69,8 @@ export default class PointsModel {
   * Массив колбэков
   * @param {Array} Handlers
   */
-  _callHandlers(Handlers) {
-    Handlers.forEach((it)=>it());
+  _callHandlers(handlers) {
+    handlers.forEach((it) => it());
   }
 
   /**

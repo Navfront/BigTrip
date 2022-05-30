@@ -24,6 +24,15 @@ export default class PointController extends AbstractController{
     this._mode = Mode.DEFAULT;
   }
 
+  destroy() {
+    this._pointItem.remove();
+    this._point.removeElement();
+    this._pointEdit.removeElement();
+    this._point = null;
+    this._pointEdit = null;
+    this._mode = Mode.DEFAULT;
+  }
+
   resetMode() {
     if (this._mode !== Mode.DEFAULT) {
       this._pointItem.replaceChild(

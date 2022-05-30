@@ -6,6 +6,13 @@ import PointController from './point-controller';
 import { findUpdatePoint } from './../utils/utils';
 import AbstractController from './abstract-controller';
 
+function renderCounter() {
+  let c = 0;
+  return (() => { c += 1;
+    return c;});
+}
+const rC = renderCounter();
+
 export default class TripController extends AbstractController {
   constructor() {
     super(...arguments);
@@ -13,14 +20,18 @@ export default class TripController extends AbstractController {
     this._isLoading = null;
     this._currentSortType = null;
     this._pointsData = this._dataModel.getPoints();
-    this._sortedData = this._dataModel.getPoints();
+    this._sort =  new SortComponent(SORTS);
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+
+    //подписываемся на изменение фильтра
+    this._dataModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   _onDataChange(newDataPoint) {
-    this._sortedData = findUpdatePoint(this._sortedData, newDataPoint);
+    this._pointsData = findUpdatePoint(this._pointsData, newDataPoint);
     this._pointControllers.get(newDataPoint.id).render(newDataPoint);
   }
 
@@ -28,7 +39,22 @@ export default class TripController extends AbstractController {
     this._pointControllers.forEach((controller) => controller.resetMode());
   }
 
+  _onFilterChange() {
+    this._pointsData = this._dataModel.getPoints();
+    this.render();
+  }
+
+  _cleanBeforeRender() {
+    this._pointControllers.forEach((it) => { it.destroy(); });
+    this._sort.rerender();
+  }
+
+
   render(isLoading = false, currentSortType = 'day') {
+
+    // this._container.innerHTML = '';
+    this._cleanBeforeRender();
+
     let isEmpty = true;
     if ( this._pointsData) {
       if (this._pointsData.length > 0) {
@@ -36,10 +62,10 @@ export default class TripController extends AbstractController {
       }
     }
 
+
     //обработчик клика по сортировке
     const onSortClickHandler = (evt) => {
       const sortType = evt.currentTarget.dataset.sortName;
-
       if (currentSortType !== sortType) {
         this._sorts.forEach((it) => {
           if (it.sortName === currentSortType) {
@@ -49,27 +75,29 @@ export default class TripController extends AbstractController {
             it.isChecked = true;
           }
         });
-        this._sortedData = sortPointsData( this._sortedData, sortType);
+        this._pointsData = sortPointsData( this._pointsData, sortType);
 
-        this._container.innerHTML = '';
         // второй ререндер
         this.render( false, sortType);
       }
     };
 
+
     //рендерим сортировку
-    const sort = new SortComponent(this._sorts);
-    this._renderComponent(this._container, sort.getElement());
-    sort.setOnSortClickHandler(onSortClickHandler);
+
+    this._renderComponent(this._container, this._sort.getElement());
+    this._sort.setOnSortClickHandler(onSortClickHandler);
 
     //рендерим point-list с точками
     const pointsList = new PointsListComponent(isEmpty, isLoading);
     this._renderComponent(this._container, pointsList.getElement());
 
+    console.log(rC());
+
     //рендерим все точки если pointsData не пустой
     this._pointControllers.clear();
     if (!isEmpty) {
-      this._sortedData.forEach((it) => {
+      this._pointsData.forEach((it) => {
         const pointController = new PointController(
           pointsList.getElement(),
           this._dataModel,

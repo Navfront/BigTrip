@@ -30,6 +30,11 @@ export default class SortComponent extends AbstractSmartComponent {
   constructor(sorts) {
     super();
     this._sorts = sorts;
+    this._onSortHandler = null;
+  }
+
+  recoveryListeners() {
+    this.setOnSortClickHandler(this._onSortHandler);
   }
 
   getTemplate() {
@@ -37,10 +42,11 @@ export default class SortComponent extends AbstractSmartComponent {
   }
 
   setOnSortClickHandler(callback) {
+    this._onSortHandler = callback;
     this._sorts.forEach((it) => {
       this.getElement()
         .querySelector(`#sort-${it.sortName}`)
-        .addEventListener('click', callback);
+        .addEventListener('click', this._onSortHandler);
     });
   }
 }
