@@ -6,9 +6,10 @@ import { EVENTS } from '../mock/events';
 import dayjs from 'dayjs';
 import AbstractController from './abstract-controller';
 
-const Mode = {
+export const Mode = {
   DEFAULT: 'DEFAULT',
   EDIT: 'EDIT',
+  ADD: 'ADD',
 };
 
 export default class PointController extends AbstractController{
@@ -17,8 +18,6 @@ export default class PointController extends AbstractController{
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._pointItem = createElement(getPointItemTemplate());
-    this._pointData = null;
-    this._editData = null;
     this._point = null;
     this._pointEdit = null;
     this._mode = Mode.DEFAULT;
@@ -47,10 +46,8 @@ export default class PointController extends AbstractController{
     //для ререндера
     const prevPoint = this._point;
     const prevEdit = this._pointEdit;
-    this._pointData = pointData;
-    this._editData = Object.assign({}, this._pointData);
-    this._point = new PointComponent(this._pointData);
-    this._pointEdit = new PointEditorComponent( this._editData);
+    this._point = new PointComponent(pointData);
+    this._pointEdit = new PointEditorComponent(pointData);
 
     const onEscKeyDownHandler = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -83,14 +80,17 @@ export default class PointController extends AbstractController{
       this._mode = Mode.DEFAULT;
     };
 
-    const handleCancelClick = () => {
+    const handleCancelClick = (evt) => {
+      console.log(evt.target);
+    };
+
+    const handleRollDownClick = () => {
       this._pointItem.replaceChild(
         this._point.getElement(),
         this._pointEdit.getElement()
       );
       document.removeEventListener('keydown', onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
-
     };
 
     const handleFavoriteClick = () => {
@@ -140,6 +140,7 @@ export default class PointController extends AbstractController{
     this._pointEdit.setOnToggleEventTypeHandler(handleTypeToggle);
     this._pointEdit.setOnChangeDestinationHandler(handleDestinationChange);
     this._pointEdit.setOnTimeInputHandler(handleTimeClick);
+    this._pointEdit.setOnRollDownHandler(handleRollDownClick);
 
 
     //добавляем к родителю элементы

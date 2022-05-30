@@ -11,6 +11,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import AbstractSmartComponent from './abstract-smart-component';
 import { humanizeForEdit } from '../utils/utils';
 
+
 const eventTypes = EVENT_TYPES;
 
 const getEventTypeItemTemplate = (eventType) => `
@@ -43,7 +44,7 @@ const getOffer = (offer, isChecked = false) => {
 
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
-const getPointEditorTemplate = (pointData = {}) => {
+const getPointEditorTemplate = (pointData = {}, isAddMode = !pointData) => {
   const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
   const choosenDestination = destination || '';
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
@@ -107,7 +108,11 @@ const getPointEditorTemplate = (pointData = {}) => {
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Cancel</button>
+    <button class="event__reset-btn" type="reset">${isAddMode?'Cancel':'Delete'}</button>
+    ${isAddMode?'':`<button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+  </button>`}
+
   </header>
   ${
   hasOffers
@@ -158,6 +163,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     // handlers cb
     this._onSaveHandler = null;
     this._onCancelHandler = null;
+    this._onRollDownHandler = null;
     this._onToggleEventTypeHandler = null;
     this._onChangeDestinationHandler = null;
     this._onTimeInputHandler = null;
@@ -167,6 +173,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setOnSaveHandler(this._onSaveHandler);
+    this.setOnRollDownHandler(this._onRollDownHandler);
     this.setOnCancelHandler(this._onCancelHandler);
     this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
     this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
@@ -208,6 +215,13 @@ export default class PointEditorComponent extends AbstractSmartComponent {
       .addEventListener('click', this._onCancelHandler);
   }
 
+  setOnRollDownHandler(callback) {
+    this._onRollDownHandler = callback;
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._onRollDownHandler);
+  }
+
   setOnToggleEventTypeHandler(callback) {
     this._onToggleEventTypeHandler = callback;
     const radios = this.getElement().querySelectorAll('.event__type-input');
@@ -229,7 +243,6 @@ export default class PointEditorComponent extends AbstractSmartComponent {
         this._onTimeInputHandler(this._initFlatPickr(), true);
       }
     }));
-
   }
 
 }
