@@ -36,15 +36,3 @@ export const getDiffTime = (date1, date2) => {
 };
 
 
-export const findUpdatePoint = (points, newPoint) => {
-  const index = points.findIndex((point) => point.id === newPoint.id);
-  if (index === -1) {
-    return points;
-  }
-  return [
-    ...points.slice(0, index),
-    newPoint,
-    ...points.slice(index + 1),
-  ];
-};
-

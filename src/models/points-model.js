@@ -1,3 +1,5 @@
+import { SORTS } from '../mock/sorts';
+
 export const FILTERS = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
@@ -8,9 +10,65 @@ export default class PointsModel {
   constructor() {
     this._pointsData = null;
     this._currentFilter = FILTERS.EVERYTHING;
+    this._sortsData = null;
     //Подписчики
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
+    this._sortsDataChangeHandlers = [];
+  }
+
+  /**
+   * Восстанавливает оригинал sortsData
+   */
+  restoreSorts() {
+
+    console.log('restore sorts...', this);
+
+    const s =  SORTS.slice();
+    this._sortsData = s;
+    return this._sortsData;
+  }
+
+  /**
+   *Возавращает SortsData
+   * @returns object
+   */
+  getSorts() {
+    if(this._sortsData){ return this._sortsData; }
+    else {
+      return this.restoreSorts();
+    }
+  }
+
+  /**
+   * Принимает новый тип сортировки
+   * @param {string} newSortType
+   */
+  changeCurrentSort(newSortType) {
+    this.getSorts().forEach((it) => {
+      it.isChecked = false;
+      if (it.sortName === newSortType) {
+        it.isChecked = true;
+      }
+    });
+    // Notify
+    this._callHandlers(this._sortsDataChangeHandlers);
+  }
+
+  /**
+   * Возвращает тип текущей сортировки
+   * @returns string
+   */
+  getCurrentSort() {
+    const sort = this.getSorts().find((it)=>it.isChecked===true);
+    return sort.sortName;
+  }
+
+  /**
+   * Отключить все sorts
+   */
+  disableSorts() {
+    this.getSorts().forEach((it) => { it.isDisabled = true;});
   }
 
   /**
@@ -41,7 +99,7 @@ export default class PointsModel {
   /**
    *
    * @param {Object} newPoint
-   * @returns Возвращает false если не нашел индекс, true если ок
+   * @returns Возвращает index поинта если ок и false если не нашел
    */
   updatePoint(newPoint) {
     const index = this._pointsData.findIndex((it) => it.id === newPoint.id);
@@ -49,7 +107,10 @@ export default class PointsModel {
       return false;
     }
     this._pointsData = [].concat(this._pointsData.slice(0, index), newPoint, this._pointsData.slice(index + 1));
-    return true;
+
+    //notify all data change
+    this._callHandlers(this._dataChangeHandlers);
+    return index;
   }
 
   /**
@@ -65,12 +126,17 @@ export default class PointsModel {
     this._filterChangeHandlers.push(handler);
   }
 
+  setSortsChangeHandler(handler) {
+    this._sortsDataChangeHandlers.push(handler);
+  }
+
   /**
   * Массив колбэков
   * @param {Array} Handlers
   */
   _callHandlers(handlers) {
-    handlers.forEach((it) => it());
+    console.log('notify', handlers);
+    if(handlers.length>0){handlers.forEach((it) => it());}
   }
 
   /**
@@ -89,6 +155,7 @@ export default class PointsModel {
         this._currentFilter = FILTERS.EVERYTHING;
         break;
     }
+    //notify all filter change
     this._callHandlers(this._filterChangeHandlers);
   }
 

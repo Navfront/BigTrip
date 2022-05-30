@@ -144,6 +144,7 @@ export default class PointController extends AbstractController{
 
     //добавляем к родителю элементы
     if (prevPoint && prevEdit) {
+      //ререндер
       this._pointItem.replaceChild( this._point.getElement(),prevPoint.getElement());
     } else {
       this._pointItem.append(this._point.getElement());

@@ -1,26 +1,26 @@
 export const SORTS = [
   {
-    sortName: "day",
+    sortName: 'day',
     isDisabled: false,
     isChecked: true,
   },
   {
-    sortName: "event",
+    sortName: 'event',
     isDisabled: false,
     isChecked: false,
   },
   {
-    sortName: "time",
+    sortName: 'time',
     isDisabled: false,
     isChecked: false,
   },
   {
-    sortName: "price",
+    sortName: 'price',
     isDisabled: false,
     isChecked: false,
   },
   {
-    sortName: "offer",
+    sortName: 'offer',
     isDisabled: false,
     isChecked: false,
   },
