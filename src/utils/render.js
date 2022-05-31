@@ -1,4 +1,4 @@
-import AbstractComponent from './../components/abstract-component';
+import AbstractComponent from '../views/abstract-component';
 
 export const POSITION_TYPES = {
   APPEND: 'append',

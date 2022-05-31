@@ -1,80 +1,90 @@
-import PointsListComponent from '../components/points-list';
-import SortComponent from '../components/sort';
-import { SORTS } from '../mock/sorts';
-import { renderComponent } from '../utils/render';
+import PointsListComponent from '../views/points-list';
+import SortComponent from '../views/sort';
 import { sortPointsData } from '../utils/sort-utils';
 import PointController from './point-controller';
-import { findUpdatePoint } from './../utils/utils';
+import AbstractController from './abstract-controller';
 
-export default class TripController {
-  constructor(container) {
-    this._container = container;
-    this._sorts = SORTS.slice();
+export default class TripController extends AbstractController {
+  constructor() {
+    super(...arguments);
+    this._sorts = this._dataModel.getSorts();
     this._isLoading = null;
-    this._currentSortType = null;
-    this._pointData = null;
-    this._sortedData = this._pointData;
+    this._currentSortType = this._dataModel.getCurrentSort();
+    this._pointsData = this._dataModel.getPoints();
+    this._isDataLoading = false;
+    this._isDataEmpty = this._pointsData.length === 0;
+    this._sort = new SortComponent(this._dataModel);
+    this._pointListComponent = new PointsListComponent(
+      this._isDataEmpty,
+      this._isDataLoading
+    );
     this._pointControllers = new Map();
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+    this._onSortClickHandler = this._onSortClickHandler.bind(this);
+    this._onSortChange = this._onSortChange.bind(this);
+
+    //подписываемся на изменение фильтра
+    this._dataModel.setFilterChangeHandler(this._onFilterChange);
+    this._dataModel.setSortsChangeHandler(this._onSortChange);
+
+
+  }
+
+  _onSortChange() {
+    this._pointsData = sortPointsData(this._pointsData,this._dataModel.getCurrentSort());
+    this.render();
   }
 
   _onDataChange(newDataPoint) {
-    this._sortedData = findUpdatePoint(this._sortedData, newDataPoint);
-    this._pointControllers.get(newDataPoint.id).render(newDataPoint);
+    const pointId = this._dataModel.updatePoint(newDataPoint);
+    //смотрим изменения по поинту, узнаем id
+    this._pointsData = this._dataModel.getPoints();
+    this._pointControllers.get(pointId.toString()).render(newDataPoint); //render on change
   }
-
 
   _onViewChange() {
     this._pointControllers.forEach((controller) => controller.resetMode());
   }
 
-  render(pointsData, isLoading = false, currentSortType = 'day') {
-    this._pointData = pointsData;
-    this._sortedData = pointsData;
-    let isEmpty = true;
-    if ( this._pointData) {
-      if (this._pointData.length > 0) {
-        isEmpty = false;
-      }
-    }
+  _onFilterChange() {
+    this._pointsData = this._dataModel.getPoints();
+    this._dataModel.restoreSorts();
+    this._sort.rerender();
+    this.render();
+  }
 
-    //обработчик клика по сортировке
-    const onSortClickHandler = (evt) => {
-      const sortType = evt.currentTarget.dataset.sortName;
+  _cleanBeforeRender() {
+    this._pointControllers.forEach((it) => {
+      it.destroy();
+    });
+  }
 
-      if (currentSortType !== sortType) {
-        this._sorts.forEach((it) => {
-          if (it.sortName === currentSortType) {
-            it.isChecked = false;
-          }
-          if (it.sortName === sortType) {
-            it.isChecked = true;
-          }
-        });
-        this._sortedData = sortPointsData( this._sortedData, sortType);
+  _onSortClickHandler(evt) {
+    this._dataModel.changeCurrentSort(evt.currentTarget.dataset.sortName);
+  }
 
-        this._container.innerHTML = '';
-        // второй ререндер
-        this.render(this._sortedData, false, sortType);
-      }
-    };
+  render() {
+    this._cleanBeforeRender();
 
     //рендерим сортировку
-    const sort = new SortComponent(this._sorts);
-    renderComponent(this._container, sort.getElement());
-    sort.setOnSortClickHandler(onSortClickHandler);
+    this._renderComponent(this._container, this._sort.getElement());
+    this._sort.setOnSortClickHandler(this._onSortClickHandler);
 
     //рендерим point-list с точками
-    const pointsList = new PointsListComponent(isEmpty, isLoading);
-    renderComponent(this._container, pointsList.getElement());
+    this._renderComponent(
+      this._container,
+      this._pointListComponent.getElement()
+    );
 
     //рендерим все точки если pointsData не пустой
     this._pointControllers.clear();
-    if (!isEmpty) {
-      pointsData.forEach((it) => {
+    if (!this._isDataEmpty) {
+      this._pointsData.forEach((it) => {
         const pointController = new PointController(
-          pointsList.getElement(),
+          this._pointListComponent.getElement(),
+          this._dataModel,
           this._onDataChange,
           this._onViewChange
         );

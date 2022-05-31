@@ -26,11 +26,23 @@ const getFiltersTemplate = (filters) => `<form class="trip-filters" action="#" m
 
 export default class FilterComponent extends AbstractSmartComponent {
   constructor(filters) {
-    super();
+    super(...arguments);
     this._filters = filters;
+    this._onFilterClickHandler = null;
   }
 
   getTemplate() {
     return getFiltersTemplate(this._filters);
+  }
+
+  recoveryListeners() {
+    this.setOnFiltersClickHandler(this._onFilterClickHandler);
+  }
+
+  setOnFiltersClickHandler(callback) {
+    this._onFilterClickHandler = callback;
+    this.getElement().querySelectorAll('.trip-filters__filter-input').forEach((it) => {
+      it.addEventListener('click', this._onFilterClickHandler);
+    });
   }
 }

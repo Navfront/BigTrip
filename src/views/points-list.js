@@ -1,5 +1,6 @@
-import { FILTERS } from '../mock/filters';
 
+
+import { FILTERS } from '../models/points-model';
 import AbstractSmartComponent from './abstract-smart-component';
 
 // Значение отображаемого текста зависит от выбранного фильтра:
@@ -10,11 +11,11 @@ import AbstractSmartComponent from './abstract-smart-component';
 const getPointsListTemplate = (isEmpty, isLoading, choosenFilter) => {
   let result = '';
   switch (choosenFilter) {
-    case FILTERS[1]:
+    case FILTERS.FUTURE:
       result = '<p class="trip-events__msg">There are no future events now</p>';
       break;
 
-    case FILTERS[2]:
+    case FILTERS.PAST:
       result = '<p class="trip-events__msg">There are no past events now</p>';
       break;
 
@@ -40,6 +41,10 @@ export default class PointsListComponent extends AbstractSmartComponent {
     this._isEmpty = isEmpty;
     this._isLoading = isLoading;
     this._choosenFilter = choosenFilter;
+  }
+
+  recoveryListeners() {
+
   }
 
   getTemplate() {

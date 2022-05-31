@@ -19,7 +19,7 @@ const getEventOffer = (offer) => {
 };
 
 const getPointTemplate = (pointData = {}) => {
-  const { type, basePrice, isFavorite, dateFrom, dateTo, destination } =
+  const { type, basePrice, isFavorite, dateFrom, dateTo, destination, offers } =
     pointData;
 
   return `<div class="event">
@@ -53,17 +53,17 @@ const getPointTemplate = (pointData = {}) => {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     ${
-  pointData.offers && pointData.offers.length > 0
+  offers && offers.length > 0
     ? '<ul class="event__selected-offers">'
     : ''
 }
     ${
-  pointData.offers &&
-      pointData.offers
+  offers &&
+      offers
         .map((it) => getEventOffer(it))
         .join('')
 }
-      ${pointData.offers && pointData.offers.length > 0 ? '</ul>' : ''}
+      ${offers && offers.length > 0 ? '</ul>' : ''}
     <button class="event__favorite-btn ${
   isFavorite ? 'event__favorite-btn--active' : ''
 } " type="button">
