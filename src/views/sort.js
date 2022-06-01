@@ -1,4 +1,4 @@
-import AbstractSmartComponent from './abstract-smart-component';
+import AbstractComponent from './abstract-component';
 
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => `
   <div class="trip-sort__item  ${
@@ -27,10 +27,10 @@ const getSortTemplate = (sorts) =>
 </form>`
     : '';
 
-export default class SortComponent extends AbstractSmartComponent {
-  constructor(dataModel) {
+export default class SortComponent extends AbstractComponent {
+  constructor(data) {
     super();
-    this._dataModel = dataModel;
+    this._data = data;
     this._onSortHandler = null;
 
   }
@@ -40,13 +40,13 @@ export default class SortComponent extends AbstractSmartComponent {
   }
 
   _getTemplate() {
-    return getSortTemplate(this._dataModel.getSorts());
+    return getSortTemplate(this._data.getSorts());
   }
 
 
   setOnSortClickHandler(callback) {
     this._onSortHandler = callback;
-    this._dataModel.getSorts().forEach((it) => {
+    this._data.getSorts().forEach((it) => {
       this.getElement()
         .querySelector(`#sort-${it.sortName}`)
         .addEventListener('click', this._onSortHandler);

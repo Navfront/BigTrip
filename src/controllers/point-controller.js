@@ -3,6 +3,7 @@ import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
 import { createElement } from '../utils/render';
 import { getPointItemTemplate } from '../views/point-item';
+import { addComponent } from './../utils/render';
 
 
 export const Mode = {
@@ -37,8 +38,13 @@ export default class PointController extends AbstractController{
 
 
   init() {
+    //создаем инстансы компонентов точки и редактора
     this._point = new PointComponent(this._dataModel.getPointById(this._id));
     this._pointEdit = new PointEditorComponent(this._dataModel.getPointById(this._id));
+    //добавляем их к list-item
+    addComponent(this._pointItem, this._point.getElement());
+    //item рендерим в контейнер
+    addComponent(this._container, this._pointItem);
 
 
     this._point.setOnRollUpHandler(this._handleRollUpClick);

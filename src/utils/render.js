@@ -9,7 +9,7 @@ export const createElement = (template) => {
   return createdElement.firstChild;
 };
 
-export const renderComponent = (container, component, position) => {
+export const addComponent = (container, component, position = POSITION_TYPES.APPEND) => {
   switch (position) {
     case POSITION_TYPES.APPEND:
       container.append(component);

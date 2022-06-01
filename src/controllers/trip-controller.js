@@ -1,4 +1,9 @@
+import { FILTERS } from '../models/points-model';
+import PointsListComponent from '../views/points-list';
 import AbstractController from './abstract-controller';
+import PointController from './point-controller';
+import { addComponent } from './../utils/render';
+
 
 export default class TripController extends AbstractController {
   constructor(container, dataModel) {
@@ -14,6 +19,17 @@ export default class TripController extends AbstractController {
 
   init() {
 
+    const pointsList = new PointsListComponent(this._dataModel.getListData());
+    addComponent(this._container, pointsList.getElement());
+
+
+    // for (const point of this._dataModel.getPoints()) {
+    //   //создаем инстанс контроллера маршрута
+    //   const pointController = new PointController(pointsList.getElement(), this._dataModel, point.id, this._onDataChange, this._onViewChange);
+    //   //закидываем его в observer
+    //   this._pointControllers.set(point.id, pointController);
+    //   pointController.init();
+    // }
   }
 
   _onSortChange() {

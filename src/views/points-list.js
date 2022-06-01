@@ -1,14 +1,15 @@
-
-
 import { FILTERS } from '../models/points-model';
-import AbstractSmartComponent from './abstract-smart-component';
+import AbstractComponent from './abstract-component';
 
 // Значение отображаемого текста зависит от выбранного фильтра:
 // * Everthing – 'Click New Event to create your first point'
 // * Past — 'There are no past events now';
 // * Future — 'There are no future events now'.
+//
+const getPointsListTemplate = (data = { isEmpty: true, isLoading: false, choosenFilter: FILTERS.EVERYTHING }) => {
 
-const getPointsListTemplate = (isEmpty, isLoading, choosenFilter) => {
+  const { isEmpty, isLoading, choosenFilter } = data;
+
   let result = '';
   switch (choosenFilter) {
     case FILTERS.FUTURE:
@@ -35,19 +36,15 @@ const getPointsListTemplate = (isEmpty, isLoading, choosenFilter) => {
   return `${result}`;
 };
 
-export default class PointsListComponent extends AbstractSmartComponent {
-  constructor(isEmpty = false, isLoading = false, choosenFilter = FILTERS[0]) {
-    super();
-    this._isEmpty = isEmpty;
-    this._isLoading = isLoading;
-    this._choosenFilter = choosenFilter;
+export default class PointsListComponent extends AbstractComponent {
+  constructor(data) {
+    super(...arguments);
+    this._data = data;
   }
 
+  _recoveryListeners(){}
+
   _getTemplate() {
-    return getPointsListTemplate(
-      this._isEmpty,
-      this._isLoading,
-      this._choosenFilter
-    );
+    return getPointsListTemplate(this._data);
   }
 }

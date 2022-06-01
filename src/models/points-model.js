@@ -174,4 +174,8 @@ export default class PointsModel {
         return pointsData;
     }
   }
+
+  getListData() {
+    return { isEmpty: !this._pointsData || this._pointsData.length<1, isLoading: false, choosenFilter: this._currentFilter };
+  }
 }

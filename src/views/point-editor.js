@@ -7,10 +7,8 @@ import {
 } from '../mock/events';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-
-import AbstractSmartComponent from './abstract-smart-component';
+import AbstractComponent from './abstract-component';
 import { humanizeForEdit } from '../utils/utils';
-
 
 const eventTypes = EVENT_TYPES;
 
@@ -43,8 +41,8 @@ const getOffer = (offer, isChecked = false) => {
 
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
-const getPointEditorTemplate = (pointData = {}, isAddMode = !pointData) => {
-  const { type, basePrice, dateFrom, dateTo, destination, offers } = pointData;
+const getPointEditorTemplate = (data = {}, isAddMode = !data) => {
+  const { type, basePrice, dateFrom, dateTo, destination, offers } = data;
   const choosenDestination = destination || '';
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);
@@ -118,8 +116,6 @@ const getPointEditorTemplate = (pointData = {}, isAddMode = !pointData) => {
     ? '<section class="event__details"><section class="event__section  event__section--offers"><h3 class="event__section-title  event__section-title--offers">Offers</h3><div class="event__available-offers"> '
     : ''
 }
-
-
 ${
   hasOffers
     ? currentOffers
@@ -127,10 +123,8 @@ ${
       .join('')
     : ''
 }
-
   </div>
   ${hasOffers ? '</section>' : ''}
-
   ${
   hasDestination? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
 }
@@ -140,7 +134,6 @@ ${
     ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
     : ''
 }
-
          ${
   hasDestination
     ? getPicturesByDestination(choosenDestination)
@@ -153,12 +146,9 @@ ${
 </form>`;
 };
 
-export default class PointEditorComponent extends AbstractSmartComponent {
-  constructor(
-    pointData,
-  ) {
-    super(arguments);
-
+export default class PointEditorComponent extends AbstractComponent {
+  constructor(data) {
+    super(...arguments);
     // handlers cb
     this._onSaveHandler = null;
     this._onCancelHandler = null;
@@ -167,7 +157,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     this._onChangeDestinationHandler = null;
     this._onTimeInputHandler = null;
     // choosen data
-    this._pointData = pointData;
+    this._data = data;
   }
 
   _recoveryListeners() {
@@ -181,7 +171,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
 
   _getTemplate() {
     return getPointEditorTemplate(
-      this._pointData,
+      this._data,
     );
   }
 

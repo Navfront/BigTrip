@@ -1,4 +1,4 @@
-import AbstractSmartComponent from './abstract-smart-component.js';
+import AbstractComponent from './abstract-component.js';
 
 const MDASH = ' &mdash; ';
 
@@ -26,13 +26,13 @@ const getInfoTemplate = (infoData = DEFAULT_DATA) => {
   </p>
 </section>`;};
 
-export default class InfoComponent extends AbstractSmartComponent {
-  constructor() {
-    super(arguments);
-
+export default class InfoComponent extends AbstractComponent {
+  constructor(data) {
+    super(...arguments);
+    this._data = data;
   }
 
   _getTemplate() {
-    return getInfoTemplate();
+    return getInfoTemplate(this._data);
   }
 }
