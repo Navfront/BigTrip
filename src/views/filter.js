@@ -31,11 +31,11 @@ export default class FilterComponent extends AbstractSmartComponent {
     this._onFilterClickHandler = null;
   }
 
-  getTemplate() {
+  _getTemplate() {
     return getFiltersTemplate(this._filters);
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnFiltersClickHandler(this._onFilterClickHandler);
   }
 

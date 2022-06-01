@@ -13,7 +13,7 @@ const getInfoTemplate = () => `<section class="trip-main__trip-info  trip-info">
 </section>`;
 
 export default class InfoComponent extends AbstractSmartComponent {
-  getTemplate() {
+  _getTemplate() {
     return getInfoTemplate();
   }
 }

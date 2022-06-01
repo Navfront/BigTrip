@@ -88,11 +88,11 @@ export default class PointComponent extends AbstractSmartComponent {
     this._onFavoriteHandler = null;
   }
 
-  getTemplate() {
+  _getTemplate() {
     return getPointTemplate(this._pointData);
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnFavoriteHandler(this._onFavoriteHandler);
     this.setOnRollUpHandler(this._onRollUpHandler);
   }

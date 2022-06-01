@@ -6,7 +6,7 @@ const getNavTemplate = () => `<nav class="trip-controls__trip-tabs  trip-tabs">
   </nav>`;
 
 export default class NavComponent extends AbstractSmartComponent {
-  getTemplate() {
+  _getTemplate() {
     return getNavTemplate(this._element);
   }
 }

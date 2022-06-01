@@ -157,7 +157,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
   constructor(
     pointData,
   ) {
-    super();
+    super(arguments);
 
     // handlers cb
     this._onSaveHandler = null;
@@ -170,7 +170,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     this._pointData = pointData;
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnSaveHandler(this._onSaveHandler);
     this.setOnRollDownHandler(this._onRollDownHandler);
     this.setOnCancelHandler(this._onCancelHandler);
@@ -179,7 +179,7 @@ export default class PointEditorComponent extends AbstractSmartComponent {
     this.setOnTimeInputHandler(this._onTimeInputHandler);
   }
 
-  getTemplate() {
+  _getTemplate() {
     return getPointEditorTemplate(
       this._pointData,
     );

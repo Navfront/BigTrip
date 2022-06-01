@@ -43,11 +43,7 @@ export default class PointsListComponent extends AbstractSmartComponent {
     this._choosenFilter = choosenFilter;
   }
 
-  recoveryListeners() {
-
-  }
-
-  getTemplate() {
+  _getTemplate() {
     return getPointsListTemplate(
       this._isEmpty,
       this._isLoading,

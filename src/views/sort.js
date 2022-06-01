@@ -35,11 +35,11 @@ export default class SortComponent extends AbstractSmartComponent {
 
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnSortClickHandler(this._onSortHandler);
   }
 
-  getTemplate() {
+  _getTemplate() {
     return getSortTemplate(this._dataModel.getSorts());
   }
 

@@ -11,6 +11,9 @@ export default class AbstractController {
    * @param {Instance} dataModel
    */
   constructor(container, dataModel) {
+    if (new.target === AbstractController) {
+      throw new Error('Can\'t instantiate AbstractController, only cocrete one.');
+    }
     this._container = container;
     this._dataModel = dataModel;
   }
