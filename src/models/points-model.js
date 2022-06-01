@@ -178,4 +178,8 @@ export default class PointsModel {
   getListData() {
     return { isEmpty: !this._pointsData || this._pointsData.length<1, isLoading: false, choosenFilter: this._currentFilter };
   }
+
+  isEmpty() {
+    return !this._pointsData || this._pointsData.length<1;
+  }
 }

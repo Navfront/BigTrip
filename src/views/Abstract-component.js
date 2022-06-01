@@ -6,6 +6,7 @@ export default class AbstractComponent {
       throw new Error('Can\'t instantiate AbstractComponent, only cocrete one.');
     }
     this._element = null;
+    this._data = undefined;
   }
 
   getElement() {
