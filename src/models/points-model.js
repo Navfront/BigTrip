@@ -77,6 +77,10 @@ export default class PointsModel {
     return  this._filterPointsData(this._pointsData);
   }
 
+  getPointById(pointId) {
+    return this._pointsData.find((it)=>it.id === pointId);
+  }
+
   /**
    *
    * @returns Возвращает оригинальные данные
@@ -89,9 +93,8 @@ export default class PointsModel {
    * Установить массив новых данных
    * @param {Array} newPointsData
    */
-  setPointsData(newPointsData) {
+  setPoints(newPointsData) {
     this._pointsData = newPointsData;
-    this._filtredData = this._filterPointsData(newPointsData);
   }
 
   /**
@@ -162,7 +165,6 @@ export default class PointsModel {
    */
   _filterPointsData(pointsData) {
     if(!pointsData){return null;}
-
     switch (this._currentFilter) {
       case FILTERS.FUTURE:
         return pointsData.slice().filter((it) => (new Date(it.dateFrom).valueOf() > Date.now()));

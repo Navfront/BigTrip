@@ -97,10 +97,6 @@ export default class PointComponent extends AbstractSmartComponent {
     this.setOnRollUpHandler(this._onRollUpHandler);
   }
 
-  rerender() {
-    super.rerender();
-  }
-
   setOnRollUpHandler(callback) {
     this._onRollUpHandler = callback;
     this.getElement()

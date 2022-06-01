@@ -8,11 +8,11 @@ import PointsModel from './models/points-model';
 import FilterController from './controllers/filter-controller';
 
 const pointsModel = new PointsModel;
-pointsModel.setPointsData(TEST_POINTS);
+pointsModel.setPoints(TEST_POINTS);
 
 const tripMain = document.querySelector('.trip-main');
 const tripControls = document.querySelector('.trip-controls__filters');
-const tripEvents = document.querySelector('.trip-events');
+const eventsContainer = document.querySelector('.trip-events');
 
 // компоненты:
 const tripInfo = new InfoComponent();
@@ -21,9 +21,9 @@ renderComponent(tripMain, tripInfo.getElement(), POSITION_TYPES.PREPEND);
 const navigation = new NavComponent();
 renderComponent(tripControls, navigation.getElement());
 
-// контроллеры:
-const filterController = new FilterController(tripControls, pointsModel);
-filterController.render();
-const tripController = new TripController(tripEvents, pointsModel);
-tripController.render();
+// // контроллеры:
+// const filterController = new FilterController(tripControls, pointsModel);
+// filterController.render();
+// const tripController = new TripController(tripEvents, pointsModel);
+// tripController.render();
 

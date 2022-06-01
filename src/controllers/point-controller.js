@@ -1,10 +1,9 @@
-import { getPointItemTemplate } from '../views/point-item';
+import AbstractController from './abstract-controller';
 import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
 import { createElement } from '../utils/render';
-import { EVENTS } from '../mock/events';
-import dayjs from 'dayjs';
-import AbstractController from './abstract-controller';
+import { getPointItemTemplate } from '../views/point-item';
+
 
 export const Mode = {
   DEFAULT: 'DEFAULT',
@@ -13,157 +12,92 @@ export const Mode = {
 };
 
 export default class PointController extends AbstractController{
-  constructor(container, dataModel, onDataChange, onViewChange) {
+  constructor(container, dataModel, id, onDataChange, onViewChange, mode = Mode.DEFAULT) {
     super(...arguments);
+    this._container = container;
+    this._dataModel = dataModel;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._pointItem = createElement(getPointItemTemplate());
     this._point = null;
     this._pointEdit = null;
-    this._mode = Mode.DEFAULT;
+    this._mode = mode;
+    this._id = id;
+
+
+    this._handleRollUpClick = this._handleRollUpClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleSaveClick = this._handleSaveClick.bind(this);
+    this._handleCancelClick = this._handleCancelClick.bind(this);
+    this._handleTypeToggle = this._handleTypeToggle.bind(this);
+    this._handleDestinationChange = this._handleDestinationChange.bind(this);
+    this._handleTimeClick = this._handleTimeClick.bind(this);
+    this._handleRollDownClick = this._handleRollDownClick.bind(this);
   }
 
-  destroy() {
-    this._pointItem.remove();
-    this._point.removeElement();
-    this._pointEdit.removeElement();
-    this._point = null;
-    this._pointEdit = null;
-    this._mode = Mode.DEFAULT;
+
+  init() {
+    this._point = new PointComponent(this._dataModel.getPointById(this._id));
+    this._pointEdit = new PointEditorComponent(this._dataModel.getPointById(this._id));
+
+
+    this._point.setOnRollUpHandler(this._handleRollUpClick);
+    this._point.setOnFavoriteHandler(this._handleFavoriteClick);
+    this._pointEdit.setOnSaveHandler(this._handleSaveClick);
+    this._pointEdit.setOnCancelHandler(this._handleCancelClick);
+    this._pointEdit.setOnToggleEventTypeHandler(this._handleTypeToggle);
+    this._pointEdit.setOnChangeDestinationHandler(this._handleDestinationChange);
+    this._pointEdit.setOnTimeInputHandler(this._handleTimeClick);
+    this._pointEdit.setOnRollDownHandler(this._handleRollDownClick);
   }
 
-  resetMode() {
-    if (this._mode !== Mode.DEFAULT) {
+  _onEscKeyDownHandler(evt){
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
       this._pointItem.replaceChild(
         this._point.getElement(),
         this._pointEdit.getElement()
       );
+      document.removeEventListener('keydown', this._onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
     }
   }
 
-  render(pointData) {
-    //для ререндера
-    const prevPoint = this._point;
-    const prevEdit = this._pointEdit;
-    this._point = new PointComponent(pointData);
-    this._pointEdit = new PointEditorComponent(pointData);
 
-    const onEscKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        this._pointItem.replaceChild(
-          this._point.getElement(),
-          this._pointEdit.getElement()
-        );
-        document.removeEventListener('keydown', onEscKeyDownHandler);
-        this._mode = Mode.DEFAULT;
-      }
-    };
-
-    const handleRollUpClick = () => {
-      document.addEventListener('keydown', onEscKeyDownHandler);
-      this._pointItem.replaceChild(
-        this._pointEdit.getElement(),
-        this._point.getElement()
-      );
-      this._onViewChange();
-      this._mode = Mode.EDIT;
-    };
-
-    const handleSaveClick = (evt) => {
-      evt.preventDefault();
-      const formData = new FormData(evt.target);
-      for (const pair of formData.entries()) {
-        console.log(`${pair[0] }, ${  pair[1]}`);
-      }
-      //  event-destination, amsterdam
-      //  event-start-time, 22/06/22 01:55
-      //  event-end-time, 22/06/22 14:22
-      //  event-price, 1100
-      //  event-offer-Choose-meal, on
-      //  event-offer-Upgrade-to-comfort-class, on
-
-
-      this._pointItem.replaceChild(
-        this._point.getElement(),
-        this._pointEdit.getElement()
-      );
-      document.removeEventListener('keydown', onEscKeyDownHandler);
-      this._mode = Mode.DEFAULT;
-    };
-
-    const handleCancelClick = (evt) => {
-      console.log(evt.target);
-    };
-
-    const handleRollDownClick = () => {
-      this._pointItem.replaceChild(
-        this._point.getElement(),
-        this._pointEdit.getElement()
-      );
-      document.removeEventListener('keydown', onEscKeyDownHandler);
-      this._mode = Mode.DEFAULT;
-    };
-
-    const handleFavoriteClick = () => {
-
-      this._onDataChange({
-        ...pointData,
-        isFavorite: !pointData.isFavorite,
-      });
-      this._point.rerender();
-    };
-
-    const handleTypeToggle = (evt) => {
-      this._editData.type = evt.target.value; //меняем тип
-      this._editData.offers = EVENTS[this._editData.type].offers; //меняем оферы по типу
-
-      this._pointEdit.rerender();
-    };
-
-    const handleDestinationChange = (evt) => {
-      //проверяем на пустое поле ина неверные данные
-      if (evt.target.value && EVENTS[this._editData.type].destinations.includes(evt.target.value)) {
-        this._editData.destination = evt.target.value;
-      } else {
-        this._editData.destination = '';
-      }
-
-      this._pointEdit.rerender();
-    };
-
-    const handleTimeClick = (pickr, isFrom) => {
-      pickr.config.onChange.push((selectedDates, dateStr) => {
-        if (isFrom) { this._editData.dateFrom = dayjs(dateStr).toISOString(); } else { this._editData.dateTo = dayjs(dateStr).toISOString(); }
-        this._pointEdit.rerender();
-      });
-      pickr.config.onClose.push((selectedDates, dateStr, instance) => {
-        instance.destroy();
-      });
-
-    };
-
-
-    // устанавливаем cb в обработчики
-    this._point.setOnRollUpHandler(handleRollUpClick);
-    this._point.setOnFavoriteHandler(handleFavoriteClick);
-    this._pointEdit.setOnSaveHandler(handleSaveClick);
-    this._pointEdit.setOnCancelHandler(handleCancelClick);
-    this._pointEdit.setOnToggleEventTypeHandler(handleTypeToggle);
-    this._pointEdit.setOnChangeDestinationHandler(handleDestinationChange);
-    this._pointEdit.setOnTimeInputHandler(handleTimeClick);
-    this._pointEdit.setOnRollDownHandler(handleRollDownClick);
-
-
-    //добавляем к родителю элементы
-    if (prevPoint && prevEdit) {
-      //ререндер
-      this._pointItem.replaceChild( this._point.getElement(),prevPoint.getElement());
-    } else {
-      this._pointItem.append(this._point.getElement());
-      this._container.append(this._pointItem);
-    }
-
-
+  _handleRollUpClick(){
+    document.addEventListener('keydown', this._onEscKeyDownHandler);
+    this._pointItem.replaceChild(
+      this._pointEdit.getElement(),
+      this._point.getElement()
+    );
+    this._onViewChange();
+    this._mode = Mode.EDIT;
   }
+
+  _handleSaveClick = (evt) => {
+    evt.preventDefault();
+    document.removeEventListener('keydown', this._onEscKeyDownHandler);
+    this._mode = Mode.DEFAULT;
+  };
+
+  _handleCancelClick = () => {
+  };
+
+  _handleRollDownClick = () => {
+    document.removeEventListener('keydown', this._onEscKeyDownHandler);
+    this._mode = Mode.DEFAULT;
+  };
+
+  _handleFavoriteClick = () => {
+  };
+
+  _handleTypeToggle = () => {
+  };
+
+  _handleDestinationChange = () => {
+  };
+
+  _handleTimeClick = () => {
+  };
+
+
 }
