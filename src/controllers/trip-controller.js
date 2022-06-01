@@ -1,4 +1,3 @@
-import { FILTERS } from '../models/points-model';
 import PointsListComponent from '../views/points-list';
 import AbstractController from './abstract-controller';
 import PointController from './point-controller';
@@ -21,7 +20,13 @@ export default class TripController extends AbstractController {
     this._onFilterChange = this._onFilterChange.bind(this);
   }
 
-  init() {
+  render() {
+    //если это повторный рендер и уже есть контроллеры то удаляем pointItems
+    if (this._pointControllers.size>0) {
+      this._pointControllers.forEach((controller) => {
+        controller.destroyItem();
+      });
+    }
     if (!this._dataModel.isEmpty()) {
       //если есть маршруты - рендерим контейнер
       addComponent(this._container, this._pointsList.getElement());
@@ -34,6 +39,7 @@ export default class TripController extends AbstractController {
         pointController.init();
       }
     } else {
+      //если нет маршрутов - рендерим emptyComponent
       addComponent(this._container, this._emptyComponent.getElement());
     }
   }

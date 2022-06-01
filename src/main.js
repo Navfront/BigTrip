@@ -22,6 +22,5 @@ const navigation = new NavComponent();
 addComponent(tripControls, navigation.getElement());
 
 const tripController = new TripController(tripEvents, pointsModel);
-tripController.init();
-
+tripController.render();
 

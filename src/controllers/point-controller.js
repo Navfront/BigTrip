@@ -1,8 +1,7 @@
 import AbstractController from './abstract-controller';
+import PointItemComponent from '../views/point-item';
 import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
-import { createElement } from '../utils/render';
-import { getPointItemTemplate } from '../views/point-item';
 import { addComponent } from './../utils/render';
 
 
@@ -19,11 +18,11 @@ export default class PointController extends AbstractController{
     this._dataModel = dataModel;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
-    this._pointItem = createElement(getPointItemTemplate());
+    this._pointItem = new PointItemComponent().getElement();
     this._point = null;
     this._pointEdit = null;
     this._mode = mode;
-    this._id = id;
+    this.id = id;
 
 
     this._handleRollUpClick = this._handleRollUpClick.bind(this);
@@ -39,8 +38,8 @@ export default class PointController extends AbstractController{
 
   init() {
     //создаем инстансы компонентов точки и редактора
-    this._point = new PointComponent(this._dataModel.getPointById(this._id));
-    this._pointEdit = new PointEditorComponent(this._dataModel.getPointById(this._id));
+    this._point = new PointComponent(this._dataModel.getPointById(this.id));
+    this._pointEdit = new PointEditorComponent(this._dataModel.getPointById(this.id));
     //добавляем их к list-item
     addComponent(this._pointItem, this._point.getElement());
     //item рендерим в контейнер
@@ -55,6 +54,10 @@ export default class PointController extends AbstractController{
     this._pointEdit.setOnChangeDestinationHandler(this._handleDestinationChange);
     this._pointEdit.setOnTimeInputHandler(this._handleTimeClick);
     this._pointEdit.setOnRollDownHandler(this._handleRollDownClick);
+  }
+
+  destroyItem() {
+    this._pointItem.remove();
   }
 
   _onEscKeyDownHandler(evt){
