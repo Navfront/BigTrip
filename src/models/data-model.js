@@ -7,6 +7,8 @@ export default class DataModel {
     this._pointsData = null;
     this._currentFilter = FILTERS.EVERYTHING;
     this._sortsData = null;
+    this._isSortDirectionUp = false;
+    this._prevSortType = null;
     //Подписчики
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
@@ -19,6 +21,8 @@ export default class DataModel {
    */
   restoreSorts() {
     this._sortsData = JSON.parse(JSON.stringify(SORTS));
+    this._isSortDirectionUp = false;
+    this._prevSortType = this._sortsData[0].sortName;
     return this._sortsData;
   }
 
@@ -39,7 +43,13 @@ export default class DataModel {
    * Принимает новый тип сортировки
    * @param {string} newSortType
    */
-  changeCurrentSort(newSortType=SORTS[0].sortName) {
+  changeCurrentSort(newSortType = SORTS[0].sortName) {
+    if (newSortType === this._prevSortType) {
+      this._isSortDirectionUp = !this._isSortDirectionUp;
+    } else {
+      this._isSortDirectionUp = false;
+    }
+    this._prevSortType = newSortType;
     this.getSorts().forEach((it) => {
       it.isChecked = false;
       if (it.sortName === newSortType) {
@@ -69,10 +79,10 @@ export default class DataModel {
 
   /**
    *
-   * @returns Возвращает отфильтрованные данные всех точек
+   * @returns Возвращает отфильтрованные и отсортированные данные всех точек
    */
   getPoints() {
-    return sortPointsData(this._filterPointsData(this._pointsData), this.getCurrentSort());
+    return sortPointsData(this._filterPointsData(this._pointsData), this.getCurrentSort(), this._isSortDirectionUp);
   }
 
   getPointById(pointId) {

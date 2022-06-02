@@ -306,7 +306,7 @@ export const TEST_POINTS = [
     basePrice: 1900,
     dateFrom: '2019-07-02T23:55:56.845Z',
     dateTo: '2019-07-03T11:22:13.375Z',
-    destination: 'geneva',
+    destination: 'chamonix',
     id: '3',
     isFavorite: false,
     offers: [

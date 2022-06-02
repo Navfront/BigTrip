@@ -75,6 +75,7 @@ export default class TripPresenter extends AbstractPresenter {
   }
 
   _onDataChange() {
+    console.log('dataChange!');
   }
 
   _onViewChange() {
