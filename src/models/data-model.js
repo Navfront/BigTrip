@@ -1,21 +1,18 @@
-import { SORTS } from '../mock/sorts';
 
-export const FILTERS = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future',
-  PAST: 'past'
-};
+import { FILTERS, SORTS } from '../utils/const';
 
-export default class PointsModel {
+
+export default class DataModel {
   constructor() {
     this._pointsData = null;
     this._currentFilter = FILTERS.EVERYTHING;
-    this._sortsData = null;
+    this._sortsData = SORTS;
     //Подписчики
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
     this._sortsDataChangeHandlers = [];
   }
+
 
   /**
    * Восстанавливает оригинал sortsData
@@ -138,6 +135,7 @@ export default class PointsModel {
   _callHandlers(handlers) {
     if(handlers.length>0){handlers.forEach((it) => it());}
   }
+
 
   /**
    *'everything' || 'future' || 'past'

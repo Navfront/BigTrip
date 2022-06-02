@@ -1,4 +1,5 @@
-import { FILTERS } from '../models/points-model';
+
+import { FILTERS } from '../utils/const';
 import AbstractComponent from './abstract-component';
 
 const getEmptyTemplate = (data = { isEmpty: true, isLoading: false, choosenFilter: FILTERS.EVERYTHING }) => {

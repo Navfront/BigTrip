@@ -4,11 +4,11 @@ import InfoComponent from './views/info';
 import NavComponent from './views/nav';
 import { addComponent } from './utils/render';
 import TripPresenter from './controllers/trip-presenter';
-import PointsModel from './models/points-model';
+import DataModel from './models/data-model';
 
 
-const pointsModel = new PointsModel;
-pointsModel.setPoints(TEST_POINTS);
+const dataModel = new DataModel;
+dataModel.setPoints(TEST_POINTS);
 
 const tripMain = document.querySelector('.trip-main');
 const tripControls = document.querySelector('.trip-controls__filters');
@@ -21,6 +21,7 @@ addComponent(tripMain, tripInfo.getElement(), POSITION_TYPES.PREPEND);
 const navigation = new NavComponent();
 addComponent(tripControls, navigation.getElement());
 
-const tripPresenter = new TripPresenter(tripEvents, pointsModel);
-tripPresenter.render();
+const tripPresenter = new TripPresenter(tripEvents, dataModel);
+tripPresenter.renderFilter();
+tripPresenter.renderPoints();
 

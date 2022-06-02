@@ -1,5 +1,5 @@
 
-import { FILTERS } from '../models/points-model';
+import { FILTERS } from '../models/data-model';
 import FilterComponent from '../views/filter';
 import AbstractPresenter from './abstract-presenter';
 

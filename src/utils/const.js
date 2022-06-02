@@ -1,3 +1,9 @@
+export const FILTERS = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
+};
+
 export const SORTS = [
   {
     sortName: 'day',

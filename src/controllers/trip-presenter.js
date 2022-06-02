@@ -3,6 +3,8 @@ import AbstractPresenter from './abstract-presenter';
 import PointPresenter from './point-presenter';
 import { addComponent } from '../utils/render';
 import EmptyComponent from '../views/empty';
+import FilterComponent from './../views/filter';
+import { FILTERS } from '../utils/const';
 
 
 export default class TripPresenter extends AbstractPresenter {
@@ -14,13 +16,18 @@ export default class TripPresenter extends AbstractPresenter {
     this._pointsList = new PointsListComponent();
     this._emptyComponent = new EmptyComponent();
     this._isLoading = true;
-
+    this._filterContainer = document.querySelector('.trip-controls__filters');
+    this._filterComponent = new FilterComponent(FILTERS);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
   }
 
-  render() {
+  renderFilter() {
+
+  }
+
+  renderPoints() {
     //если это повторный рендер и уже есть контроллеры то удаляем pointItems
     if (this._pointPresenters.size>0) {
       this._pointPresenters.forEach((controller) => {
