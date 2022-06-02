@@ -19,10 +19,6 @@ const getEmptyTemplate = (data = { isEmpty: true, isLoading: false, choosenFilte
       break;
   }
 
-  if (!data?.isEmpty && !data?.isLoading) {
-    result = 'no data in EmptyCompont';
-  }
-
   if (data?.isLoading) {
     result = '<p class="trip-events__msg">Loading...</p>';
   }

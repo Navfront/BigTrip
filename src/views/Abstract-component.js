@@ -25,13 +25,37 @@ export default class AbstractComponent {
   }
 
   rerender(data) {
+    console.log('rerendering ', this);
     const oldElement = this.getElement();
     const parent = oldElement.parentElement;
+    if (oldElement === parent || !parent) {
+      return -1;
+    }
     this._removeElement();
     this._data = data;
     const newElement = this.getElement();
-    parent.replaceChild(newElement, oldElement);
+    parent?.replaceChild(newElement, oldElement);
     this._recoveryListeners();
+  }
+
+  destroy() {
+    if (this._element?.parentElement) {
+      this._element.remove();
+      this._removeElement();
+    }
+    return -1;
+  }
+
+  hide() {
+    if (this._element) {
+      this._element.classList.add('visually-hidden');
+    }
+  }
+
+  show() {
+    if (this._element) {
+      this._element.classList.remove('visually-hidden');
+    }
   }
 
 

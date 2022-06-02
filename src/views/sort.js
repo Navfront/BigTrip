@@ -1,5 +1,6 @@
 import AbstractComponent from './abstract-component';
 
+
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => `
   <div class="trip-sort__item  ${
   sortName ? `trip-sort__item--${sortName}` : ''
@@ -28,7 +29,7 @@ const getSortTemplate = (sorts) => sorts
 
 export default class SortComponent extends AbstractComponent {
   constructor(data) {
-    super();
+    super(...arguments);
     this._data = data;
     this._onSortHandler = null;
 
@@ -51,4 +52,5 @@ export default class SortComponent extends AbstractComponent {
       element.addEventListener('click', this._onSortHandler.bind(null, element));
     });
   }
+
 }

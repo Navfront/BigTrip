@@ -7,11 +7,6 @@ export default class PointItemComponent extends AbstractComponent{
     super(...arguments);
   }
 
-  dElement() {
-    this._element.remove();
-    this._element = null;
-  }
-
   _getTemplate() {
     return getPointItemTemplate();
   }

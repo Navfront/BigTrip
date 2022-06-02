@@ -16,7 +16,6 @@ export default class TripPresenter extends AbstractPresenter {
     this._pointPresenters = new Map();
     this._pointsList = new PointsListComponent();
     this._emptyComponent = new EmptyComponent();
-    this._isLoading = true;
     this._filterContainer = document.querySelector('.trip-controls__filters');
     this._filterComponent = new FilterComponent(Object.values(FILTERS));
     this._sortsComponent = new SortComponent(this._dataModel.getSorts());
@@ -47,12 +46,14 @@ export default class TripPresenter extends AbstractPresenter {
 
   renderPoints() {
     //если это повторный рендер и уже есть контроллеры то удаляем pointItems
-    if (this._pointPresenters.size>0) {
-      this._pointPresenters.forEach((controller) => {
-        controller.destroyItem();
+    if (this._pointPresenters.size > 0) {
+      this._pointPresenters.forEach((presenter) => {
+        presenter.destroyItem();
       });
     }
-    if (!this._dataModel.isEmpty()) {
+    if (this._dataModel.getPoints().length > 0) {
+      this._sortsComponent.show();
+      this._emptyComponent.destroy();
       //если есть маршруты - рендерим контейнер
       addComponent(this._container, this._pointsList.getElement());
       //итерируем маршруты
@@ -66,6 +67,8 @@ export default class TripPresenter extends AbstractPresenter {
     } else {
       //если нет маршрутов - рендерим emptyComponent
       addComponent(this._container, this._emptyComponent.getElement());
+      this._emptyComponent.rerender(this._dataModel.getListData());
+      this._sortsComponent.hide();
     }
   }
 
