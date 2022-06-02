@@ -20,17 +20,29 @@ export default class TripPresenter extends AbstractPresenter {
     this._filterContainer = document.querySelector('.trip-controls__filters');
     this._filterComponent = new FilterComponent(Object.values(FILTERS));
     this._sortsComponent = new SortComponent(this._dataModel.getSorts());
-    this._onDataChange = this._onDataChange.bind(this);
-    this._onViewChange = this._onViewChange.bind(this);
-    this._onFilterChange = this._onFilterChange.bind(this);
   }
 
   renderFilter() {
+    //ставим обработчик клика на фильтр
+    this._filterComponent.setOnFiltersClickHandler((element) => {
+      this._dataModel.setActiveFilter(element.value);
+    });
+    //подписываемся на изменение модели
+    this._dataModel.setFilterChangeHandler(this._onFilterChange.bind(this));
+    //рисуем компонент
     addComponent(this._filterContainer, this._filterComponent.getElement());
   }
 
   renderSorts() {
-    addComponent(this._container,this._sortsComponent.getElement());
+    //ставим обработчик
+    this._sortsComponent.setOnSortClickHandler((element) => {
+      this._dataModel.changeCurrentSort(element.dataset.sortName);
+    });
+    //подписываемся на изменение модели
+    this._dataModel.setSortsChangeHandler(this._onSortChange.bind(this));
+    //рисуем компонент
+    addComponent(this._container, this._sortsComponent.getElement());
+
   }
 
   renderPoints() {
@@ -58,7 +70,8 @@ export default class TripPresenter extends AbstractPresenter {
   }
 
   _onSortChange() {
-
+    //ререндер всех поинтов
+    this.renderPoints();
   }
 
   _onDataChange() {
@@ -68,11 +81,12 @@ export default class TripPresenter extends AbstractPresenter {
   }
 
   _onFilterChange() {
-  }
-
-  _onSortClickHandler() {
-    // cant evt
-    // this._dataModel.changeCurrentSort(evt.currentTarget.dataset.sortName);
+    //сбрасываем сортировку в модели
+    this._dataModel.restoreSorts();
+    //ререндерим компонент сортировки
+    this._sortsComponent.rerender(this._dataModel.getSorts());
+    //ререндер всех поинтов
+    this.renderPoints();
   }
 
 

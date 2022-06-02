@@ -302,4 +302,23 @@ export const TEST_POINTS = [
     ],
     type: 'flight',
   },
+  {
+    basePrice: 1900,
+    dateFrom: '2019-07-02T23:55:56.845Z',
+    dateTo: '2019-07-03T11:22:13.375Z',
+    destination: 'geneva',
+    id: '3',
+    isFavorite: false,
+    offers: [
+      {
+        title: 'Choose meal',
+        price: 1280,
+      },
+      {
+        title: 'Upgrade to comfort class',
+        price: 150,
+      },
+    ],
+    type: 'transport',
+  }
 ];

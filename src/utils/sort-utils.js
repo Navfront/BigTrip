@@ -9,7 +9,8 @@ export const sortPointsData = (pointsData, sortType) => {
 
   switch (sortType) {
     case 'event':
-      sortedPointsData = pointsData.slice().sort((a, b) => (`${  a.type}`).localeCompare(b.type));
+
+      sortedPointsData = pointsData.slice().sort((a, b) => {const collator = new Intl.Collator('en'); return collator.compare(a.destination, b.destination);});
       break;
     case 'time':
       sortedPointsData = pointsData.slice()

@@ -1,12 +1,12 @@
-
 import { FILTERS, SORTS } from '../utils/const';
+import { sortPointsData } from '../utils/sort-utils';
 
 
 export default class DataModel {
   constructor() {
     this._pointsData = null;
     this._currentFilter = FILTERS.EVERYTHING;
-    this._sortsData = SORTS;
+    this._sortsData = null;
     //Подписчики
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
@@ -39,12 +39,13 @@ export default class DataModel {
    * Принимает новый тип сортировки
    * @param {string} newSortType
    */
-  changeCurrentSort(newSortType) {
+  changeCurrentSort(newSortType=SORTS[0].sortName) {
     this.getSorts().forEach((it) => {
       it.isChecked = false;
       if (it.sortName === newSortType) {
         it.isChecked = true;
       }
+
     });
     // Notify
     this._callHandlers(this._sortsDataChangeHandlers);
@@ -71,7 +72,7 @@ export default class DataModel {
    * @returns Возвращает отфильтрованные данные всех точек
    */
   getPoints() {
-    return  this._filterPointsData(this._pointsData);
+    return sortPointsData(this._filterPointsData(this._pointsData), this.getCurrentSort());
   }
 
   getPointById(pointId) {
@@ -109,31 +110,6 @@ export default class DataModel {
     //notify all data change
     this._callHandlers(this._dataChangeHandlers);
     return index;
-  }
-
-  /**
-   *
-   * Observer. Подписка на обновление данных
-   * @param {Function} handler
-   */
-  setDataChangeHandler(handler) {
-    this._dataChangeHandlers.push(handler);
-  }
-
-  setFilterChangeHandler(handler) {
-    this._filterChangeHandlers.push(handler);
-  }
-
-  setSortsChangeHandler(handler) {
-    this._sortsDataChangeHandlers.push(handler);
-  }
-
-  /**
-  * Массив колбэков
-  * @param {Array} Handlers
-  */
-  _callHandlers(handlers) {
-    if(handlers.length>0){handlers.forEach((it) => it());}
   }
 
 
@@ -180,4 +156,30 @@ export default class DataModel {
   isEmpty() {
     return !this._pointsData || this._pointsData.length<1;
   }
+
+  /**
+   *
+   * Observer. Подписка на обновление данных
+   * @param {Function} handler
+   */
+  setDataChangeHandler(handler) {
+    this._dataChangeHandlers.push(handler);
+  }
+
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
+  }
+
+  setSortsChangeHandler(handler) {
+    this._sortsDataChangeHandlers.push(handler);
+  }
+
+  /**
+    * Массив колбэков
+    * @param {Array} Handlers
+    */
+  _callHandlers(handlers) {
+    if(handlers.length>0){handlers.forEach((it) => it());}
+  }
+
 }

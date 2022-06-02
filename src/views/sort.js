@@ -45,11 +45,10 @@ export default class SortComponent extends AbstractComponent {
 
   setOnSortClickHandler(callback) {
     this._onSortHandler = callback;
-    this._data.getSorts().forEach((it) => {
-      this.getElement()
-        .querySelector(`#sort-${it.sortName}`)
-        .addEventListener('click', this._onSortHandler);
-
+    this._data.forEach((it) => {
+      const element = this.getElement()
+        .querySelector(`#sort-${it.sortName}`);
+      element.addEventListener('click', this._onSortHandler.bind(null, element));
     });
   }
 }

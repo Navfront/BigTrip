@@ -42,7 +42,7 @@ export default class FilterComponent extends AbstractComponent {
   setOnFiltersClickHandler(callback) {
     this._onFilterClickHandler = callback;
     this.getElement().querySelectorAll('.trip-filters__filter-input').forEach((it) => {
-      it.addEventListener('click', this._onFilterClickHandler);
+      it.addEventListener('click', this._onFilterClickHandler.bind(null, it));
     });
   }
 }
