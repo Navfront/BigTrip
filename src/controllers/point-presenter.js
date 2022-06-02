@@ -33,6 +33,8 @@ export default class PointPresenter extends AbstractPresenter{
     this._handleDestinationChange = this._handleDestinationChange.bind(this);
     this._handleTimeClick = this._handleTimeClick.bind(this);
     this._handleRollDownClick = this._handleRollDownClick.bind(this);
+    this._onEscKeyDownHandler = this._onEscKeyDownHandler.bind(this);
+
   }
 
 
@@ -57,11 +59,23 @@ export default class PointPresenter extends AbstractPresenter{
   }
 
   destroyItem() {
+    //Удаляем только из dom
     this._pointItem.remove();
   }
 
-  _onEscKeyDownHandler(evt){
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+  openEditor() {
+    this._onViewChange();
+    if (this._mode !== Mode.EDIT) {
+      this._pointItem.replaceChild(
+        this._pointEdit.getElement(),
+        this._point.getElement()
+      );
+      this._mode = Mode.EDIT;
+    }
+  }
+
+  closeEditor(){
+    if (this._mode !== Mode.DEFAULT) {
       this._pointItem.replaceChild(
         this._point.getElement(),
         this._pointEdit.getElement()
@@ -71,32 +85,39 @@ export default class PointPresenter extends AbstractPresenter{
     }
   }
 
+  _onEscKeyDownHandler(evt){
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      this.closeEditor();
+    }
+  }
+
 
   _handleRollUpClick(){
     document.addEventListener('keydown', this._onEscKeyDownHandler);
-    this._pointItem.replaceChild(
-      this._pointEdit.getElement(),
-      this._point.getElement()
-    );
-    this._onViewChange();
-    this._mode = Mode.EDIT;
+    this.openEditor();
+
   }
 
   _handleSaveClick = (evt) => {
     evt.preventDefault();
+    this.closeEditor();
     document.removeEventListener('keydown', this._onEscKeyDownHandler);
-    this._mode = Mode.DEFAULT;
   };
 
   _handleCancelClick = () => {
+    document.removeEventListener('keydown', this._onEscKeyDownHandler);
+    this.closeEditor();
   };
 
   _handleRollDownClick = () => {
     document.removeEventListener('keydown', this._onEscKeyDownHandler);
-    this._mode = Mode.DEFAULT;
+    this.closeEditor();
   };
 
   _handleFavoriteClick = () => {
+    const data = this._dataModel.getPointById(this.id);
+    this._onDataChange({ ...data, isFavorite: !data.isFavorite });
+    this._point.rerender(this._dataModel.getPointById(this.id));
   };
 
   _handleTypeToggle = () => {

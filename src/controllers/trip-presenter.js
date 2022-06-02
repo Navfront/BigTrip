@@ -19,6 +19,10 @@ export default class TripPresenter extends AbstractPresenter {
     this._filterContainer = document.querySelector('.trip-controls__filters');
     this._filterComponent = new FilterComponent(Object.values(FILTERS));
     this._sortsComponent = new SortComponent(this._dataModel.getSorts());
+
+    this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+    this._onSortChange = this._onSortChange.bind(this);
   }
 
   renderFilter() {
@@ -27,7 +31,7 @@ export default class TripPresenter extends AbstractPresenter {
       this._dataModel.setActiveFilter(element.value);
     });
     //подписываемся на изменение модели
-    this._dataModel.setFilterChangeHandler(this._onFilterChange.bind(this));
+    this._dataModel.setFilterChangeHandler(this._onFilterChange);
     //рисуем компонент
     addComponent(this._filterContainer, this._filterComponent.getElement());
   }
@@ -38,7 +42,7 @@ export default class TripPresenter extends AbstractPresenter {
       this._dataModel.changeCurrentSort(element.dataset.sortName);
     });
     //подписываемся на изменение модели
-    this._dataModel.setSortsChangeHandler(this._onSortChange.bind(this));
+    this._dataModel.setSortsChangeHandler(this._onSortChange);
     //рисуем компонент
     addComponent(this._container, this._sortsComponent.getElement());
 
@@ -77,11 +81,31 @@ export default class TripPresenter extends AbstractPresenter {
     this.renderPoints();
   }
 
-  _onDataChange() {
-    console.log('dataChange!');
+
+  _onDataChange(newData) {
+    if (!newData) {
+      console.log('deleting data');
+      return;
+    }
+    switch (typeof newData.id) {
+      //id is null
+      case 'object':
+        console.log('creating data');
+        break;
+        //id is string
+      default:
+        console.log('updating data');
+        this._dataModel.updatePoint(newData);
+        break;
+    }
   }
 
   _onViewChange() {
+    console.log(this._pointPresenters);
+    this._pointPresenters.forEach((presenter) => { presenter.closeEditor();
+      //resetDataDefault
+    });
+    console.log('onViewChange');
   }
 
   _onFilterChange() {

@@ -86,7 +86,7 @@ export default class DataModel {
   }
 
   getPointById(pointId) {
-    return this._pointsData.find((it)=>it.id === pointId);
+    return this._pointsData.find((it)=>it.id === String(pointId));
   }
 
   /**
