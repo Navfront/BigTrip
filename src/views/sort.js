@@ -17,15 +17,14 @@ const getSortItem = (sortName, isDisabled = true, isChecked = false) => `
   </div>
   `;
 
-const getSortTemplate = (sorts) =>
-  sorts
-    ? `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+const getSortTemplate = (sorts) => sorts
+  ? `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${sorts
     .map((it) => getSortItem(it.sortName, it.isDisabled, it.isChecked))
     .join('')}
 
 </form>`
-    : '';
+  : '';
 
 export default class SortComponent extends AbstractComponent {
   constructor(data) {
@@ -40,9 +39,9 @@ export default class SortComponent extends AbstractComponent {
   }
 
   _getTemplate() {
-    return getSortTemplate(this._data.getSorts());
-  }
 
+    return getSortTemplate(this._data);
+  }
 
   setOnSortClickHandler(callback) {
     this._onSortHandler = callback;

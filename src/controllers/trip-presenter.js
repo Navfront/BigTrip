@@ -5,6 +5,7 @@ import { addComponent } from '../utils/render';
 import EmptyComponent from '../views/empty';
 import FilterComponent from './../views/filter';
 import { FILTERS } from '../utils/const';
+import SortComponent from './../views/sort';
 
 
 export default class TripPresenter extends AbstractPresenter {
@@ -17,14 +18,19 @@ export default class TripPresenter extends AbstractPresenter {
     this._emptyComponent = new EmptyComponent();
     this._isLoading = true;
     this._filterContainer = document.querySelector('.trip-controls__filters');
-    this._filterComponent = new FilterComponent(FILTERS);
+    this._filterComponent = new FilterComponent(Object.values(FILTERS));
+    this._sortsComponent = new SortComponent(this._dataModel.getSorts());
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
   }
 
   renderFilter() {
+    addComponent(this._filterContainer, this._filterComponent.getElement());
+  }
 
+  renderSorts() {
+    addComponent(this._container,this._sortsComponent.getElement());
   }
 
   renderPoints() {

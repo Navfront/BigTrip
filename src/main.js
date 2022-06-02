@@ -23,5 +23,6 @@ addComponent(tripControls, navigation.getElement());
 
 const tripPresenter = new TripPresenter(tripEvents, dataModel);
 tripPresenter.renderFilter();
+tripPresenter.renderSorts();
 tripPresenter.renderPoints();
 
