@@ -42,7 +42,8 @@ const getOffer = (offer, isChecked = false) => {
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (data = {}, isAddMode = !data) => {
-  const { type, basePrice, dateFrom, dateTo, destination, offers } = data;
+  const { id: pointId, type, basePrice, dateFrom, dateTo, destination, offers } = data;
+
   const choosenDestination = destination || '';
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);
@@ -53,8 +54,8 @@ const getPointEditorTemplate = (data = {}, isAddMode = !data) => {
   const currentOffers = offers || getOffersByType(choosenType);
   const currentDescription = getDescriptionOfDestination(choosenDestination);
 
-  const hasOffers = currentOffers.length > 0;
-  const hasDestination = destination.length > 0;
+  const hasOffers = currentOffers?.length > 0;
+  const hasDestination = destination?.length > 0;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -105,8 +106,8 @@ const getPointEditorTemplate = (data = {}, isAddMode = !data) => {
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">${isAddMode?'Cancel':'Delete'}</button>
-    ${isAddMode?'':`<button class="event__rollup-btn" type="button">
+    <button class="event__reset-btn" type="reset">${pointId === null?'Cancel':'Delete'}</button>
+    ${pointId === null?'':`<button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>`}
 

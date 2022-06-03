@@ -1,3 +1,4 @@
+import { FILTERS } from '../utils/const.js';
 import AbstractComponent from './abstract-component.js';
 
 const getFilter = (filterName, isChecked = false) => `
@@ -32,7 +33,7 @@ export default class FilterComponent extends AbstractComponent {
   }
 
   _getTemplate() {
-    return getFiltersTemplate(this._data);
+    return getFiltersTemplate(this._data || Object.values(FILTERS));
   }
 
   _recoveryListeners() {

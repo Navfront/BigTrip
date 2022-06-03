@@ -78,6 +78,13 @@ export default class DataModel {
   }
 
   /**
+   * Включить все sorts
+   */
+  enableSorts() {
+    this.getSorts().forEach((it) => { it.isDisabled = false;});
+  }
+
+  /**
    *
    * @returns Возвращает отфильтрованные и отсортированные данные всех точек
    */
@@ -88,8 +95,8 @@ export default class DataModel {
   getPointById(pointId) {
     const newPoint = {
       basePrice: 0,
-      dateFrom: null,
-      dateTo: null,
+      dateFrom: Date.now(),
+      dateTo: Date.now(),
       destination: null,
       id: null,
       isFavorite: false,
@@ -151,6 +158,15 @@ export default class DataModel {
         break;
     }
     //notify all filter change
+    this._callHandlers(this._filterChangeHandlers);
+  }
+
+
+  /**
+   * Устанавливает дефолтный фильтр
+   */
+  setActiveFilterDefault() {
+    this._currentFilter = FILTERS.EVERYTHING;
     this._callHandlers(this._filterChangeHandlers);
   }
 
