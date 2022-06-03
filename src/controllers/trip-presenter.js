@@ -1,10 +1,9 @@
 import PointsListComponent from '../views/points-list';
 import AbstractPresenter from './abstract-presenter';
-import PointPresenter from './point-presenter';
+import PointPresenter, { Mode } from './point-presenter';
 import { addComponent } from '../utils/render';
 import EmptyComponent from '../views/empty';
 import FilterComponent from './../views/filter';
-import { FILTERS } from '../utils/const';
 import SortComponent from './../views/sort';
 import AddButtonComponent from '../views/add-button';
 import InfoComponent from '../views/info';
@@ -25,12 +24,13 @@ export default class TripPresenter extends AbstractPresenter {
     this._pointsList = new PointsListComponent();
     this._emptyComponent = new EmptyComponent();
     this._addButtonComponent = new AddButtonComponent();
-    this._filterComponent = new FilterComponent(Object.values(FILTERS));
-    this._sortsComponent = new SortComponent(this._dataModel.getSorts());
+    this._filterComponent = new FilterComponent();
+    this._sortsComponent = new SortComponent();
 
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
+    this._onAddEvent = this._onAddEvent.bind(this);
   }
 
   renderInfo() {
@@ -43,6 +43,7 @@ export default class TripPresenter extends AbstractPresenter {
 
   renderAddButton() {
     addComponent(this._headerContainer, this._addButtonComponent.getElement());
+    this._addButtonComponent.setClickHandler(this._onAddEvent);
   }
 
   renderFilter() {
@@ -96,9 +97,29 @@ export default class TripPresenter extends AbstractPresenter {
     }
   }
 
+  _disableAddButton() {
+    this._addButtonComponent.getElement().disabled = true;
+  }
+
+  _enableAddButton() {
+    this._addButtonComponent.getElement().disabled = false;
+  }
+
+  _onAddEvent() {
+    this._dataModel.restoreSorts();
+    this._dataModel.setActiveFilterDefault();
+    this._filterComponent.rerender();
+    this.renderPoints();
+    this._onViewChange();
+    this._disableAddButton();
+    this._pointPresenters.set('add', new PointPresenter(this._pointsList.getElement(), this._dataModel, null, this._onDataChange, this._onViewChange, Mode.ADD));
+    this._pointPresenters.get('add').init();
+  }
+
   _onSortChange() {
     //ререндер всех поинтов
     this.renderPoints();
+    this._enableAddButton();
   }
 
 
@@ -121,11 +142,14 @@ export default class TripPresenter extends AbstractPresenter {
   }
 
   _onViewChange() {
-    console.log(this._pointPresenters);
-    this._pointPresenters.forEach((presenter) => { presenter.closeEditor();
-      //resetDataDefault
+    this._pointPresenters.forEach((presenter) => {
+      if (presenter.id === null) {
+        presenter.destroyItem();
+      } else{ presenter.closeEditor();}
+
     });
-    console.log('onViewChange');
+    this._pointPresenters.delete('add');
+    this._enableAddButton();
   }
 
   _onFilterChange() {
@@ -135,7 +159,6 @@ export default class TripPresenter extends AbstractPresenter {
     this._sortsComponent.rerender(this._dataModel.getSorts());
     //ререндер всех поинтов
     this.renderPoints();
+    this._enableAddButton();
   }
-
-
 }
