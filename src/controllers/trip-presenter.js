@@ -6,30 +6,43 @@ import EmptyComponent from '../views/empty';
 import FilterComponent from './../views/filter';
 import { FILTERS } from '../utils/const';
 import SortComponent from './../views/sort';
-import AddButton from '../views/add-button';
+import AddButtonComponent from '../views/add-button';
+import InfoComponent from '../views/info';
+import NavComponent from '../views/nav';
+import { POSITION_TYPES } from './../utils/render';
 
 
 export default class TripPresenter extends AbstractPresenter {
-  constructor(container, dataModel) {
+  constructor(headerContainer, filterContainer, eventsContainer, dataModel) {
     super(...arguments);
-    this._container = container;
+    this._headerContainer = headerContainer;
+    this._eventsContainer = eventsContainer;
+    this._filterContainer = filterContainer;
     this._dataModel = dataModel;
     this._pointPresenters = new Map();
+    this._infoComponent = new InfoComponent();
+    this._navComponent = new NavComponent();
     this._pointsList = new PointsListComponent();
     this._emptyComponent = new EmptyComponent();
-    this._addPointButton = new AddButton();
+    this._addButtonComponent = new AddButtonComponent();
     this._filterComponent = new FilterComponent(Object.values(FILTERS));
     this._sortsComponent = new SortComponent(this._dataModel.getSorts());
-    this._tripMainContainer = document.querySelector('.trip-main');
-    this._filterContainer = this._tripMainContainer.querySelector('.trip-controls__filters');
 
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
   }
 
+  renderInfo() {
+    addComponent(this._headerContainer, this._infoComponent.getElement(), POSITION_TYPES.PREPEND);
+  }
+
+  renderNavigation() {
+    addComponent(this._filterContainer, this._navComponent.getElement());
+  }
+
   renderAddButton() {
-    addComponent(this._tripMainContainer, this._addPointButton.getElement());
+    addComponent(this._headerContainer, this._addButtonComponent.getElement());
   }
 
   renderFilter() {
@@ -51,7 +64,7 @@ export default class TripPresenter extends AbstractPresenter {
     //подписываемся на изменение модели
     this._dataModel.setSortsChangeHandler(this._onSortChange);
     //рисуем компонент
-    addComponent(this._container, this._sortsComponent.getElement());
+    addComponent(this._eventsContainer, this._sortsComponent.getElement());
 
   }
 
@@ -66,7 +79,7 @@ export default class TripPresenter extends AbstractPresenter {
       this._sortsComponent.show();
       this._emptyComponent.destroy();
       //если есть маршруты - рендерим контейнер
-      addComponent(this._container, this._pointsList.getElement());
+      addComponent(this._eventsContainer, this._pointsList.getElement());
       //итерируем маршруты
       for (const point of this._dataModel.getPoints()) {
         //создаем инстанс контроллера маршрута
@@ -77,7 +90,7 @@ export default class TripPresenter extends AbstractPresenter {
       }
     } else {
       //если нет маршрутов - рендерим emptyComponent
-      addComponent(this._container, this._emptyComponent.getElement());
+      addComponent(  this._eventsContainer, this._emptyComponent.getElement());
       this._emptyComponent.rerender(this._dataModel.getListData());
       this._sortsComponent.hide();
     }

@@ -48,7 +48,7 @@ export default class PointPresenter extends AbstractPresenter{
     //item рендерим в контейнер
     addComponent(this._container, this._pointItem);
 
-
+    //устанавливаем обработчики
     this._point.setOnRollUpHandler(this._handleRollUpClick);
     this._point.setOnFavoriteHandler(this._handleFavoriteClick);
     this._pointEdit.setOnSaveHandler(this._handleSaveClick);

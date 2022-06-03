@@ -1,27 +1,18 @@
 import { TEST_POINTS } from './mock/events';
-import { POSITION_TYPES } from './utils/render';
-import InfoComponent from './views/info';
-import NavComponent from './views/nav';
-import { addComponent } from './utils/render';
 import TripPresenter from './controllers/trip-presenter';
 import DataModel from './models/data-model';
 
+const headerContainer = document.querySelector('.trip-main');
+const filterContainer = document.querySelector('.trip-controls__filters');
+const eventsContainer = document.querySelector('.trip-events');
 
 const dataModel = new DataModel;
 dataModel.setPoints(TEST_POINTS);
 
-const tripMain = document.querySelector('.trip-main');
-const tripControls = document.querySelector('.trip-controls__filters');
-const tripEvents = document.querySelector('.trip-events');
+const tripPresenter = new TripPresenter(headerContainer, filterContainer, eventsContainer, dataModel);
 
-// компоненты:
-const tripInfo = new InfoComponent();
-addComponent(tripMain, tripInfo.getElement(), POSITION_TYPES.PREPEND);
-
-const navigation = new NavComponent();
-addComponent(tripControls, navigation.getElement());
-
-const tripPresenter = new TripPresenter(tripEvents, dataModel);
+tripPresenter.renderInfo();
+tripPresenter.renderNavigation();
 tripPresenter.renderAddButton();
 tripPresenter.renderFilter();
 tripPresenter.renderSorts();
