@@ -1,3 +1,4 @@
+import { SORTS } from '../utils/const';
 import AbstractComponent from './abstract-component';
 
 
@@ -30,9 +31,8 @@ const getSortTemplate = (sorts) => sorts
 export default class SortComponent extends AbstractComponent {
   constructor(data) {
     super(...arguments);
-    this._data = data;
+    this._data = data || SORTS;
     this._onSortHandler = null;
-
   }
 
   _recoveryListeners() {
@@ -40,8 +40,7 @@ export default class SortComponent extends AbstractComponent {
   }
 
   _getTemplate() {
-
-    return getSortTemplate(this._data);
+    return getSortTemplate(this._data || SORTS);
   }
 
   setOnSortClickHandler(callback) {

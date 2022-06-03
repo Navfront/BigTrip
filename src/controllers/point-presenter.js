@@ -2,7 +2,7 @@ import AbstractPresenter from './abstract-presenter';
 import PointItemComponent from '../views/point-item';
 import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
-import { addComponent } from '../utils/render';
+import { addComponent, POSITION_TYPES } from '../utils/render';
 
 
 export const Mode = {
@@ -40,13 +40,23 @@ export default class PointPresenter extends AbstractPresenter{
 
 
   init() {
+
     //создаем инстансы компонентов точки и редактора
     this._point = new PointComponent(this._dataModel.getPointById(this.id));
     this._pointEdit = new PointEditorComponent(this._dataModel.getPointById(this.id));
-    //добавляем их к list-item
-    addComponent(this._pointItem, this._point.getElement());
-    //item рендерим в контейнер
-    addComponent(this._container, this._pointItem);
+
+    if (this._mode === Mode.ADD) {
+      //добавляем Edit к list-item
+      addComponent(this._pointItem, this._pointEdit.getElement());
+      //item рендерим в контейнер
+      addComponent(this._container, this._pointItem, POSITION_TYPES.PREPEND);
+    } else {
+      //добавляем point к list-item
+      addComponent(this._pointItem, this._point.getElement());
+      //item рендерим в контейнер
+      addComponent(this._container, this._pointItem);
+    }
+
 
     //устанавливаем обработчики
     this._point.setOnRollUpHandler(this._handleRollUpClick);
@@ -56,7 +66,9 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit.setOnToggleEventTypeHandler(this._handleTypeToggle);
     this._pointEdit.setOnChangeDestinationHandler(this._handleDestinationChange);
     this._pointEdit.setOnTimeInputHandler(this._handleTimeClick);
-    this._pointEdit.setOnRollDownHandler(this._handleRollDownClick);
+    if (this._mode !== Mode.ADD) {
+      this._pointEdit.setOnRollDownHandler(this._handleRollDownClick);
+    }
   }
 
   destroyItem() {
@@ -75,7 +87,10 @@ export default class PointPresenter extends AbstractPresenter{
     }
   }
 
-  closeEditor(){
+  closeEditor() {
+    if (this._mode === Mode.ADD) {
+      this._onViewChange();
+    }
     if (this._mode !== Mode.DEFAULT) {
       this._pointItem.replaceChild(
         this._point.getElement(),
@@ -84,6 +99,7 @@ export default class PointPresenter extends AbstractPresenter{
       document.removeEventListener('keydown', this._onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
     }
+
   }
 
   _onEscKeyDownHandler(evt){
@@ -106,8 +122,8 @@ export default class PointPresenter extends AbstractPresenter{
   };
 
   _handleCancelClick = () => {
-    document.removeEventListener('keydown', this._onEscKeyDownHandler);
     this.closeEditor();
+    document.removeEventListener('keydown', this._onEscKeyDownHandler);
   };
 
   _handleRollDownClick = () => {

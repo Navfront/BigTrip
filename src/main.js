@@ -11,6 +11,6 @@ const dataModel = new DataModel;
 dataModel.setPoints(TEST_POINTS);
 
 
-const app = new Facade(new TripPresenter(headerContainer, filterContainer, eventsContainer, dataModel));
+const presenter = new Facade(new TripPresenter(headerContainer, filterContainer, eventsContainer, dataModel));
 
-app.init();
+presenter.init();
