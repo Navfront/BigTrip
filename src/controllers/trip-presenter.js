@@ -6,6 +6,7 @@ import EmptyComponent from '../views/empty';
 import FilterComponent from './../views/filter';
 import { FILTERS } from '../utils/const';
 import SortComponent from './../views/sort';
+import AddButton from '../views/add-button';
 
 
 export default class TripPresenter extends AbstractPresenter {
@@ -16,13 +17,19 @@ export default class TripPresenter extends AbstractPresenter {
     this._pointPresenters = new Map();
     this._pointsList = new PointsListComponent();
     this._emptyComponent = new EmptyComponent();
-    this._filterContainer = document.querySelector('.trip-controls__filters');
+    this._addPointButton = new AddButton();
     this._filterComponent = new FilterComponent(Object.values(FILTERS));
     this._sortsComponent = new SortComponent(this._dataModel.getSorts());
+    this._tripMainContainer = document.querySelector('.trip-main');
+    this._filterContainer = this._tripMainContainer.querySelector('.trip-controls__filters');
 
     this._onViewChange = this._onViewChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
+  }
+
+  renderAddButton() {
+    addComponent(this._tripMainContainer, this._addPointButton.getElement());
   }
 
   renderFilter() {

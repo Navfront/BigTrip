@@ -86,7 +86,18 @@ export default class DataModel {
   }
 
   getPointById(pointId) {
-    return this._pointsData.find((it)=>it.id === String(pointId));
+    const newPoint = {
+      basePrice: 0,
+      dateFrom: null,
+      dateTo: null,
+      destination: null,
+      id: null,
+      isFavorite: false,
+      offers: [],
+      type: 'flight',
+    };
+    const result = this._pointsData.find((it) => it.id === String(pointId));
+    return result? result: newPoint;
   }
 
   /**

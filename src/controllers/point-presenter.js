@@ -23,6 +23,7 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit = null;
     this._mode = mode;
     this.id = id;
+    this._buffer = dataModel.getPointById(this.id);
 
 
     this._handleRollUpClick = this._handleRollUpClick.bind(this);
