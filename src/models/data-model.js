@@ -97,12 +97,17 @@ export default class DataModel {
 
   getPointById(pointId) {
     const newPoint = {
+      id: null,
+      isFavorite: false,
       basePrice: 0,
       dateFrom: Date.now(),
       dateTo: Date.now(),
-      destination: null,
-      id: null,
-      isFavorite: false,
+      destination: {
+        name: null,
+        description: null,
+        pictures: []
+      },
+      destinationsByType: this.getDestinationsByType(this.type),
       offers: [],
       type: 'flight',
     };

@@ -70,7 +70,7 @@ const getPointEditorTemplate = (data = {}) => {
       <label class="event__label  event__type-output" for="event-destination-1">
       ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName||''}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${destinationsByType.map((it) => getDestinationOptionTemplate(it)).join('')}
       </datalist>
@@ -93,10 +93,10 @@ const getPointEditorTemplate = (data = {}) => {
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">${id === null?'Cancel':'Delete'}</button>
-    ${id === null?'':`<button class="event__rollup-btn" type="button">
+    <button class="event__reset-btn" type="reset">${id?'Delete':'Cancel'}</button>
+    ${id?`<button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
-  </button>`}
+  </button>`:''}
 
   </header>
   ${
@@ -114,11 +114,11 @@ ${
   </div>
   ${hasOffers ? '</section>' : ''}
   ${
-  destination? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
+  destination.name? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
 }
-    ${destination ? description : ''}
+    ${destination.name ? description : ''}
       ${
-  destination
+  destination.name
     ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
     : ''
 }
@@ -129,7 +129,7 @@ ${
       .join('')
     : ''
 }
-         ${destination ? '</div></div></section>' : ''}
+         ${destination.name ? '</div></div></section>' : ''}
   </section>
 </form>`;
 };
