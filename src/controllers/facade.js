@@ -7,6 +7,7 @@ export default class Facade{
     this._tripPresenter.renderInfo();
     this._tripPresenter.renderNavigation();
     this._tripPresenter.renderAddButton();
+    this._tripPresenter.renderPointList();
     this._tripPresenter.renderFilter();
     this._tripPresenter.renderSorts();
     this._tripPresenter.renderPointList();
