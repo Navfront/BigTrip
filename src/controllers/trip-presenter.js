@@ -66,7 +66,11 @@ export default class TripPresenter extends AbstractPresenter {
     this._dataModel.setSortsChangeHandler(this._onSortChange);
     //рисуем компонент
     addComponent(this._eventsContainer, this._sortsComponent.getElement());
+  }
 
+  renderPointList() {
+    //контейнер для маршрутов
+    addComponent(this._eventsContainer, this._pointsList.getElement());
   }
 
   renderPoints() {
@@ -79,8 +83,6 @@ export default class TripPresenter extends AbstractPresenter {
     if (this._dataModel.getPoints().length > 0) {
       this._sortsComponent.show();
       this._emptyComponent.destroy();
-      //если есть маршруты - рендерим контейнер
-      addComponent(this._eventsContainer, this._pointsList.getElement());
       //итерируем маршруты
       for (const point of this._dataModel.getPoints()) {
         //создаем инстанс контроллера маршрута
