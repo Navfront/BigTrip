@@ -3,7 +3,7 @@ import PointItemComponent from '../views/point-item';
 import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
 import { addComponent, POSITION_TYPES } from '../utils/render';
-import { dateToIso,  humanizeForEdit } from '../utils/utils';
+import { dateToIso } from '../utils/utils';
 
 
 export const Mode = {
@@ -25,8 +25,8 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit = null;
     this._mode = mode;
     this.id = id;
-    this._data = dataModel.getPointById(this.id);
-    this._buffer = dataModel.getPointById(this.id);
+    this._data = this._dataModel.getPointById(id);
+    this._buffer = this._dataModel.getPointById(id);
 
     this._handleRollUpClick = this._handleRollUpClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -36,7 +36,7 @@ export default class PointPresenter extends AbstractPresenter{
     this._handleDestinationChange = this._handleDestinationChange.bind(this);
     this._handleTimeClick = this._handleTimeClick.bind(this);
     this._handleRollDownClick = this._handleRollDownClick.bind(this);
-
+    this._handlePriceChange = this._handlePriceChange.bind(this);
   }
 
 
@@ -44,7 +44,7 @@ export default class PointPresenter extends AbstractPresenter{
 
     //создаем инстансы компонентов точки и редактора
     this._point = new PointComponent(this._data);
-    this._pointEdit = new PointEditorComponent(this._data);
+    this._pointEdit = new PointEditorComponent(Object.assign(this._data, { availableOffers: this._dataModel.getOffersByType(this._data.type) }) );
 
     if (this._mode === Mode.ADD) {
       //добавляем Edit к list-item
@@ -67,6 +67,7 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit.setOnToggleEventTypeHandler(this._handleTypeToggle);
     this._pointEdit.setOnChangeDestinationHandler(this._handleDestinationChange);
     this._pointEdit.setOnTimeInputHandler(this._handleTimeClick);
+    this._pointEdit.setOnBasePriceChange(this._handlePriceChange);
     if (this._mode !== Mode.ADD) {
       this._pointEdit.setOnRollDownHandler(this._handleRollDownClick);
     }
@@ -110,10 +111,24 @@ export default class PointPresenter extends AbstractPresenter{
     document.addEventListener('keydown', this._onEscHandler);
   }
 
-  _handleSaveClick = (evt) => {
+  _handleSaveClick = (evt, form) => {
     evt.preventDefault();
+    const datas = new FormData(form).keys();
+    const newOffers = [];
+    for (const key of datas) {
+      if (key.includes('offer')) {
+        const normKey = key.split('-').slice(2).join(' ');
+        const finded = this._buffer.availableOffers.find((it) => it.title.split('-').join(' ') === normKey);
+        if(finded){newOffers.push(finded);}
+      }
+    }
+    delete this._buffer.destinationsByType;
+    delete this._buffer.availableOffers;
+    this._onDataChange(Object.assign(this._buffer, {offers: newOffers}));
     this.closeEditor();
-
+    if (this._buffer.id) {
+      this._point.rerender(this._dataModel.getPointById(this._buffer.id));
+    }
   };
 
   _handleCancelClick = () => {
@@ -146,6 +161,11 @@ export default class PointPresenter extends AbstractPresenter{
       this._buffer.dateFrom = dateToIso(dateStr);
     } else { this._buffer.dateTo = dateToIso(dateStr); }
     this._pointEdit.rerender(this._buffer);
+  };
+
+  _handlePriceChange = (element) => {
+    this._buffer.basePrice = element.value;
+    // this._pointEdit.rerender(this._buffer);
   };
 
 
