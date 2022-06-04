@@ -38,11 +38,11 @@ const getOffer = (offer, isChecked = false) => {
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (data = {}) => {
-  const { id, type, basePrice, dateFrom, dateTo, destination, offers } = data;
+  const { id, type, basePrice, dateFrom, dateTo, destination, offers, destinationsByType} = data;
   const { name: destinationName, description, pictures } = destination;
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);
-
+  console.log(data);
   const hasOffers = offers?.length > 0;
 
 
@@ -72,9 +72,7 @@ const getPointEditorTemplate = (data = {}) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
       <datalist id="destination-list-1">
-      ${['geneva','somehren']//WIP
-    .map((it) => getDestinationOptionTemplate(it))
-    .join('')}
+      ${destinationsByType.map((it) => getDestinationOptionTemplate(it)).join('')}
       </datalist>
     </div>
 

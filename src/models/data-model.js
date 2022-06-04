@@ -1,4 +1,5 @@
 import { EVENT_DESTINATIONS } from '../mock/events';
+import { POINTS } from '../mock/points';
 import { FILTERS, SORTS } from '../utils/const';
 import { sortPointsData } from '../utils/sort-utils';
 
@@ -156,7 +157,7 @@ export default class DataModel {
   }
 
   getDestinationsByType(eventType) {
-    //wip
+    return this._events.find((it)=>it.type===eventType)?.destinations;
   }
 
   getOffersByType(eventType) {

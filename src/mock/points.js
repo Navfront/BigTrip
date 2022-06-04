@@ -163,7 +163,7 @@ const EVENT_DESTINATIONS = [
   },
 ];
 //-> api/offers?<type>
-const EVENTS_DATA = [
+export const EVENTS_DATA = [
   {
     type: 'taxi',
     offers: [

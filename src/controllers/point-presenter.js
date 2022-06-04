@@ -24,6 +24,7 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit = null;
     this._mode = mode;
     this.id = id;
+    this._data = dataModel.getPointById(this.id);
     this._buffer = dataModel.getPointById(this.id);
 
     this._handleRollUpClick = this._handleRollUpClick.bind(this);
@@ -41,8 +42,8 @@ export default class PointPresenter extends AbstractPresenter{
   init() {
 
     //создаем инстансы компонентов точки и редактора
-    this._point = new PointComponent(this._dataModel.getPointById(this.id));
-    this._pointEdit = new PointEditorComponent(this._dataModel.getPointById(this.id));
+    this._point = new PointComponent(this._data);
+    this._pointEdit = new PointEditorComponent(Object.assign({}, this._data, {destinationsByType: this._dataModel.getDestinationsByType(this._data.type)}));
 
     if (this._mode === Mode.ADD) {
       //добавляем Edit к list-item
