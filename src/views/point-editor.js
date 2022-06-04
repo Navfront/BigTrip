@@ -162,8 +162,10 @@ export default class PointEditorComponent extends AbstractComponent {
   }
 
   _recoveryListeners() {
+    if (this._data.id !== null) {
+      this.setOnRollDownHandler(this._onRollDownHandler);
+    }
     this.setOnSaveHandler(this._onSaveHandler);
-    this.setOnRollDownHandler(this._onRollDownHandler);
     this.setOnCancelHandler(this._onCancelHandler);
     this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
     this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
@@ -177,7 +179,7 @@ export default class PointEditorComponent extends AbstractComponent {
   }
 
   rerender() {
-    super.rerender();
+    super.rerender(...arguments);
   }
 
   _initFlatPickr() {
@@ -213,7 +215,7 @@ export default class PointEditorComponent extends AbstractComponent {
   setOnToggleEventTypeHandler(callback) {
     this._onToggleEventTypeHandler = callback;
     const radios = this.getElement().querySelectorAll('.event__type-input');
-    radios.forEach((it) => it.addEventListener('change', this._onToggleEventTypeHandler));
+    radios.forEach((it) => it.addEventListener('change', this._onToggleEventTypeHandler.bind(null, it)));
   }
 
   setOnChangeDestinationHandler(callback) {

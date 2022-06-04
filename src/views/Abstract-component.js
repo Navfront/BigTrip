@@ -25,7 +25,7 @@ export default class AbstractComponent {
   }
 
   rerender(data) {
-    console.log('rerendering ', this);
+    console.log('rerendering ', this, data);
     const oldElement = this.getElement();
     const parent = oldElement.parentElement;
     if (oldElement === parent || !parent) {

@@ -72,7 +72,7 @@ export default class PointPresenter extends AbstractPresenter{
   }
 
   destroyItem() {
-    //Удаляем только из dom
+    //Удаляем Item с поинтом и редактором из DOM
     this._pointItem.remove();
   }
 
@@ -137,7 +137,13 @@ export default class PointPresenter extends AbstractPresenter{
     this._point.rerender(this._dataModel.getPointById(this.id));
   };
 
-  _handleTypeToggle = () => {
+  _handleTypeToggle = (element) => {
+    this._buffer.type = element.value;
+    console.log(this._pointEdit);
+    console.log(this._buffer);
+    console.log(this._mode);
+    this._pointEdit.rerender(this._buffer);
+
   };
 
   _handleDestinationChange = () => {
