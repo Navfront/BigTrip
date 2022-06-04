@@ -10,7 +10,7 @@ export const sortPointsData = (pointsData, sortType, isUpDirection) => {
 
   switch (sortType) {
     case 'event':
-      sortedPointsData = pointsData.slice().sort((a, b) => {const collator = new Intl.Collator('en'); return multiplier*collator.compare(a.destination, b.destination);});
+      sortedPointsData = pointsData.slice().sort((a, b) => {const collator = new Intl.Collator('en'); return multiplier*collator.compare(a.destination.name, b.destination.name);});
       break;
     case 'time':
       sortedPointsData = pointsData.slice()
