@@ -208,7 +208,7 @@ export default class PointEditorComponent extends AbstractComponent {
     this._onChangeDestinationHandler = callback;
     const element = this.getElement().querySelector('.event__input--destination');
     element.addEventListener('click', (evt)=>{evt.target.value = '';});
-    element.addEventListener('change', callback);
+    element.addEventListener('change', callback.bind(null, element));
   }
 
   setOnTimeInputHandler(callback) {

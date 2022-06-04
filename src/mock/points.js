@@ -109,7 +109,7 @@ export const POINTS = [
 ];
 
 //-> api/destination?<name>
-const EVENT_DESTINATIONS = [
+export const EVENT_DESTINATIONS = [
   { name: 'Chamonix',
     basePrice: 1300,
     description:

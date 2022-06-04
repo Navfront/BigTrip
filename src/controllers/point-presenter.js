@@ -89,6 +89,8 @@ export default class PointPresenter extends AbstractPresenter{
   }
 
   closeEditor() {
+    this._buffer = { ...this._data };
+    this._pointEdit.rerender(this._data);
     if (this._mode === Mode.ADD) {
       this._onViewChange();
     }
@@ -99,6 +101,7 @@ export default class PointPresenter extends AbstractPresenter{
       );
       this._mode = Mode.DEFAULT;
     }
+
 
   }
 
@@ -130,11 +133,12 @@ export default class PointPresenter extends AbstractPresenter{
 
   _handleTypeToggle = (element) => {
     this._buffer.type = element.value;
-    this._pointEdit.rerender(Object.assign(this._buffer, { destinationsByType: this._dataModel.getDestinationsByType(element.value)}));
-
+    this._pointEdit.rerender(Object.assign(this._buffer, { destinationsByType: this._dataModel.getDestinationsByType(element.value), offers: this._dataModel.getOffersByType(element.value)}));
   };
 
-  _handleDestinationChange = () => {
+  _handleDestinationChange = (element) => {
+    this._buffer.destination = this._dataModel.getEventDestinationData(element.value);
+    this._pointEdit.rerender(this._buffer);
   };
 
   _handleTimeClick = () => {
