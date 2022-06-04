@@ -9,9 +9,7 @@ export const POINTS = [
     destination:
       {
         name: 'amsterdam',
-        basePrice: 1500,
         description: 'Amsterdam is nice.',
-
         pictures: [
           {
             src: 'http://picsum.photos/300/200',
@@ -47,7 +45,6 @@ export const POINTS = [
     dateTo: '2019-07-12T11:12:13.375Z',
     destination: {
       name: 'geneva',
-      basePrice: 999,
       description: 'Geneva is beautiful.',
       pictures: [
         {
@@ -83,8 +80,7 @@ export const POINTS = [
     dateFrom: '2019-07-12T22:55:56.845Z',
     dateTo: '2019-07-13T15:22:13.375Z',
     destination: {
-      name: 'Chamonix',
-      basePrice: 1300,
+      name: 'chamonix',
       description:
         'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
       pictures: [

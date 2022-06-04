@@ -1,9 +1,5 @@
 import {
   EVENT_TYPES,
-  getDestinationByTypes,
-  getOffersByType,
-  getPicturesByDestination,
-  getDescriptionOfDestination,
 } from '../mock/events';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -42,27 +38,20 @@ const getOffer = (offer, isChecked = false) => {
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (data = {}) => {
-  const { id: pointId, type, basePrice, dateFrom, dateTo, destination, offers } = data;
-
-  const choosenDestination = destination || '';
+  const { id, type, basePrice, dateFrom, dateTo, destination, offers } = data;
+  const { name: destinationName, description, pictures } = destination;
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);
-  const choosenType = type || eventTypes[0];
 
-  const currentPrice = basePrice || 0;
-  const currentDestinationOptions = getDestinationByTypes(choosenType);
-  const currentOffers = offers || getOffersByType(choosenType);
-  const currentDescription = getDescriptionOfDestination(choosenDestination);
+  const hasOffers = offers?.length > 0;
 
-  const hasOffers = currentOffers?.length > 0;
-  const hasDestination = destination?.length > 0;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
         <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/${choosenType}.png" alt="Event type icon">
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
       </label>
       <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -79,11 +68,11 @@ const getPointEditorTemplate = (data = {}) => {
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-      ${choosenType}
+      ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${choosenDestination}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
       <datalist id="destination-list-1">
-      ${currentDestinationOptions
+      ${['geneva','somehren']//WIP
     .map((it) => getDestinationOptionTemplate(it))
     .join('')}
       </datalist>
@@ -102,12 +91,12 @@ const getPointEditorTemplate = (data = {}) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${currentPrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">${pointId === null?'Cancel':'Delete'}</button>
-    ${pointId === null?'':`<button class="event__rollup-btn" type="button">
+    <button class="event__reset-btn" type="reset">${id === null?'Cancel':'Delete'}</button>
+    ${id === null?'':`<button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>`}
 
@@ -119,7 +108,7 @@ const getPointEditorTemplate = (data = {}) => {
 }
 ${
   hasOffers
-    ? currentOffers
+    ? offers
       .map((it, index) => getOffer(it, index === 0 || index === 1))
       .join('')
     : ''
@@ -127,22 +116,22 @@ ${
   </div>
   ${hasOffers ? '</section>' : ''}
   ${
-  hasDestination? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
+  destination? '<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3><p class="event__destination-description">': ''
 }
-    ${hasDestination ? currentDescription : ''}
+    ${destination ? description : ''}
       ${
-  hasDestination
+  destination
     ? '</p><div class="event__photos-container"><div class="event__photos-tape">'
     : ''
 }
          ${
-  hasDestination
-    ? getPicturesByDestination(choosenDestination)
+  pictures
+    ? pictures
       .map((it) => getDestinationImage(it.src))
       .join('')
     : ''
 }
-         ${hasDestination ? '</div></div></section>' : ''}
+         ${destination ? '</div></div></section>' : ''}
   </section>
 </form>`;
 };
