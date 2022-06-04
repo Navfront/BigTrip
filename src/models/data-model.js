@@ -135,6 +135,16 @@ export default class DataModel {
     this._pointsData = newPointsData;
   }
 
+  addMetaToPoint(point) {
+    console.log(point);
+    const currentOffers = [...point.offers];
+    point.offers = this.getOffersByType(point.id);
+    for (const offer of point.offers) {
+      offer.checked = !!currentOffers.find((it)=>it.title === offer.title);
+    }
+    return point.offers;
+  }
+
   /**
    *
    * @param {Object} newPoint

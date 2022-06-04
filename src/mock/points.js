@@ -27,12 +27,12 @@ export const POINTS = [
       },
     offers: [
       {
-        title: 'Choose meal',
-        price: 180,
+        title: 'Upgrade to a business class',
+        price: 120,
       },
       {
-        title: 'Upgrade to comfort class',
-        price: 50,
+        title: 'Choose the radio station',
+        price: 60,
       },
     ],
     type: 'taxi',
@@ -63,12 +63,8 @@ export const POINTS = [
     },
     offers: [
       {
-        title: 'Choose meal',
-        price: 280,
-      },
-      {
-        title: 'Upgrade to comfort class',
-        price: 150,
+        title: 'Restoraunt all-inclusice',
+        price: 400,
       },
     ],
     type: 'train',
@@ -96,12 +92,8 @@ export const POINTS = [
     },
     offers: [
       {
-        title: 'Choose meal',
-        price: 1280,
-      },
-      {
         title: 'Upgrade to comfort class',
-        price: 4150,
+        price: 50,
       },
     ],
     type: 'flight',

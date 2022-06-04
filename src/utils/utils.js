@@ -8,7 +8,6 @@ export const getRandomInteger = (a = 0, b = 1) => {
 };
 
 
-// export const dayNow = dayjs().format(); //WIP
 export const dateToIso = (date) =>  dayjs(date).toISOString();
 
 export const humanizeDateDueDate = (dueDate) => dayjs(dueDate).format('D MMM');

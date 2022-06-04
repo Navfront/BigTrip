@@ -38,11 +38,11 @@ const getOffer = (offer, isChecked = false) => {
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (data = {}) => {
-  const { id, type, basePrice, dateFrom, dateTo, destination, offers, destinationsByType } = data;
+  const { id, type, basePrice, dateFrom, dateTo, destination, offers, availableOffers, destinationsByType } = data;
   const { name: destinationName, description, pictures } = destination;
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);
-  const hasOffers = offers?.length > 0;
+  const hasOffers = availableOffers?.length > 0;
 
 
   return `<form class="event event--edit" action="#" method="post">
@@ -105,8 +105,11 @@ const getPointEditorTemplate = (data = {}) => {
 }
 ${
   hasOffers
-    ? offers
-      .map((it, index) => getOffer(it, index === 0 || index === 1))
+    ? availableOffers
+      .map((it) => {
+        const checked = offers.find((offer) => offer.title === it.title);
+        return getOffer(it, checked);
+      })
       .join('')
     : ''
 }
@@ -143,6 +146,7 @@ export default class PointEditorComponent extends AbstractComponent {
     this._onToggleEventTypeHandler = null;
     this._onChangeDestinationHandler = null;
     this._onTimeInputHandler = null;
+    this._onPriceChangeHandler = null;
     // choosen data
     this._data = data;
   }
@@ -156,6 +160,7 @@ export default class PointEditorComponent extends AbstractComponent {
     this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
     this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
     this.setOnTimeInputHandler(this._onTimeInputHandler);
+    this.setOnBasePriceChange(this._onPriceChangeHandler);
   }
 
   _getTemplate() {
@@ -179,7 +184,8 @@ export default class PointEditorComponent extends AbstractComponent {
 
   setOnSaveHandler(callback) {
     this._onSaveHandler = callback;
-    this.getElement().onsubmit = this._onSaveHandler;
+    const form = this.getElement();
+    form.addEventListener('submit', (evt)=>{this._onSaveHandler.call(null, evt, form);});
   }
 
   setOnCancelHandler(callback) {
@@ -225,16 +231,12 @@ export default class PointEditorComponent extends AbstractComponent {
           this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, true,  dateStr); });
 
         }); }
-
-
     });
   }
 
-
+  setOnBasePriceChange(callback) {
+    this._onPriceChangeHandler = callback;
+    const element = this.getElement().querySelector('.event__input--price');
+    element.addEventListener('change', this._onPriceChangeHandler.bind(null, element));
+  }
 }
-
-
-// timeInputs.forEach((it) => it.addEventListener('click', () => {
-//   if (it.id.includes('end')) { this._onTimeInputHandler(this._initFlatPickr(), false); } else {
-//     this._onTimeInputHandler(this._initFlatPickr(), true);
-//   }

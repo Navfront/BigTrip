@@ -28,6 +28,7 @@ export default class TripPresenter extends AbstractPresenter {
     this._sortsComponent = new SortComponent();
 
     this._onViewChange = this._onViewChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
     this._onAddEvent = this._onAddEvent.bind(this);
@@ -143,6 +144,7 @@ export default class TripPresenter extends AbstractPresenter {
         this._dataModel.updatePoint(newData);
         break;
     }
+    this.renderPoints();
   }
 
   _onViewChange() {
