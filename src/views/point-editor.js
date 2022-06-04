@@ -41,7 +41,7 @@ const getOffer = (offer, isChecked = false) => {
 
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
-const getPointEditorTemplate = (data = {}, isAddMode = !data) => {
+const getPointEditorTemplate = (data = {}) => {
   const { id: pointId, type, basePrice, dateFrom, dateTo, destination, offers } = data;
 
   const choosenDestination = destination || '';

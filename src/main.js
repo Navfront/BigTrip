@@ -1,4 +1,4 @@
-import { TEST_POINTS } from './mock/events';
+import { TEST_POINTS, EVENTS } from './mock/events';
 import TripPresenter from './controllers/trip-presenter';
 import DataModel from './models/data-model';
 import Facade from './controllers/facade';
@@ -8,7 +8,8 @@ const filterContainer = document.querySelector('.trip-controls__filters');
 const eventsContainer = document.querySelector('.trip-events');
 
 const dataModel = new DataModel;
-dataModel.setPoints(TEST_POINTS);
+dataModel.setEvents(EVENTS); //данные о самих эвентах
+dataModel.setPoints(TEST_POINTS);//маршруты
 
 
 const presenter = new Facade(new TripPresenter(headerContainer, filterContainer, eventsContainer, dataModel));

@@ -1,9 +1,11 @@
+import { EVENT_DESTINATIONS } from '../mock/events';
 import { FILTERS, SORTS } from '../utils/const';
 import { sortPointsData } from '../utils/sort-utils';
 
 
 export default class DataModel {
   constructor() {
+    this._events = null;
     this._pointsData = null;
     this._currentFilter = FILTERS.EVERYTHING;
     this._sortsData = null;
@@ -140,6 +142,30 @@ export default class DataModel {
     return index;
   }
 
+  /**
+   * Установить все доступные варианты эвентов \\ не маршруты!
+   * @param {array} events
+   */
+  setEvents(events) {
+    this._events = events;
+  }
+
+
+  getEventTypes() {
+    return Object.keys(this._events);
+  }
+
+  getDestinationsByType(eventType) {
+    //wip
+  }
+
+  getOffersByType(eventType) {
+    //wip
+  }
+
+  getEventDestinationData(destinationName) {
+    //wip
+  }
 
   /**
    *'everything' || 'future' || 'past'
