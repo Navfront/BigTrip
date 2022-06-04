@@ -12,19 +12,19 @@ export const Mode = {
 };
 
 export default class PointPresenter extends AbstractPresenter{
-  constructor(container, dataModel, id, onDataChange, onViewChange, mode = Mode.DEFAULT) {
+  constructor(container, dataModel, id, onDataChange, onViewChange, onEscHandler, mode = Mode.DEFAULT) {
     super(...arguments);
     this._container = container;
     this._dataModel = dataModel;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+    this._onEscHandler = onEscHandler;
     this._pointItem = new PointItemComponent().getElement();
     this._point = null;
     this._pointEdit = null;
     this._mode = mode;
     this.id = id;
     this._buffer = dataModel.getPointById(this.id);
-
 
     this._handleRollUpClick = this._handleRollUpClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -34,7 +34,6 @@ export default class PointPresenter extends AbstractPresenter{
     this._handleDestinationChange = this._handleDestinationChange.bind(this);
     this._handleTimeClick = this._handleTimeClick.bind(this);
     this._handleRollDownClick = this._handleRollDownClick.bind(this);
-    this._onEscKeyDownHandler = this._onEscKeyDownHandler.bind(this);
 
   }
 
@@ -96,38 +95,28 @@ export default class PointPresenter extends AbstractPresenter{
         this._point.getElement(),
         this._pointEdit.getElement()
       );
-      document.removeEventListener('keydown', this._onEscKeyDownHandler);
       this._mode = Mode.DEFAULT;
     }
 
   }
 
-  _onEscKeyDownHandler(evt){
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      this.closeEditor();
-    }
-  }
-
-
   _handleRollUpClick(){
-    document.addEventListener('keydown', this._onEscKeyDownHandler);
     this.openEditor();
-
+    document.addEventListener('keydown', this._onEscHandler);
   }
 
   _handleSaveClick = (evt) => {
     evt.preventDefault();
     this.closeEditor();
-    document.removeEventListener('keydown', this._onEscKeyDownHandler);
+
   };
 
   _handleCancelClick = () => {
     this.closeEditor();
-    document.removeEventListener('keydown', this._onEscKeyDownHandler);
+
   };
 
   _handleRollDownClick = () => {
-    document.removeEventListener('keydown', this._onEscKeyDownHandler);
     this.closeEditor();
   };
 

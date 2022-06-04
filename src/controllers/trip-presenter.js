@@ -31,6 +31,7 @@ export default class TripPresenter extends AbstractPresenter {
     this._onFilterChange = this._onFilterChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
     this._onAddEvent = this._onAddEvent.bind(this);
+    this._onEscKeyDownHandler = this._onEscKeyDownHandler.bind(this);
   }
 
   renderInfo() {
@@ -86,7 +87,7 @@ export default class TripPresenter extends AbstractPresenter {
       //итерируем маршруты
       for (const point of this._dataModel.getPoints()) {
         //создаем инстанс контроллера маршрута
-        const pointPresenter = new PointPresenter(this._pointsList.getElement(), this._dataModel, point.id, this._onDataChange, this._onViewChange);
+        const pointPresenter = new PointPresenter(this._pointsList.getElement(), this._dataModel, point.id, this._onDataChange, this._onViewChange, this._onEscKeyDownHandler);
         //закидываем его в observer
         this._pointPresenters.set(point.id, pointPresenter);
         pointPresenter.init();
@@ -114,8 +115,9 @@ export default class TripPresenter extends AbstractPresenter {
     this.renderPoints();
     this._onViewChange();
     this._disableAddButton();
-    this._pointPresenters.set('add', new PointPresenter(this._pointsList.getElement(), this._dataModel, null, this._onDataChange, this._onViewChange, Mode.ADD));
+    this._pointPresenters.set('add', new PointPresenter(this._pointsList.getElement(), this._dataModel, null, this._onDataChange, this._onViewChange, this._onEscKeyDownHandler, Mode.ADD));
     this._pointPresenters.get('add').init();
+    document.addEventListener('keydown', this._onEscKeyDownHandler);
   }
 
   _onSortChange() {
@@ -152,6 +154,7 @@ export default class TripPresenter extends AbstractPresenter {
     });
     this._pointPresenters.delete('add');
     this._enableAddButton();
+    document.removeEventListener('keydown', this._onEscKeyDownHandler);
   }
 
   _onFilterChange() {
@@ -162,5 +165,11 @@ export default class TripPresenter extends AbstractPresenter {
     //ререндер всех поинтов
     this.renderPoints();
     this._enableAddButton();
+  }
+
+  _onEscKeyDownHandler(evt){
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      this._onViewChange();
+    }
   }
 }
