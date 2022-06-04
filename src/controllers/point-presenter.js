@@ -3,6 +3,7 @@ import PointItemComponent from '../views/point-item';
 import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
 import { addComponent, POSITION_TYPES } from '../utils/render';
+import { getDestinationByTypes } from './../mock/events';
 
 
 export const Mode = {
@@ -43,7 +44,7 @@ export default class PointPresenter extends AbstractPresenter{
 
     //создаем инстансы компонентов точки и редактора
     this._point = new PointComponent(this._data);
-    this._pointEdit = new PointEditorComponent(Object.assign({}, this._data, {destinationsByType: this._dataModel.getDestinationsByType(this._data.type)}));
+    this._pointEdit = new PointEditorComponent(this._data);
 
     if (this._mode === Mode.ADD) {
       //добавляем Edit к list-item
@@ -129,10 +130,7 @@ export default class PointPresenter extends AbstractPresenter{
 
   _handleTypeToggle = (element) => {
     this._buffer.type = element.value;
-    console.log(this._pointEdit);
-    console.log(this._buffer);
-    console.log(this._mode);
-    this._pointEdit.rerender(this._buffer);
+    this._pointEdit.rerender(Object.assign(this._buffer, { destinationsByType: this._dataModel.getDestinationsByType(element.value)}));
 
   };
 

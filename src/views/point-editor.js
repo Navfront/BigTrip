@@ -38,11 +38,10 @@ const getOffer = (offer, isChecked = false) => {
 const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc}" alt="Event photo">`;
 
 const getPointEditorTemplate = (data = {}) => {
-  const { id, type, basePrice, dateFrom, dateTo, destination, offers, destinationsByType} = data;
+  const { id, type, basePrice, dateFrom, dateTo, destination, offers, destinationsByType } = data;
   const { name: destinationName, description, pictures } = destination;
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);
-  console.log(data);
   const hasOffers = offers?.length > 0;
 
 

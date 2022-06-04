@@ -1,5 +1,3 @@
-import { EVENT_DESTINATIONS } from '../mock/events';
-import { POINTS } from '../mock/points';
 import { FILTERS, SORTS } from '../utils/const';
 import { sortPointsData } from '../utils/sort-utils';
 
@@ -96,6 +94,7 @@ export default class DataModel {
   }
 
   getPointById(pointId) {
+    const defaultType = 'flight';
     const newPoint = {
       id: null,
       isFavorite: false,
@@ -107,12 +106,16 @@ export default class DataModel {
         description: null,
         pictures: []
       },
-      destinationsByType: this.getDestinationsByType(this.type),
+      destinationsByType: this.getDestinationsByType(defaultType),
       offers: [],
-      type: 'flight',
+      type: defaultType,
     };
     const result = this._pointsData.find((it) => it.id === String(pointId));
-    return result? result: newPoint;
+    return result? Object.assign({}, result, {destinationsByType: this.getDestinationsByType(this.getTypeById(pointId))}): newPoint;
+  }
+
+  getTypeById(pointId) {
+    return this._pointsData.find((it)=>it.id===pointId)?.type;
   }
 
   /**
@@ -162,7 +165,8 @@ export default class DataModel {
   }
 
   getDestinationsByType(eventType) {
-    return this._events.find((it)=>it.type===eventType)?.destinations;
+    const result = this._events.find((it)=>it.type===eventType)?.destinations;
+    return result;
   }
 
   getOffersByType(eventType) {
