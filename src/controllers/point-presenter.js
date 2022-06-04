@@ -3,7 +3,7 @@ import PointItemComponent from '../views/point-item';
 import PointComponent from '../views/point';
 import PointEditorComponent from '../views/point-editor';
 import { addComponent, POSITION_TYPES } from '../utils/render';
-import { getDestinationByTypes } from './../mock/events';
+import { dateToIso,  humanizeForEdit } from '../utils/utils';
 
 
 export const Mode = {
@@ -141,8 +141,11 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit.rerender(this._buffer);
   };
 
-  _handleTimeClick = () => {
-    console.log('time');
+  _handleTimeClick = (isDateFrom,  dateStr) => {
+    if (isDateFrom) {
+      this._buffer.dateFrom = dateToIso(dateStr);
+    } else { this._buffer.dateTo = dateToIso(dateStr); }
+    this._pointEdit.rerender(this._buffer);
   };
 
 

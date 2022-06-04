@@ -164,19 +164,17 @@ export default class PointEditorComponent extends AbstractComponent {
     );
   }
 
-  rerender() {
-    super.rerender(...arguments);
-  }
 
-  _initFlatPickr() {
+  _initFlatPickr(callback) {
     return flatpickr('.event__field-group--time',{
       dateFormat: 'Y-m-d H:i',
       enableTime: true,
       minDate: 'today',
       maxDate: new Date().fp_incr(14),
       // eslint-disable-next-line camelcase
-      time_24hr: true
-    });
+      time_24hr: true,
+      onChange: callback}
+    );
   }
 
   setOnSaveHandler(callback) {
@@ -208,19 +206,35 @@ export default class PointEditorComponent extends AbstractComponent {
     this._onChangeDestinationHandler = callback;
     const element = this.getElement().querySelector('.event__input--destination');
     element.addEventListener('click', (evt)=>{evt.target.value = '';});
-    element.addEventListener('change', callback.bind(null, element));
+    element.addEventListener('change', this._onChangeDestinationHandler.bind(null, element));
   }
 
   setOnTimeInputHandler(callback) {
     this._onTimeInputHandler = callback;
     const timeInputs = this.getElement().querySelectorAll('.event__input--time');
-    timeInputs.forEach((it) => it.addEventListener('click', () => {
-      if (it.id.includes('end')) { this._onTimeInputHandler(this._initFlatPickr(), false); } else {
-        this._onTimeInputHandler(this._initFlatPickr(), true);
+    timeInputs.forEach((it) => {
+      if (it.id.includes('end')) //если element - dateTo
+      {
+        it.addEventListener('click', () => {
+          this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, false,  dateStr); });
+        });
       }
-    }));
+      else //если element - dateFrom
+      {
+        it.addEventListener('click', () => {
+          this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, true,  dateStr); });
+
+        }); }
+
+
+    });
   }
+
 
 }
 
 
+// timeInputs.forEach((it) => it.addEventListener('click', () => {
+//   if (it.id.includes('end')) { this._onTimeInputHandler(this._initFlatPickr(), false); } else {
+//     this._onTimeInputHandler(this._initFlatPickr(), true);
+//   }
