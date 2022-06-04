@@ -44,7 +44,7 @@ export default class PointPresenter extends AbstractPresenter{
 
     //создаем инстансы компонентов точки и редактора
     this._point = new PointComponent(this._data);
-    this._pointEdit = new PointEditorComponent(Object.assign(this._data, { availableOffers: this._dataModel.getOffersByType(this._data.type) }) );
+    this._pointEdit = new PointEditorComponent(Object.assign({},this._buffer, { availableOffers: this._dataModel.getOffersByType(this._data.type) }) );
 
     if (this._mode === Mode.ADD) {
       //добавляем Edit к list-item
@@ -85,6 +85,13 @@ export default class PointPresenter extends AbstractPresenter{
         this._pointEdit.getElement(),
         this._point.getElement()
       );
+      this._buffer = { ...this._data };
+      this._pointEdit.rerender(Object.assign(this._buffer,
+        {
+          destinationsByType: this._dataModel.getDestinationsByType(this._data.type),
+          availableOffers: this._dataModel.getOffersByType(this._data.type)
+        }
+      ));
       this._mode = Mode.EDIT;
     }
   }
@@ -124,10 +131,10 @@ export default class PointPresenter extends AbstractPresenter{
     }
     delete this._buffer.destinationsByType;
     delete this._buffer.availableOffers;
-    this._onDataChange(Object.assign(this._buffer, {offers: newOffers}));
+    this._onDataChange(Object.assign({}, this._buffer, {offers: newOffers}));
     this.closeEditor();
     if (this._buffer.id) {
-      this._point.rerender(this._dataModel.getPointById(this._buffer.id));
+      // this._point.rerender(this._dataModel.getPointById(this._buffer.id));
     }
   };
 
@@ -148,10 +155,16 @@ export default class PointPresenter extends AbstractPresenter{
 
   _handleTypeToggle = (element) => {
     this._buffer.type = element.value;
-    this._pointEdit.rerender(Object.assign(this._buffer, { destinationsByType: this._dataModel.getDestinationsByType(element.value), offers: this._dataModel.getOffersByType(element.value)}));
+    this._pointEdit.rerender(Object.assign(this._buffer,
+      {
+        destinationsByType: this._dataModel.getDestinationsByType(element.value),
+        availableOffers: this._dataModel.getOffersByType(element.value)
+      }
+    ));
   };
 
   _handleDestinationChange = (element) => {
+    console.log('destination change');
     this._buffer.destination = this._dataModel.getEventDestinationData(element.value);
     this._pointEdit.rerender(this._buffer);
   };
