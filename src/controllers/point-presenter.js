@@ -90,11 +90,11 @@ export default class PointPresenter extends AbstractPresenter{
 
   closeEditor() {
     this._buffer = { ...this._data };
-    this._pointEdit.rerender(this._data);
     if (this._mode === Mode.ADD) {
       this._onViewChange();
     }
     if (this._mode !== Mode.DEFAULT) {
+      this._pointEdit.rerender(this._data);
       this._pointItem.replaceChild(
         this._point.getElement(),
         this._pointEdit.getElement()
@@ -142,6 +142,7 @@ export default class PointPresenter extends AbstractPresenter{
   };
 
   _handleTimeClick = () => {
+    console.log('time');
   };
 
 
