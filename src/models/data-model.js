@@ -1,6 +1,7 @@
 import { EVENT_DESTINATIONS } from '../mock/points';
 import { FILTERS, SORTS } from '../utils/const';
 import { sortPointsData } from '../utils/sort-utils';
+import uniqid from 'uniqid';
 
 
 export default class DataModel {
@@ -101,7 +102,7 @@ export default class DataModel {
       isFavorite: false,
       basePrice: 0,
       dateFrom: Date.now(),
-      dateTo: Date.now(),
+      dateTo: null,
       destination: {
         name: null,
         description: null,
@@ -135,15 +136,6 @@ export default class DataModel {
     this._pointsData = newPointsData;
   }
 
-  addMetaToPoint(point) {
-    console.log(point);
-    const currentOffers = [...point.offers];
-    point.offers = this.getOffersByType(point.id);
-    for (const offer of point.offers) {
-      offer.checked = !!currentOffers.find((it)=>it.title === offer.title);
-    }
-    return point.offers;
-  }
 
   /**
    *
@@ -160,6 +152,16 @@ export default class DataModel {
     //notify all data change
     this._callHandlers(this._dataChangeHandlers);
     return index;
+  }
+
+  createPoint(newPoint) {
+    this._pointsData.push({ ...newPoint, id: uniqid() });
+  }
+
+  deletePoint(deletePointId) {
+    const index = this._pointsData.findIndex((it) => it.id === deletePointId);
+    if (index !== undefined)
+    { this._pointsData.splice(index,1); }
   }
 
   /**

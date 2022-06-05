@@ -40,8 +40,8 @@ const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc
 const getPointEditorTemplate = (data = {}) => {
   const { id, type, basePrice, dateFrom, dateTo, destination, offers, availableOffers, destinationsByType } = data;
   const { name: destinationName, description, pictures } = destination;
-  const choosenDueDateFrom = humanizeForEdit(dateFrom);
-  const choosenDueDateTo = humanizeForEdit(dateTo);
+  const choosenDueDateFrom = humanizeForEdit(dateFrom) || '';
+  const choosenDueDateTo = humanizeForEdit(dateTo) || '';
   const hasOffers = availableOffers?.length > 0;
 
 
@@ -69,7 +69,7 @@ const getPointEditorTemplate = (data = {}) => {
       <label class="event__label  event__type-output" for="event-destination-1">
       ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName||''}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" required value="${destinationName||''}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${destinationsByType.map((it) => getDestinationOptionTemplate(it)).join('')}
       </datalist>
@@ -77,10 +77,10 @@ const getPointEditorTemplate = (data = {}) => {
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${choosenDueDateFrom}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" required name="event-start-time" value="${choosenDueDateFrom}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${choosenDueDateTo}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" required name="event-end-time" value="${choosenDueDateTo}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -142,6 +142,7 @@ export default class PointEditorComponent extends AbstractComponent {
     // handlers cb
     this._onSaveHandler = null;
     this._onCancelHandler = null;
+    this._onDeleteHandler = null;
     this._onRollDownHandler = null;
     this._onToggleEventTypeHandler = null;
     this._onChangeDestinationHandler = null;
@@ -154,9 +155,10 @@ export default class PointEditorComponent extends AbstractComponent {
   _recoveryListeners() {
     if (this._data.id !== null) {
       this.setOnRollDownHandler(this._onRollDownHandler);
+      this.setOnCancelHandler(this._onCancelHandler);
     }
+    this.setOnDeleteHandler(this._onDeleteHandler);
     this.setOnSaveHandler(this._onSaveHandler);
-    this.setOnCancelHandler(this._onCancelHandler);
     this.setOnToggleEventTypeHandler(this._onToggleEventTypeHandler);
     this.setOnChangeDestinationHandler(this._onChangeDestinationHandler);
     this.setOnTimeInputHandler(this._onTimeInputHandler);
@@ -193,6 +195,13 @@ export default class PointEditorComponent extends AbstractComponent {
     this.getElement()
       .querySelector('.event__reset-btn')
       .addEventListener('click', this._onCancelHandler);
+  }
+
+  setOnDeleteHandler(callback) {
+    this._onDeleteHandler = callback;
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._onDeleteHandler);
   }
 
   setOnRollDownHandler(callback) {

@@ -19,7 +19,10 @@ export const humanizeFromDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
 export const humanizeToDueDate = (dueDate) => dayjs(dueDate).format('HH:mm');
 
-export const humanizeForEdit = (dueDate) => dayjs(dueDate).format('DD/MM/YY HH:mm');
+export const humanizeForEdit = (dueDate) => {
+  if (dueDate)
+  { return dayjs(dueDate).format('DD/MM/YY HH:mm'); }
+};
 
 export const dateToPickr = (date) => dayjs(date).format('YYYY-MM-DD HH:mm');
 

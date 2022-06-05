@@ -37,6 +37,7 @@ export default class PointPresenter extends AbstractPresenter{
     this._handleTimeClick = this._handleTimeClick.bind(this);
     this._handleRollDownClick = this._handleRollDownClick.bind(this);
     this._handlePriceChange = this._handlePriceChange.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
 
@@ -63,13 +64,15 @@ export default class PointPresenter extends AbstractPresenter{
     this._point.setOnRollUpHandler(this._handleRollUpClick);
     this._point.setOnFavoriteHandler(this._handleFavoriteClick);
     this._pointEdit.setOnSaveHandler(this._handleSaveClick);
-    this._pointEdit.setOnCancelHandler(this._handleCancelClick);
     this._pointEdit.setOnToggleEventTypeHandler(this._handleTypeToggle);
     this._pointEdit.setOnChangeDestinationHandler(this._handleDestinationChange);
     this._pointEdit.setOnTimeInputHandler(this._handleTimeClick);
     this._pointEdit.setOnBasePriceChange(this._handlePriceChange);
     if (this._mode !== Mode.ADD) {
       this._pointEdit.setOnRollDownHandler(this._handleRollDownClick);
+      this._pointEdit.setOnDeleteHandler(this._handleDeleteClick);
+    } else if (this._mode === Mode.ADD) {
+      this._pointEdit.setOnCancelHandler(this._handleCancelClick);
     }
   }
 
@@ -140,7 +143,11 @@ export default class PointPresenter extends AbstractPresenter{
 
   _handleCancelClick = () => {
     this.closeEditor();
+  };
 
+  _handleDeleteClick = () => {
+    this._onDataChange(this.id.toString());
+    this.closeEditor();
   };
 
   _handleRollDownClick = () => {

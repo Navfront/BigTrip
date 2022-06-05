@@ -43,9 +43,7 @@ const getPointTemplate = (pointData = {}) => {
       <p class="event__duration">${getDiffTime(dateFrom, dateTo)}</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">${
-  basePrice ? basePrice : ''
-}</span>
+      &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     ${
