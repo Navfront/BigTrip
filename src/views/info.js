@@ -3,22 +3,23 @@ import AbstractComponent from './abstract-component.js';
 const MDASH = ' &mdash; ';
 
 const DEFAULT_DATA = {
-  destinations: ['Amsterdam', 'Chamonix', 'Geneva','Saint-Petersburg'],
-  month: 'Mar',
+  destinations: ['Moscow', 'Chamonix', 'Geneva','Saint-Petersburg'],
+  startMonth: 'Mar',
+  endMonth: 'June',
   dateFrom: 18,
   dateTo: 20,
   cost: 1390
 };
-//Amsterdam &mdash; Chamonix &mdash; Geneva
+
 const getTitle = (destinations) => destinations.length > 3? `${destinations[0]+MDASH}...${MDASH}${destinations[destinations.length-1]}` : destinations.map((it)=>it).join(` ${MDASH} `);
 
 const getInfoTemplate = (infoData = DEFAULT_DATA) => {
-  const { destinations, month, dateFrom, dateTo, cost } = infoData;
+  const { destinations, startMonth, endMonth, dateFrom, dateTo, cost } = infoData;
   return`<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getTitle(destinations)}</h1>
 
-    <p class="trip-info__dates">${month} ${dateFrom}&nbsp;&mdash;&nbsp;${dateTo}</p>
+    <p class="trip-info__dates">${startMonth} ${dateFrom}&nbsp;&mdash;&nbsp;${endMonth} ${dateTo}</p>
   </div>
 
   <p class="trip-info__cost">

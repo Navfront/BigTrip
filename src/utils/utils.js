@@ -1,7 +1,35 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-dayjs.extend(duration);
+import localeData from 'dayjs/plugin/localeData';
 
+dayjs.extend(duration);
+dayjs.extend(localeData);
+
+
+export const generateInfoData = (points) => {
+  const nd = {};
+  const destinations = new Set;
+  let minMonth = 11;
+  let minMonthDate;
+  let maxMonth = 0;
+  let maxMonthDate;
+  let cost = 0;
+  for (const point of points) {
+    destinations.add(point.destination.name);
+    const pointMonth = dayjs(point.dateFrom).month();
+    const pointDay = dayjs(point.dateFrom).date();
+    if (pointMonth < minMonth) { minMonth = pointMonth; minMonthDate = pointDay;}
+    if (pointMonth > maxMonth) { maxMonth = pointMonth; maxMonthDate = pointDay; }
+    cost += Number(point.basePrice);
+  }
+  nd.destinations = [...destinations];
+  nd.startMonth = dayjs.months()[minMonth].slice(0, 3);
+  nd.endMonth = dayjs.months()[maxMonth].slice(0, 3);
+  nd.dateFrom = minMonthDate;
+  nd.dateTo = maxMonthDate;
+  nd.cost = cost;
+  return nd;
+};
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
