@@ -3,7 +3,7 @@ const POSITION_TYPES = {
   PREPEND: 'prepend',
 };
 
-export default class AbstractController {
+export default class AbstractPresenter {
 
   /**
    *
@@ -11,6 +11,9 @@ export default class AbstractController {
    * @param {Instance} dataModel
    */
   constructor(container, dataModel) {
+    if (new.target === AbstractPresenter) {
+      throw new Error('Can\'t instantiate AbstractPresenter, only cocrete one.');
+    }
     this._container = container;
     this._dataModel = dataModel;
   }

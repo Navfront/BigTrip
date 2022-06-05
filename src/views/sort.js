@@ -1,4 +1,6 @@
-import AbstractSmartComponent from './abstract-smart-component';
+import { SORTS } from '../utils/const';
+import AbstractComponent from './abstract-component';
+
 
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => `
   <div class="trip-sort__item  ${
@@ -17,40 +19,37 @@ const getSortItem = (sortName, isDisabled = true, isChecked = false) => `
   </div>
   `;
 
-const getSortTemplate = (sorts) =>
-  sorts
-    ? `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+const getSortTemplate = (sorts) => sorts
+  ? `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${sorts
     .map((it) => getSortItem(it.sortName, it.isDisabled, it.isChecked))
     .join('')}
 
 </form>`
-    : '';
+  : '';
 
-export default class SortComponent extends AbstractSmartComponent {
-  constructor(dataModel) {
-    super();
-    this._dataModel = dataModel;
+export default class SortComponent extends AbstractComponent {
+  constructor(data) {
+    super(...arguments);
+    this._data = data || SORTS;
     this._onSortHandler = null;
-
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnSortClickHandler(this._onSortHandler);
   }
 
-  getTemplate() {
-    return getSortTemplate(this._dataModel.getSorts());
+  _getTemplate() {
+    return getSortTemplate(this._data || SORTS);
   }
-
 
   setOnSortClickHandler(callback) {
     this._onSortHandler = callback;
-    this._dataModel.getSorts().forEach((it) => {
-      this.getElement()
-        .querySelector(`#sort-${it.sortName}`)
-        .addEventListener('click', this._onSortHandler);
-
+    this._data.forEach((it) => {
+      const element = this.getElement()
+        .querySelector(`#sort-${it.sortName}`);
+      element.addEventListener('click', this._onSortHandler.bind(null, element));
     });
   }
+
 }

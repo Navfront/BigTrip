@@ -247,8 +247,8 @@ export const IMAGES_SRC = [
 export const TEST_POINTS = [
   {
     basePrice: 1100,
-    dateFrom: '2022-06-21T22:55:56.845Z',
-    dateTo: '2022-06-22T11:22:13.375Z',
+    dateFrom: '2022-03-21T22:55:56.845Z',
+    dateTo: '2022-03-22T11:22:13.375Z',
     destination: 'amsterdam',
     id: '0',
     isFavorite: false,
@@ -302,4 +302,23 @@ export const TEST_POINTS = [
     ],
     type: 'flight',
   },
+  {
+    basePrice: 1900,
+    dateFrom: '2019-07-02T23:55:56.845Z',
+    dateTo: '2019-07-03T11:22:13.375Z',
+    destination: 'chamonix',
+    id: '3',
+    isFavorite: false,
+    offers: [
+      {
+        title: 'Choose meal',
+        price: 1280,
+      },
+      {
+        title: 'Upgrade to comfort class',
+        price: 150,
+      },
+    ],
+    type: 'transport',
+  }
 ];

@@ -4,32 +4,31 @@
  * @param {{string}} sortType
  * @returns
  */
-export const sortPointsData = (pointsData, sortType) => {
+export const sortPointsData = (pointsData, sortType, isUpDirection) => {
+  const multiplier = isUpDirection ? -1 : 1;
   let sortedPointsData;
 
   switch (sortType) {
     case 'event':
-      sortedPointsData = pointsData.slice().sort((a, b) => (`${  a.type}`).localeCompare(b.type));
+      sortedPointsData = pointsData.slice().sort((a, b) => {const collator = new Intl.Collator('en'); return multiplier*collator.compare(a.destination.name, b.destination.name);});
       break;
     case 'time':
       sortedPointsData = pointsData.slice()
         .sort(
-          (a, b) =>
-            new Date(a.dateFrom).valueOf() -
-            new Date(a.dateTo).valueOf() -
-            (new Date(b.dateFrom).valueOf() - new Date(b.dateTo).valueOf())
+          ((a, b) =>
+            multiplier*(new Date(a.dateFrom).valueOf()-new Date(a.dateTo).valueOf()-(new Date(b.dateFrom).valueOf() - new Date(b.dateTo).valueOf())))
         );
       break;
     case 'price':
       sortedPointsData = pointsData.slice()
-        .sort((a, b) => b.basePrice - a.basePrice);
+        .sort((a, b) => multiplier*(b.basePrice - a.basePrice));
 
       break;
     case 'offer':
       sortedPointsData = pointsData.slice().sort(
         (a, b) =>
-          b.offers.reduce((acc, it) => (acc += it.price), 0) -
-          a.offers.reduce((acc, it) => (acc += it.price), 0)
+          multiplier*(b.offers.reduce((acc, it) => (acc += it.price), 0) -
+          a.offers.reduce((acc, it) => (acc += it.price), 0))
       );
       break;
 
@@ -38,7 +37,7 @@ export const sortPointsData = (pointsData, sortType) => {
       sortedPointsData = pointsData.slice()
         .sort(
           (a, b) =>
-            new Date(a.dateFrom).valueOf() - new Date(b.dateFrom).valueOf()
+            multiplier*(new Date(b.dateFrom).valueOf() - new Date(a.dateFrom).valueOf())
         );
       break;
   }

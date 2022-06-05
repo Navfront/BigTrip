@@ -1,3 +1,4 @@
+import AbstractComponent from './abstract-component';
 import {
   getDiffTime,
   humanizeDateDueDate,
@@ -5,7 +6,6 @@ import {
   humanizeToDueDate,
 } from '../utils/utils';
 
-import AbstractSmartComponent from './abstract-smart-component';
 
 const getEventOffer = (offer) => {
   const { title, price } = offer;
@@ -27,13 +27,9 @@ const getPointTemplate = (pointData = {}) => {
   dateFrom
 )}</time>
     <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/${
-  type ? type : 'taxi'
-}.png" alt="Event type icon">
+      <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${type ? type : '?'} ${
-  destination ? destination : '???'
-}</h3>
+    <h3 class="event__title">${type} ${destination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="${dateFrom}">${
@@ -47,9 +43,7 @@ const getPointTemplate = (pointData = {}) => {
       <p class="event__duration">${getDiffTime(dateFrom, dateTo)}</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">${
-  basePrice ? basePrice : ''
-}</span>
+      &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     ${
@@ -80,25 +74,21 @@ const getPointTemplate = (pointData = {}) => {
 `;
 };
 
-export default class PointComponent extends AbstractSmartComponent {
-  constructor(pointData) {
-    super();
-    this._pointData = pointData;
+export default class PointComponent extends AbstractComponent {
+  constructor(data) {
+    super(...arguments);
+    this._data = data;
     this._onRollUpHandler = null;
     this._onFavoriteHandler = null;
   }
 
-  getTemplate() {
-    return getPointTemplate(this._pointData);
+  _getTemplate() {
+    return getPointTemplate(this._data);
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnFavoriteHandler(this._onFavoriteHandler);
     this.setOnRollUpHandler(this._onRollUpHandler);
-  }
-
-  rerender() {
-    super.rerender();
   }
 
   setOnRollUpHandler(callback) {

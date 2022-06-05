@@ -1,29 +1,17 @@
-import { TEST_POINTS } from './mock/events';
-import { POSITION_TYPES } from './utils/render';
-import InfoComponent from './views/info';
-import NavComponent from './views/nav';
-import { renderComponent } from './utils/render';
-import TripController from './controllers/trip-controller';
-import PointsModel from './models/points-model';
-import FilterController from './controllers/filter-controller';
+import TripPresenter from './controllers/trip-presenter';
+import DataModel from './models/data-model';
+import Facade from './controllers/facade';
+import { EVENTS_DATA, POINTS } from './mock/points';
 
-const pointsModel = new PointsModel;
-pointsModel.setPointsData(TEST_POINTS);
+const headerContainer = document.querySelector('.trip-main');
+const filterContainer = document.querySelector('.trip-controls__filters');
+const eventsContainer = document.querySelector('.trip-events');
 
-const tripMain = document.querySelector('.trip-main');
-const tripControls = document.querySelector('.trip-controls__filters');
-const tripEvents = document.querySelector('.trip-events');
+const dataModel = new DataModel;
+dataModel.setEvents(EVENTS_DATA); //данные о самих эвентах
+dataModel.setPoints(POINTS); //маршруты
 
-// компоненты:
-const tripInfo = new InfoComponent();
-renderComponent(tripMain, tripInfo.getElement(), POSITION_TYPES.PREPEND);
 
-const navigation = new NavComponent();
-renderComponent(tripControls, navigation.getElement());
+const presenter = new Facade(new TripPresenter(headerContainer, filterContainer, eventsContainer, dataModel));
 
-// контроллеры:
-const filterController = new FilterController(tripControls, pointsModel);
-filterController.render();
-const tripController = new TripController(tripEvents, pointsModel);
-tripController.render();
-
+presenter.init();

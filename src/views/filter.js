@@ -1,4 +1,5 @@
-import AbstractSmartComponent from './abstract-smart-component.js';
+import { FILTERS } from '../utils/const.js';
+import AbstractComponent from './abstract-component.js';
 
 const getFilter = (filterName, isChecked = false) => `
   <div class="trip-filters__filter">
@@ -24,25 +25,25 @@ const getFiltersTemplate = (filters) => `<form class="trip-filters" action="#" m
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
 
-export default class FilterComponent extends AbstractSmartComponent {
-  constructor(filters) {
+export default class FilterComponent extends AbstractComponent {
+  constructor(data) {
     super(...arguments);
-    this._filters = filters;
+    this._data = data;
     this._onFilterClickHandler = null;
   }
 
-  getTemplate() {
-    return getFiltersTemplate(this._filters);
+  _getTemplate() {
+    return getFiltersTemplate(this._data || Object.values(FILTERS));
   }
 
-  recoveryListeners() {
+  _recoveryListeners() {
     this.setOnFiltersClickHandler(this._onFilterClickHandler);
   }
 
   setOnFiltersClickHandler(callback) {
     this._onFilterClickHandler = callback;
     this.getElement().querySelectorAll('.trip-filters__filter-input').forEach((it) => {
-      it.addEventListener('click', this._onFilterClickHandler);
+      it.addEventListener('click', this._onFilterClickHandler.bind(null, it));
     });
   }
 }
