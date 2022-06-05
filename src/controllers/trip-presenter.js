@@ -133,7 +133,7 @@ export default class TripPresenter extends AbstractPresenter {
   _onDataChange(newData) {
     switch (typeof newData.id) {
       case 'number':
-        this._dataModel.deletePoint(newData);
+        this._dataModel.deletePoint(newData.id);
         break;
       //id is null
       case 'object':

@@ -159,8 +159,8 @@ export default class DataModel {
   }
 
   deletePoint(deletePointId) {
-    const index = this._pointsData.findIndex((it) => it.id === deletePointId);
-    if (index !== undefined)
+    const index = this._pointsData.findIndex((it) => it.id === String(deletePointId));
+    if (index !== -1)
     { this._pointsData.splice(index,1); }
   }
 
