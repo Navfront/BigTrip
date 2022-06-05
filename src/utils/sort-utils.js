@@ -37,7 +37,7 @@ export const sortPointsData = (pointsData, sortType, isUpDirection) => {
       sortedPointsData = pointsData.slice()
         .sort(
           (a, b) =>
-            multiplier*(new Date(a.dateFrom).valueOf() - new Date(b.dateFrom).valueOf())
+            multiplier*(new Date(b.dateFrom).valueOf() - new Date(a.dateFrom).valueOf())
         );
       break;
   }
