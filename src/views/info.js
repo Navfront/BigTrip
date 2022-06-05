@@ -22,7 +22,7 @@ const getInfoTemplate = (infoData) => {
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getTitle(destinations)}</h1>
 
-    <p class="trip-info__dates">${startMonth} ${dateFrom}&nbsp;&mdash;&nbsp;${endMonth} ${dateTo}</p>
+    <p class="trip-info__dates">${startMonth} ${dateFrom}${dateTo===dateFrom&&startMonth===endMonth?'':'&nbsp;&mdash;&nbsp;'}${startMonth===endMonth?'':endMonth} ${dateTo===dateFrom?'':dateTo}</p>
   </div>
 
   <p class="trip-info__cost">
