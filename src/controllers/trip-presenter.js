@@ -131,14 +131,10 @@ export default class TripPresenter extends AbstractPresenter {
 
 
   _onDataChange(newData) {
-    if (typeof newData === 'string') {
-      //if newData === id
-      this._dataModel.deletePoint(newData);
-      this.renderPoints();
-      this._infoComponent.rerender(generateInfoData(this._dataModel.getOriginalPoints()));
-      return;
-    }
     switch (typeof newData.id) {
+      case 'number':
+        this._dataModel.deletePoint(newData);
+        break;
       //id is null
       case 'object':
         this._dataModel.createPoint(newData);
