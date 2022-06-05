@@ -9,6 +9,7 @@ import AddButtonComponent from '../views/add-button';
 import InfoComponent from '../views/info';
 import NavComponent from '../views/nav';
 import { POSITION_TYPES } from './../utils/render';
+import { generateInfoData } from './../utils/utils';
 
 
 export default class TripPresenter extends AbstractPresenter {
@@ -19,7 +20,7 @@ export default class TripPresenter extends AbstractPresenter {
     this._filterContainer = filterContainer;
     this._dataModel = dataModel;
     this._pointPresenters = new Map();
-    this._infoComponent = new InfoComponent();
+    this._infoComponent = new InfoComponent(generateInfoData(this._dataModel.getOriginalPoints()));
     this._navComponent = new NavComponent();
     this._pointsList = new PointsListComponent();
     this._emptyComponent = new EmptyComponent();
@@ -34,6 +35,7 @@ export default class TripPresenter extends AbstractPresenter {
     this._onAddEvent = this._onAddEvent.bind(this);
     this._onEscKeyDownHandler = this._onEscKeyDownHandler.bind(this);
   }
+
 
   renderInfo() {
     addComponent(this._headerContainer, this._infoComponent.getElement(), POSITION_TYPES.PREPEND);
@@ -129,13 +131,10 @@ export default class TripPresenter extends AbstractPresenter {
 
 
   _onDataChange(newData) {
-    if (typeof newData === 'string') {
-      //if newData === id
-      this._dataModel.deletePoint(newData);
-      this.renderPoints();
-      return;
-    }
     switch (typeof newData.id) {
+      case 'number':
+        this._dataModel.deletePoint(newData);
+        break;
       //id is null
       case 'object':
         this._dataModel.createPoint(newData);
@@ -145,7 +144,9 @@ export default class TripPresenter extends AbstractPresenter {
         this._dataModel.updatePoint(newData);
         break;
     }
+    this._enableAddButton();
     this.renderPoints();
+    this._infoComponent.rerender(generateInfoData(this._dataModel.getOriginalPoints()));
   }
 
   _onViewChange() {

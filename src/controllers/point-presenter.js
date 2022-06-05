@@ -136,9 +136,6 @@ export default class PointPresenter extends AbstractPresenter{
     delete this._buffer.availableOffers;
     this._onDataChange(Object.assign({}, this._buffer, {offers: newOffers}));
     this.closeEditor();
-    if (this._buffer.id) {
-      // this._point.rerender(this._dataModel.getPointById(this._buffer.id));
-    }
   };
 
   _handleCancelClick = () => {
@@ -146,7 +143,7 @@ export default class PointPresenter extends AbstractPresenter{
   };
 
   _handleDeleteClick = () => {
-    this._onDataChange(this.id.toString());
+    this._onDataChange(Object.assign({}, this._buffer, { id: Number(this.id) }));
     this.closeEditor();
   };
 
@@ -172,6 +169,7 @@ export default class PointPresenter extends AbstractPresenter{
 
   _handleDestinationChange = (element) => {
     this._buffer.destination = this._dataModel.getEventDestinationData(element.value);
+    this._buffer.destination.name = this._buffer.destination.name.toLowerCase();
     this._pointEdit.rerender(this._buffer);
   };
 
