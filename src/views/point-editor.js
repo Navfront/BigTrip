@@ -39,8 +39,6 @@ const getDestinationImage = (imgSrc) => `<img class="event__photo" src="${imgSrc
 
 const getPointEditorTemplate = (data = {}) => {
   const { id, type, basePrice, dateFrom, dateTo, destination, offers, availableOffers, destinationsByType } = data;
-  console.log('allof', availableOffers);
-  console.log('current', offers);
   const { name: destinationName, description, pictures } = destination;
   const choosenDueDateFrom = humanizeForEdit(dateFrom);
   const choosenDueDateTo = humanizeForEdit(dateTo);

@@ -164,7 +164,6 @@ export default class PointPresenter extends AbstractPresenter{
   };
 
   _handleDestinationChange = (element) => {
-    console.log('destination change');
     this._buffer.destination = this._dataModel.getEventDestinationData(element.value);
     this._pointEdit.rerender(this._buffer);
   };
