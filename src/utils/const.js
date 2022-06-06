@@ -31,3 +31,35 @@ export const SORTS = [
     isChecked: false,
   },
 ];
+
+export const TYPES_OF_TRANSFER = [{
+  title: 'Bus to',
+  id: 'bus',
+},
+{
+  title: 'Drive to',
+  id: 'drive',
+},
+{
+  title: 'Flight to',
+  id: 'flight',
+},
+{
+  title: 'Ship to',
+  id: 'ship',
+},
+{
+  title: 'Taxi to',
+  id: 'taxi',
+},
+{
+  title: 'Train to',
+  id: 'train',
+
+},
+{
+  title: 'Transport to',
+  id: 'transport',
+
+},
+];

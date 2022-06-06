@@ -10,6 +10,7 @@ import InfoComponent from '../views/info';
 import NavComponent from '../views/nav';
 import { POSITION_TYPES } from './../utils/render';
 import { generateInfoData } from './../utils/utils';
+import StatsComponent from './../views/stats';
 
 
 export default class TripPresenter extends AbstractPresenter {
@@ -27,6 +28,7 @@ export default class TripPresenter extends AbstractPresenter {
     this._addButtonComponent = new AddButtonComponent();
     this._filterComponent = new FilterComponent();
     this._sortsComponent = new SortComponent();
+    this._statsComponent = new StatsComponent(this._dataModel.getOriginalPoints());
 
     this._onViewChange = this._onViewChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
@@ -39,6 +41,9 @@ export default class TripPresenter extends AbstractPresenter {
 
   renderInfo() {
     addComponent(this._headerContainer, this._infoComponent.getElement(), POSITION_TYPES.PREPEND);
+    //stats WIP
+    addComponent(this._eventsContainer, this._statsComponent.getElement());
+    this._statsComponent.getStatistics();
   }
 
   renderNavigation() {
