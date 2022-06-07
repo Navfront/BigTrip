@@ -101,7 +101,7 @@ export default class DataModel {
       id: null,
       isFavorite: false,
       basePrice: 0,
-      dateFrom: Date.now(),
+      dateFrom: new Date().toISOString(),
       dateTo: null,
       destination: {
         name: null,

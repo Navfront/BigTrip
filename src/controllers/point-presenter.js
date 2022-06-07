@@ -181,8 +181,7 @@ export default class PointPresenter extends AbstractPresenter{
   };
 
   _handlePriceChange = (element) => {
-    this._buffer.basePrice = element.value;
-    // this._pointEdit.rerender(this._buffer);
+    this._buffer.basePrice = Number(element.value);
   };
 
 

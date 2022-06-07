@@ -50,12 +50,14 @@ export default class AbstractComponent {
     if (this._element) {
       this._element.classList.add('visually-hidden');
     }
+    return this;
   }
 
   show() {
     if (this._element) {
       this._element.classList.remove('visually-hidden');
     }
+    return this;
   }
 
 

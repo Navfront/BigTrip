@@ -36,18 +36,22 @@ export default class TripPresenter extends AbstractPresenter {
     this._onSortChange = this._onSortChange.bind(this);
     this._onAddEvent = this._onAddEvent.bind(this);
     this._onEscKeyDownHandler = this._onEscKeyDownHandler.bind(this);
+    this._onNavTabClickHandler = this._onNavTabClickHandler.bind(this);
   }
 
 
   renderInfo() {
     addComponent(this._headerContainer, this._infoComponent.getElement(), POSITION_TYPES.PREPEND);
-    //stats WIP
-    addComponent(this._eventsContainer, this._statsComponent.getElement());
-    this._statsComponent.getStatistics();
   }
 
   renderNavigation() {
     addComponent(this._filterContainer, this._navComponent.getElement());
+    this._navComponent.setOnTableClick(this._onNavTabClickHandler);
+  }
+
+  renderStat() {
+    addComponent(this._eventsContainer, this._statsComponent.getElement());
+    this._statsComponent.getStatistics(this._dataModel.getOriginalPoints());
   }
 
   renderAddButton() {
@@ -179,6 +183,27 @@ export default class TripPresenter extends AbstractPresenter {
   _onEscKeyDownHandler(evt){
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       this._onViewChange();
+    }
+  }
+
+  _onNavTabClickHandler(element) {
+    const currentTab = element.dataset.ref;
+    switch (currentTab) {
+      case 'stats':
+        this._pointsList.hide();
+        this._sortsComponent.hide();
+        this._filterComponent.hide();
+        this._statsComponent.show().rerender(this._dataModel.getOriginalPoints());
+        this._addButtonComponent.hide();
+        break;
+
+      default:
+        this._statsComponent.hide();
+        this._filterComponent.show();
+        this._pointsList.show();
+        this._sortsComponent.show();
+        this._addButtonComponent.show();
+        break;
     }
   }
 }

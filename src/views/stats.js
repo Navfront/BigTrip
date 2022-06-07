@@ -11,7 +11,7 @@ dayjs.extend(localeData);
 const BAR_HEIGHT = 55;
 const MIN_CTX_HEIGHT = 130;
 
-const getStatsTemplate = () => `<section class="statistics visually-hidden">
+const getStatsTemplate = () => `<section class="statistics">
   <h2 class="visually-hidden">Trip statistics</h2>
 
   <div class="statistics__item statistics__item--money">
@@ -33,6 +33,7 @@ export default class StatsComponent extends AbstractComponent{
     this._data = data;
     this._moneyChart = null;
     this._transportChart = null;
+    this._timeSpendChart = null;
   }
 
   _getTemplate() {
@@ -46,12 +47,33 @@ export default class StatsComponent extends AbstractComponent{
     this.getStatistics(this._data);
   }
 
-  getStatistics() {
+  destroy() {
+    if (this._element?.parentElement) {
+      this._element.remove();
+      this._removeElement();
+      this._moneyChart.destroy();
+      this._transportChart.destroy();
+      this._timeSpendChart.destroy();
+    }
+    return -1;
+  }
+
+  getStatistics(data) {
+    this._data = data;
     const moneyCtx = this.getElement().querySelector('.statistics__chart--money');
     const transportCtx = this.getElement().querySelector('.statistics__chart--transport');
     const timeCtx = this.getElement().querySelector('.statistics__chart--time');
     const types = Array.from(new Set(this._data.map((it) => it.type.toUpperCase())));
+    const moneyOfType = {};
+    console.log('statdata=',this._data);
+    for (const point of this._data) {
+      moneyOfType[point.type] = moneyOfType[point.type] || 0 + point.basePrice;
+    }
+
+    console.log(moneyOfType);
     const money = this._data.map((it) => it.basePrice);
+
+
     moneyCtx.height = BAR_HEIGHT * types.length > MIN_CTX_HEIGHT ? BAR_HEIGHT * types.length : MIN_CTX_HEIGHT;
 
     Chart.defaults.global.defaultFontColor = 'black';
@@ -207,10 +229,11 @@ export default class StatsComponent extends AbstractComponent{
 
     const timeinCities = events.reduce((acc, event) => {
       const city = event.destination.name.toUpperCase();
-      const start = dayjs(event.start);
-      const end = dayjs(event.end);
+      const start = dayjs(event.start).toISOString();
+      const end = dayjs(event.end).toISOString();
       const difference = new Date(end) - new Date(start);
       const timeDura = dayjs.duration(difference).hours();
+
 
       if (acc[city]) {
         acc[city].push(timeDura);
@@ -219,6 +242,7 @@ export default class StatsComponent extends AbstractComponent{
       }
       return acc;
     }, {});
+
 
     const cities = Object.keys(timeinCities);
     const time = (Object.values(timeinCities).map((it) => it.reduce((a, b) => (a + b))));
