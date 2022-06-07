@@ -65,14 +65,13 @@ export default class StatsComponent extends AbstractComponent{
     const timeCtx = this.getElement().querySelector('.statistics__chart--time');
     const types = Array.from(new Set(this._data.map((it) => it.type.toUpperCase())));
     const moneyOfType = {};
-    console.log('statdata=',this._data);
     for (const point of this._data) {
-      moneyOfType[point.type] = moneyOfType[point.type] || 0 + point.basePrice;
+      if (!moneyOfType[point.type]) {
+        moneyOfType[point.type] = 0;
+      }
+      moneyOfType[point.type] += point.basePrice;
     }
-
-    console.log(moneyOfType);
-    const money = this._data.map((it) => it.basePrice);
-
+    const money = Object.values(moneyOfType);
 
     moneyCtx.height = BAR_HEIGHT * types.length > MIN_CTX_HEIGHT ? BAR_HEIGHT * types.length : MIN_CTX_HEIGHT;
 
