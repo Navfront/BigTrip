@@ -200,7 +200,7 @@ export const EVENTS_DATA = [
         price: 400,
       },
     ],
-    destinations: ['geneva', 'chamonix', 'xz'],
+    destinations: ['geneva', 'chamonix'],
   },
   {
     type: 'ship',

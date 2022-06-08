@@ -25,16 +25,17 @@ export default class AbstractComponent {
   }
 
   rerender(data) {
-    console.log('rerendering ', this, data);
+    console.log('rerender', this);
     const oldElement = this.getElement();
-    const parent = oldElement.parentElement;
-    if (oldElement === parent || !parent) {
-      return -1;
-    }
+    const parent = oldElement?.parentElement;
     this._removeElement();
     this._data = data;
     const newElement = this.getElement();
-    parent?.replaceChild(newElement, oldElement);
+    try {
+      parent?.replaceChild(newElement, oldElement);
+    } catch {
+      this._removeElement();
+    }
     this._recoveryListeners();
   }
 
