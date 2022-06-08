@@ -188,6 +188,7 @@ export default class TripPresenter extends AbstractPresenter {
   }
 
   _onNavTabClickHandler(element) {
+    const containers = document.querySelectorAll('.page-body__container');
     const currentTab = element.dataset.ref;
     switch (currentTab) {
       case 'stats':
@@ -196,9 +197,15 @@ export default class TripPresenter extends AbstractPresenter {
         this._filterComponent.hide();
         this._statsComponent.show().rerender(this._dataModel.getOriginalPoints());
         this._addButtonComponent.hide();
+        for (const container of containers) {
+          container.classList.add('page-body__container--noline');
+        }
         break;
 
       default:
+        for (const container of containers) {
+          container.classList.remove('page-body__container--noline');
+        }
         this._statsComponent.hide();
         this._filterComponent.show();
         this._pointsList.show();
