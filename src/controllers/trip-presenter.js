@@ -52,6 +52,7 @@ export default class TripPresenter extends AbstractPresenter {
   renderStat() {
     addComponent(this._eventsContainer, this._statsComponent.getElement());
     this._statsComponent.getStatistics(this._dataModel.getOriginalPoints());
+    this._statsComponent.hide();
   }
 
   renderAddButton() {

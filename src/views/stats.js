@@ -11,7 +11,7 @@ dayjs.extend(localeData);
 const BAR_HEIGHT = 55;
 const MIN_CTX_HEIGHT = 130;
 
-const getStatsTemplate = () => `<section class="statistics">
+const getStatsTemplate = () => `<section class="statistics ">
   <h2 class="visually-hidden">Trip statistics</h2>
 
   <div class="statistics__item statistics__item--money">
