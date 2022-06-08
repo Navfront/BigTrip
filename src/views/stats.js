@@ -228,20 +228,18 @@ export default class StatsComponent extends AbstractComponent{
 
     const timeinCities = events.reduce((acc, event) => {
       const city = event.destination.name.toUpperCase();
-      const start = dayjs(event.start).toISOString();
-      const end = dayjs(event.end).toISOString();
-      const difference = new Date(end) - new Date(start);
-      const timeDura = dayjs.duration(difference).hours();
-
+      const start = dayjs(event.dateFrom).toISOString();
+      const end = dayjs(event.dateTo).toISOString();
+      const difference = (new Date(end).valueOf()) - (new Date(start).valueOf());
+      const timeDuration = dayjs.duration(difference).hours() + (dayjs.duration(difference).days()*24);
 
       if (acc[city]) {
-        acc[city].push(timeDura);
+        acc[city].push(timeDuration);
       } else {
-        acc[city] = [timeDura];
+        acc[city] = [timeDuration];
       }
       return acc;
     }, {});
-
 
     const cities = Object.keys(timeinCities);
     const time = (Object.values(timeinCities).map((it) => it.reduce((a, b) => (a + b))));
