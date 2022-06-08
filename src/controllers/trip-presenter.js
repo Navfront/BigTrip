@@ -46,7 +46,7 @@ export default class TripPresenter extends AbstractPresenter {
 
   renderNavigation() {
     addComponent(this._filterContainer, this._navComponent.getElement());
-    this._navComponent.setOnTableClick(this._onNavTabClickHandler);
+    this._navComponent.setOnTabsClick(this._onNavTabClickHandler);
   }
 
   renderStat() {
@@ -148,6 +148,7 @@ export default class TripPresenter extends AbstractPresenter {
         break;
         //id is string
       default:
+        // id = <random>--delete string
         if (newData.id.includes('--delete')) {
           this._dataModel.deletePoint(newData.id.split('--')[0]);
         } else {

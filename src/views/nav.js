@@ -10,6 +10,7 @@ export default class NavComponent extends AbstractComponent {
     super(...arguments);
     this._onTabsClickHadler = null;
     this._activeBtnClass = 'trip-tabs__btn--active';
+    this._buttons = this.getElement().querySelectorAll('.trip-tabs__btn');
   }
 
   _getTemplate() {
@@ -20,9 +21,9 @@ export default class NavComponent extends AbstractComponent {
     this.setOnTabsClick(this._onTabsClickHadler);
   }
 
-  setOnTableClick(callback) {
+  setOnTabsClick(callback) {
     this._onTabsClickHadler = callback;
-    const elements = this.getElement().querySelectorAll('.trip-tabs__btn');
+    const elements = this._buttons;
     for (const element of elements) {
       element.addEventListener('click', () => {
         for (const tab of elements) {
@@ -32,7 +33,6 @@ export default class NavComponent extends AbstractComponent {
           }
         }
         this._onTabsClickHadler.call(null, element);
-
       });
     }
   }
