@@ -8,7 +8,6 @@ const getTitle = (destinations) => destinations.length > 3 ? `${destinations[0].
 
 const getInfoTemplate = (infoData) => {
   const { destinations, startMonth, endMonth, dateFrom, dateTo, cost } = infoData;
-  console.log('Пришла дата ', destinations);
   return destinations.length?`<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getTitle(destinations)}</h1>

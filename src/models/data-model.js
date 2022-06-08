@@ -160,6 +160,8 @@ export default class DataModel {
 
   deletePoint(deletePointId) {
     const index = this._pointsData.findIndex((it) => it.id === String(deletePointId));
+    console.log(this._pointsData);
+    console.log('index of del', index);
     if (index !== -1)
     { this._pointsData.splice(index,1); }
   }

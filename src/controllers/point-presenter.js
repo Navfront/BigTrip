@@ -143,7 +143,7 @@ export default class PointPresenter extends AbstractPresenter{
   };
 
   _handleDeleteClick = () => {
-    this._onDataChange(Object.assign({}, this._buffer, { id: Number(this.id) }));
+    this._onDataChange(Object.assign({}, this._buffer, { id: this.id.concat('--delete') }));
     this.closeEditor();
   };
 

@@ -142,17 +142,18 @@ export default class TripPresenter extends AbstractPresenter {
 
   _onDataChange(newData) {
     switch (typeof newData.id) {
-      case 'number':
-        this._dataModel.deletePoint(newData.id);
-        break;
       //id is null
       case 'object':
         this._dataModel.createPoint(newData);
         break;
         //id is string
       default:
-        this._dataModel.updatePoint(newData);
-        break;
+        if (newData.id.includes('--delete')) {
+          this._dataModel.deletePoint(newData.id.split('--')[0]);
+        } else {
+          this._dataModel.updatePoint(newData);
+          break;}
+
     }
     this._enableAddButton();
     this.renderPoints();
