@@ -7,26 +7,61 @@ const TIMEOUT = 2000;
 
 
 const app = express();
+app.use(express.json("application/json"))
 
 const port = 3001;
 const log = (req) => {
-    console.log('method:', req.method,'from:', req.headers.host,  req.ip);
+    console.log('method:', req?.method,'from:', req?.headers?.host,  req?.ip, req?.body);
 }
-app.get('/api', (req, res) => {
+
+//all points
+app.get('/api/points', (req, res) => {
   log(req)
-  setTimeout(()=>{res.send({message: serverModel.getPoints})}, TIMEOUT)
+  setTimeout(()=>{res.json({message: serverModel.getPoints()})}, TIMEOUT)
 });
 
-app.delete('/api', (req, res) => {
+//all events
+app.get('/api/events', (req, res) => {
   log(req)
-  //WIP
-  res.send({message: 'deleted'})
+  setTimeout(()=>{res.json({message: serverModel.getEvents()})}, TIMEOUT)
+});
+
+//all destinations
+app.get('/api/destinations', (req, res) => {
+  log(req)
+  setTimeout(()=>{res.json({message: serverModel.getDestinations()})}, TIMEOUT)
+});
+
+//get point by query id
+app.get('/api/point', (req, res) => {
+  log(req)
+  setTimeout(()=>{res.json({message: serverModel.getPointById(req.query.id)})}, TIMEOUT)
+});
+
+//create new point by data
+app.post('/api/create', (req, res) => {
+  log(req)
+  res.send({message: serverModel.createPoint(req.body)})
 })
 
-app.post('/api', (req, res) => {
+//create new point by data
+app.post('/api/update', (req, res) => {
+  log(req)
+  res.send({message: serverModel.updatePoint(req.body)})
+})
+
+//delete point by query id
+app.post('/api/delete', (req, res) => {
+  log(req)
+  res.send({message: serverModel.deletePoint(req.body.id)})
+})
+
+app.post('*', (req, res) => {
   log(req)
   //WIP
-  res.send({message: 'created'})
+  res.json({
+    message: 'post ok',
+    body: req.body})
 })
 
 app.listen(port, () => {
