@@ -37,6 +37,9 @@ export default class TripPresenter extends AbstractPresenter {
     this._onAddEvent = this._onAddEvent.bind(this);
     this._onEscKeyDownHandler = this._onEscKeyDownHandler.bind(this);
     this._onNavTabClickHandler = this._onNavTabClickHandler.bind(this);
+    this.renderPoints = this.renderPoints.bind(this);
+
+    this._dataModel.setLoadingWatchHandler(this.renderPoints);
   }
 
 

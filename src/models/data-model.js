@@ -12,10 +12,12 @@ export default class DataModel {
     this._sortsData = null;
     this._isSortDirectionUp = false;
     this._prevSortType = null;
+    this._listIsLoading = true;
     //Подписчики
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
     this._sortsDataChangeHandlers = [];
+    this._loadingWhatchHandlers = [];
   }
 
 
@@ -133,9 +135,21 @@ export default class DataModel {
    * @param {Array} newPointsData
    */
   setPoints(newPointsData) {
+
     this._pointsData = newPointsData;
+    if (this._pointsData && this._pointsData.length) {
+      this._setLoading(true);
+    }
   }
 
+  /**
+   * Boolean показ loading..
+   * @param {boolean} state
+   */
+  _setLoading(state) {
+    this._listIsLoading = state;
+    this._callHandlers(this._loadingWhatchHandlers);
+  }
 
   /**
    *
@@ -242,7 +256,7 @@ export default class DataModel {
   }
 
   getListData() {
-    return { isEmpty: !this._pointsData || this._pointsData.length<1, isLoading: false, choosenFilter: this._currentFilter };
+    return { isEmpty: !this._pointsData || this._pointsData.length<1, isLoading: this._listIsLoading, choosenFilter: this._currentFilter };
   }
 
   isEmpty() {
@@ -264,6 +278,10 @@ export default class DataModel {
 
   setSortsChangeHandler(handler) {
     this._sortsDataChangeHandlers.push(handler);
+  }
+
+  setLoadingWatchHandler(handler){
+    this._loadingWhatchHandlers.push(handler);
   }
 
   /**

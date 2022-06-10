@@ -1,13 +1,27 @@
 const express = require('express');
 const ServerModel = require('./model.js')
+const cors = require('cors');
+
 const serverModel = new ServerModel();
 
 //искуственная задержка
 const TIMEOUT = 2000;
 
+const whitelist = ["http://localhost:8080"]
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
+}
 
 const app = express();
-app.use(express.json("application/json"))
+app.use(express.json("application/json"));
+app.use(cors(corsOptions));
 
 const port = 3001;
 const log = (req) => {
