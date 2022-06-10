@@ -5,9 +5,10 @@ import uniqid from 'uniqid';
 
 
 export default class DataModel {
-  constructor() {
-    this._events = null;
-    this._pointsData = null;
+  constructor(api) {
+    this._api = api;
+    this._events = [];
+    this._pointsData = [];
     this._currentFilter = FILTERS.EVERYTHING;
     this._sortsData = null;
     this._isSortDirectionUp = false;
@@ -18,8 +19,20 @@ export default class DataModel {
     this._filterChangeHandlers = [];
     this._sortsDataChangeHandlers = [];
     this._loadingWhatchHandlers = [];
+
+
   }
 
+  init() {
+    const points = this._api.getAllPoints();
+    const events = this._api.getEvents();
+    Promise.all([points, events]).then((datas) =>
+    {
+      this._events = datas[1].message;
+      this.setPoints(datas[0].message);
+    }
+    );
+  }
 
   /**
    * Восстанавливает оригинал sortsData
@@ -135,7 +148,6 @@ export default class DataModel {
    * @param {Array} newPointsData
    */
   setPoints(newPointsData) {
-
     this._pointsData = newPointsData;
     if (this._pointsData && this._pointsData.length) {
       this._setLoading(true);

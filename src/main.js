@@ -1,7 +1,6 @@
 import TripPresenter from './controllers/trip-presenter';
 import DataModel from './models/data-model';
 import Facade from './controllers/facade';
-import { EVENTS_DATA, POINTS } from './mock/points';
 import Api from './api';
 
 const ADRESS = {
@@ -21,20 +20,10 @@ const eventsContainer = document.querySelector('.trip-events');
 
 const api = new Api(ADRESS);
 
-const dataModel = new DataModel;
-dataModel.setEvents(EVENTS_DATA); //данные о самих эвентах
-dataModel.setPoints([]); //маршруты
-
+const dataModel = new DataModel(api);
+dataModel.init();
 
 const presenter = new Facade(new TripPresenter(headerContainer, filterContainer, eventsContainer, dataModel));
 presenter.init();
-
-api.getAllPoints().then((response) => {
-  if (response.ok) {
-    return response.json();
-  }
-}).then((data) => {
-  dataModel.setPoints(data.message);
-});
 
 

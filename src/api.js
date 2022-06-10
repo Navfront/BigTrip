@@ -1,16 +1,21 @@
 export default class Api {
-  constructor(adress) {
-    this._url = adress.URL;
-    this._points = adress.POINTS;
-    this._pointById = adress.POINT_BY_ID;
-    this._events = adress.EVENTS;
-    this._destinations = adress.DESTINATIONS;
-    this._create = adress.CREATE;
-    this._update = adress.UPDATE;
-    this._delete = adress.DELETE;
+  constructor(endpoints) {
+    this._endpoints = endpoints;
+  }
+
+  _getFetch(endpoint) {
+    return fetch(this._endpoints.URL + endpoint).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+    });
   }
 
   getAllPoints() {
-    return fetch(this._url + this._points);
+    return this._getFetch(this._endpoints.POINTS);
+  }
+
+  getEvents() {
+    return this._getFetch(this._endpoints.EVENTS);
   }
 }
