@@ -33,9 +33,9 @@ app.get('/api/destinations', (req, res) => {
 });
 
 //get point by query id
-app.get('/api/point', (req, res) => {
+app.post('/api/point', (req, res) => {
   log(req)
-  setTimeout(()=>{res.json({message: serverModel.getPointById(req.query.id)})}, TIMEOUT)
+  setTimeout(()=>{res.json({message: serverModel.getPointById(req.body.id)})}, TIMEOUT)
 });
 
 //create new point by data
