@@ -3,8 +3,14 @@ export default class Api {
     this._endpoints = endpoints;
   }
 
-  _getFetch(endpoint) {
-    return fetch(this._endpoints.URL + endpoint).then((response) => {
+  _getFetch(endpoint, body) {
+    return fetch(this._endpoints.URL + endpoint, {
+      method: body ? 'POST' : 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    }).then((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -21,5 +27,17 @@ export default class Api {
 
   getDestinations() {
     return this._getFetch(this._endpoints.DESTINATIONS);
+  }
+
+  createPoint(pointData) {
+    return this._getFetch(this._endpoints.CREATE, pointData);
+  }
+
+  updatePoint(pointData) {
+    return this._getFetch(this._endpoints.UPDATE, pointData);
+  }
+
+  deletePoint(id) {
+    return this._getFetch(this._endpoints.DELETE, { id });
   }
 }

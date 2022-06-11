@@ -1,4 +1,3 @@
-import { EVENT_DESTINATIONS } from '../mock/points';
 import { FILTERS, SORTS } from '../utils/const';
 import { sortPointsData } from '../utils/sort-utils';
 import uniqid from 'uniqid';
@@ -34,7 +33,6 @@ export default class DataModel {
       this._events = datas[1].message;
       this._destinations = datas[2].message;
       this.setPoints(datas[0].message);
-      console.log(this._destinations);
     }
     );
   }
@@ -154,8 +152,8 @@ export default class DataModel {
    */
   setPoints(newPointsData) {
     this._pointsData = newPointsData;
-    if (this._pointsData && this._pointsData.length) {
-      this._setLoading(true);
+    if (this._pointsData) {
+      this._setLoading(false);
     }
   }
 
@@ -180,19 +178,25 @@ export default class DataModel {
     }
     this._pointsData = [].concat(this._pointsData.slice(0, index), newPoint, this._pointsData.slice(index + 1));
 
+    this._api.updatePoint(newPoint);
     //notify all data change
     this._callHandlers(this._dataChangeHandlers);
     return index;
   }
 
   createPoint(newPoint) {
-    this._pointsData.push({ ...newPoint, id: uniqid() });
+    const newData = { ...newPoint, id: uniqid() };
+    this._pointsData.push(newData);
+    this._api.createPoint(newData);
   }
 
   deletePoint(deletePointId) {
     const index = this._pointsData.findIndex((it) => it.id === String(deletePointId));
     if (index !== -1)
-    { this._pointsData.splice(index,1); }
+    {
+      this._pointsData.splice(index, 1);
+      this._api.deletePoint(String(deletePointId));
+    }
   }
 
   /**
@@ -219,7 +223,7 @@ export default class DataModel {
   }
 
   getEventDestinationData(destinationName) {
-    const result = EVENT_DESTINATIONS.find((it) => it.name.toLowerCase() === destinationName.toLowerCase()) || {
+    const result = this._destinations.find((it) => it.name.toLowerCase() === destinationName.toLowerCase()) || {
       name: null,
       description: null,
       pictures: []
