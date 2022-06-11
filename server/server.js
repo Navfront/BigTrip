@@ -55,19 +55,20 @@ app.post('/api/point', (req, res) => {
 //create new point by data
 app.post('/api/create', (req, res) => {
   log(req, 'created: ')
-  res.send({message: serverModel.createPoint(req.body)})
+  setTimeout(() => {res.json({message: serverModel.createPoint(req.body)})}, TIMEOUT)
+
 })
 
 //create new point by data
 app.post('/api/update', (req, res) => {
   log(req, 'update')
-  res.send({message: serverModel.updatePoint(req.body)})
+  setTimeout(() => {res.json({message: serverModel.updatePoint(req.body)})}, TIMEOUT)
 })
 
 //delete point by id
 app.post('/api/delete', (req, res) => {
   log(req, 'delete')
-  res.send({message: serverModel.deletePoint(req.body.id)})
+  setTimeout(() => {res.json({message: serverModel.deletePoint(req.body.id)})}, TIMEOUT)
 })
 
 app.post('*', (req, res) => {
