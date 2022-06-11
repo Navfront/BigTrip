@@ -24,49 +24,49 @@ app.use(express.json("application/json"));
 app.use(cors(corsOptions));
 
 const port = 3001;
-const log = (req) => {
-    console.log('method:', req?.method,'from:', req?.headers?.host,  req?.ip, req?.body);
+const log = (req, text='') => {
+    console.log('method:', req?.method,'from:', req?.headers?.host,  req?.ip, text, req?.body?.id || '', req?.body?.destination.name || '');
 }
 
 //all points
 app.get('/api/points', (req, res) => {
-  log(req)
+  log(req, 'points')
   setTimeout(()=>{res.json({message: serverModel.getPoints()})}, TIMEOUT)
 });
 
 //all events
 app.get('/api/events', (req, res) => {
-  log(req)
+  log(req, 'events')
   setTimeout(()=>{res.json({message: serverModel.getEvents()})}, TIMEOUT)
 });
 
 //all destinations
 app.get('/api/destinations', (req, res) => {
-  log(req)
+  log(req, 'destinations')
   setTimeout(()=>{res.json({message: serverModel.getDestinations()})}, TIMEOUT)
 });
 
 //get point by query id
 app.post('/api/point', (req, res) => {
-  log(req)
+  log(req, 'point by id')
   setTimeout(()=>{res.json({message: serverModel.getPointById(req.body.id)})}, TIMEOUT)
 });
 
 //create new point by data
 app.post('/api/create', (req, res) => {
-  log(req)
+  log(req, 'created: ')
   res.send({message: serverModel.createPoint(req.body)})
 })
 
 //create new point by data
 app.post('/api/update', (req, res) => {
-  log(req)
+  log(req, 'update')
   res.send({message: serverModel.updatePoint(req.body)})
 })
 
 //delete point by query id
 app.post('/api/delete', (req, res) => {
-  log(req)
+  log(req, 'delete')
   res.send({message: serverModel.deletePoint(req.body.id)})
 })
 
