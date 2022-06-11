@@ -18,4 +18,8 @@ export default class Api {
   getEvents() {
     return this._getFetch(this._endpoints.EVENTS);
   }
+
+  getDestinations() {
+    return this._getFetch(this._endpoints.DESTINATIONS);
+  }
 }

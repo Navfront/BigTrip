@@ -9,6 +9,7 @@ export default class DataModel {
     this._api = api;
     this._events = [];
     this._pointsData = [];
+    this._destinations = [];
     this._currentFilter = FILTERS.EVERYTHING;
     this._sortsData = null;
     this._isSortDirectionUp = false;
@@ -26,10 +27,14 @@ export default class DataModel {
   init() {
     const points = this._api.getAllPoints();
     const events = this._api.getEvents();
-    Promise.all([points, events]).then((datas) =>
+    const destinations = this._api.getDestinations();
+
+    Promise.all([points, events, destinations]).then((datas) =>
     {
       this._events = datas[1].message;
+      this._destinations = datas[2].message;
       this.setPoints(datas[0].message);
+      console.log(this._destinations);
     }
     );
   }

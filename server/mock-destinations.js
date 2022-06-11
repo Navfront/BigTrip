@@ -1,9 +1,8 @@
-const EVENT_DESTINATIONS = {
-  chamonix: {
+const EVENT_DESTINATIONS = [
+  { name: 'Chamonix',
     basePrice: 1300,
     description:
       'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
-    name: 'Chamonix',
     pictures: [
       {
         src: 'http://picsum.photos/300/200?r=0.0762563005163317',
@@ -15,10 +14,9 @@ const EVENT_DESTINATIONS = {
       },
     ],
   },
-  geneva: {
+  { name: 'Geneva',
     basePrice: 999,
     description: 'Geneva is beautiful.',
-    name: 'Geneva',
     pictures: [
       {
         src: 'http://picsum.photos/300/200?r=0.0762563005163317',
@@ -34,10 +32,9 @@ const EVENT_DESTINATIONS = {
       },
     ],
   },
-  amsterdam: {
+  { name: 'Amsterdam',
     basePrice: 1500,
     description: 'Amsterdam is nice.',
-    name: 'Amsterdam',
     pictures: [
       {
         src: 'http://picsum.photos/300/200',
@@ -53,7 +50,7 @@ const EVENT_DESTINATIONS = {
       },
     ],
   },
-};
+];
 
 
 module.exports = EVENT_DESTINATIONS;
