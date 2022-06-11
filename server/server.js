@@ -59,7 +59,7 @@ app.post('/api/create', (req, res) => {
 
 })
 
-//create new point by data
+//update point by data
 app.post('/api/update', (req, res) => {
   log(req, 'update')
   setTimeout(() => {res.json({message: serverModel.updatePoint(req.body)})}, TIMEOUT)
