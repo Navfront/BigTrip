@@ -46,7 +46,7 @@ app.get('/api/destinations', (req, res) => {
   setTimeout(()=>{res.json({message: serverModel.getDestinations()})}, TIMEOUT)
 });
 
-//get point by query id
+//get point by id
 app.post('/api/point', (req, res) => {
   log(req, 'point by id')
   setTimeout(()=>{res.json({message: serverModel.getPointById(req.body.id)})}, TIMEOUT)
@@ -64,7 +64,7 @@ app.post('/api/update', (req, res) => {
   res.send({message: serverModel.updatePoint(req.body)})
 })
 
-//delete point by query id
+//delete point by id
 app.post('/api/delete', (req, res) => {
   log(req, 'delete')
   res.send({message: serverModel.deletePoint(req.body.id)})
