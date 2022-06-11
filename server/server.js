@@ -25,7 +25,7 @@ app.use(cors(corsOptions));
 
 const port = 3001;
 const log = (req, text='') => {
-    console.log('method:', req?.method,'from:', req?.headers?.host,  req?.ip, text, req?.body?.id || '', req?.body?.destination.name || '');
+    console.log('method:', req?.method,'from:', req?.headers?.host,  req?.ip, text, req?.body?.id || '', req?.body?.destination?.name || '');
 }
 
 //all points
