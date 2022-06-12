@@ -12,12 +12,14 @@
 
 ## О проекте:
 
-- Архитектура MVP (Model-View-Presenter)
-- Различные патерны проектирования: observer, adapter, proxy и тд.
-- Node Express Server залитый на Heroku
-- ESLint контролирует качество кода
-- Оффлайн режим с LocalStorage
-- Service Worker для кеширования
+- [x] Архитектура MVP (Model-View-Presenter)
+- [x] Сортировка и фильтрация данных
+- [x] Npm пакеты: Chart.js и Dayjs и др.
+- [x] Различные патерны проектирования: observer, adapter, proxy и тд.
+- [x] Node Express Server залитый на Heroku
+- [x] ESLint контролирует качество кода
+- [x] Оффлайн режим с LocalStorage
+- [x] Service Worker для кеширования
 
 <br>
 
