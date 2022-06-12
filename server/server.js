@@ -49,43 +49,41 @@ app.get('/api/destinations', (req, res) => {
 //get point by id
 app.post('/api/point', (req, res) => {
   log(req, 'point by id')
-  setTimeout(()=>{res.json({message: serverModel.getPointById(req.body.id)})}, TIMEOUT)
+  setTimeout(()=>{res.json({message: serverModel.getPointById(req?.body?.id)})}, TIMEOUT)
 });
 
 //create new point by data
 app.post('/api/create', (req, res) => {
   log(req, 'created: ')
-  setTimeout(() => {res.json({message: serverModel.createPoint(req.body)})}, TIMEOUT)
+  setTimeout(() => {res.json({message: serverModel.createPoint(req?.body)})}, TIMEOUT)
 
 })
 
 //update point by data
 app.post('/api/update', (req, res) => {
   log(req, 'update')
-  setTimeout(() => {res.json({message: serverModel.updatePoint(req.body)})}, TIMEOUT)
+  setTimeout(() => {res.json({message: serverModel.updatePoint(req?.body)})}, TIMEOUT)
 })
 
 //delete point by id
 app.post('/api/delete', (req, res) => {
   log(req, 'delete')
-  setTimeout(() => {res.json({message: serverModel.deletePoint(req.body.id)})}, TIMEOUT)
+  setTimeout(() => {res.json({message: serverModel.deletePoint(req?.body?.id)})}, TIMEOUT)
 })
 
 //sync points
 app.post('/api/sync', (req, res) => {
   log(req, 'sync')
-  setTimeout(() => {res.json({message: serverModel.syncPoints(req.body)})}, TIMEOUT)
+  setTimeout(() => {res.json({message: serverModel.syncPoints(req?.body)})}, TIMEOUT)
 })
 
 app.post('*', (req, res) => {
   log(req)
   //WIP
-  res.json({
-    message: 'post ok',
-    body: req.body})
+  res.send('Server works!')
 })
 
-app.listen(port, () => {
+app.listen((process.env.PORT || 5000), () => {
   console.log(`App listening on port ${port}`);
 });
 

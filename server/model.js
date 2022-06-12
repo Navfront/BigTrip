@@ -16,24 +16,25 @@ class ServerModel {
   }
 
   updatePoint(newPoint) {
-    const index = this._points.findIndex((it) => it.id === newPoint.id);
+    if (newPoint) {
+      const index = this._points.findIndex((it) => it.id === newPoint.id);
     if (index === -1) {
       return false;
     }
     this._points = [].concat(this._points.slice(0, index), newPoint, this._points.slice(index + 1));
     return index;
   }
+  }
 
   deletePoint(deletePointId) {
-    const index = this._points.findIndex((it) => it.id === String(deletePointId));
+    if (deletePointId) {
+      const index = this._points.findIndex((it) => it.id === String(deletePointId));
     if (index !== -1)
     {
       this._points.splice(index, 1);
       return index
-    } else {
-      return false
-      }
-
+    }
+    }
   }
 
   createPoint(newPoint) {
@@ -57,7 +58,8 @@ class ServerModel {
   }
 
   getPointById(pointId) {
-    console.log('point id = ', pointId || "null");
+    if (pointId) {
+      console.log('point id = ', pointId || "null");
     const defaultType = 'transport';
     const newPoint = {
       id: null,
@@ -76,34 +78,45 @@ class ServerModel {
     };
     const result = this._points.find((it) => it.id === String(pointId));
     return result? Object.assign({}, result, {destinationsByType: this.getDestinationsByType(this.getTypeById(pointId))}): newPoint;
+   }
   }
 
   getTypeById(pointId) {
-    return this._points.find((it)=>it.id===pointId)?.type;
+    if (pointId) {
+      return this._points.find((it)=>it.id===pointId)?.type;
+    }
   }
 
   getDestinationsByType(eventType) {
-    const result = this._events.find((it)=>it.type===eventType)?.destinations;
+    if (eventType) {
+      const result = this._events.find((it)=>it.type===eventType)?.destinations;
     return result;
+    }
   }
 
   getOffersByType(eventType) {
-    const result = this._events.find((it) => it.type === eventType)?.offers;
+    if (eventType) {
+      const result = this._events.find((it) => it.type === eventType)?.offers;
     return result;
+    }
   }
 
   getEventDestinationData(destinationName) {
-    const result = this._destinations.find((it) => it.name.toLowerCase() === destinationName.toLowerCase()) || {
-      name: null,
-      description: null,
-      pictures: []
-    };
-    return result;
+    if (destinationName) {
+      const result = this._destinations.find((it) => it.name.toLowerCase() === destinationName.toLowerCase()) || {
+        name: null,
+        description: null,
+        pictures: []
+      };
+      return result;
+}
   }
 
   syncPoints(points) {
     //v.0.0.0.0.1
-    this._points = points;
+    if (points) {
+      this._points = points;
+  }
   }
 }
 
