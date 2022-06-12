@@ -48,7 +48,12 @@ window.addEventListener('offline', () => {
   document.title = `${currentTitle} [offline]`;
 });
 
-navigator.serviceWorker.register('./sw.js');
-// .then((reg) => { console.log('регистрация сработала', reg); }).catch((e) => {
-//   console.log('ошибка', e);
-// });
+
+window.addEventListener('load', () => {
+  navigator.serviceWorker.register('./sw.js');
+  // .then((reg) => { console.log('регистрация сработала', reg); }).catch((e) => {
+  //   console.log('ошибка', e);
+  // });
+});
+
+
