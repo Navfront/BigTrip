@@ -68,25 +68,26 @@ self.addEventListener('fetch', (evt) => {
       .then((cacheResponse) => {
         // Если в кеше нашелся ответ на запрос (request),
         // возвращаем его (cacheResponse) вместо запроса к серверу
-        if(cacheResponse) {
+        if (cacheResponse) {
           return cacheResponse;
         }
         // Если в кеше не нашелся ответ,
         // повторно вызываем fetch
         // с тем же запросом (request)
         // и возвращаем его
-        return fetch(request).then((response) =>
-          // // Если ответа нет, или ответ со статусом отличным от 200 ОК
-          // // или ответ небезопасного типа (не basic), тогда просто передаем
-          // // ответ дальше, никак не обрабатываем
-          // if (!response || response.status !== 200 || response.type !== 'basic') {
-          //   return response;
-          // }
-          // // А если ответ удовлетворяет, клонируем его
-          // const clonedResponse = response.clone();
-          // caches.open(CACHE_NAME).then((cache) => cache.put(request, clonedResponse));
-          response
-        );
+        return fetch(request).then((response) => {
+          // Если ответа нет, или ответ со статусом отличным от 200 ОК
+          // или ответ небезопасного типа (не basic), тогда просто передаем
+          // ответ дальше, никак не обрабатываем
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+          // А если ответ удовлетворяет, клонируем его
+          const clonedResponse = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clonedResponse));
+          return response;
+        });
+
       }
       )
   );

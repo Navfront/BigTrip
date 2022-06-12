@@ -3,6 +3,7 @@
   "version": "17.0.0",
   "private": true,
   "description": "Проект «Большое путешествие» от HTML Academy",
+  "homepage": "https://navfront.github.io/BigTrip/",
   "browserslist": [
     "last 2 versions",
     "not dead",
@@ -11,6 +12,8 @@
     "not < 0.25%"
   ],
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "lint": "eslint src/",
     "build": "webpack --mode production",
     "start": "webpack serve --mode development --open"
@@ -24,6 +27,7 @@
     "css-loader": "6.7.1",
     "eslint": "8.13.0",
     "eslint-config-htmlacademy": "5.1.2",
+    "gh-pages": "^4.0.0",
     "style-loader": "3.3.1",
     "webpack": "5.72.0",
     "webpack-cli": "4.9.2",
