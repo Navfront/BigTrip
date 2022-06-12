@@ -1,5 +1,5 @@
-import { FILTERS } from '../utils/const.js';
 import AbstractComponent from './abstract-component.js';
+import { FILTERS } from '../utils/const.js';
 
 const getFilter = (filterName, isChecked = false) => `
   <div class="trip-filters__filter">

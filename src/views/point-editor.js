@@ -1,10 +1,9 @@
-import {
-  EVENT_TYPES,
-} from '../mock/events';
+import AbstractComponent from './abstract-component';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import AbstractComponent from './abstract-component';
 import { humanizeForEdit } from '../utils/utils';
+import { EVENT_TYPES } from '../mock/events';
+
 
 const eventTypes = EVENT_TYPES;
 

@@ -1,6 +1,5 @@
-import { SORTS } from '../utils/const';
 import AbstractComponent from './abstract-component';
-
+import { SORTS } from '../utils/const';
 
 const getSortItem = (sortName, isDisabled = true, isChecked = false) => `
   <div class="trip-sort__item  ${

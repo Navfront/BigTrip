@@ -19,9 +19,6 @@ export default class DataModel {
     this._loadingWhatchHandlers = [];
   }
 
-  /**
-   * Восстанавливает оригинал sortsData
-   */
   restoreSorts() {
     this._sortsData = JSON.parse(JSON.stringify(SORTS));
     this._isSortDirectionUp = false;
@@ -29,10 +26,6 @@ export default class DataModel {
     return this._sortsData;
   }
 
-  /**
-   *Возавращает SortsData
-   * @returns object
-   */
   getSorts() {
     if (this._sortsData) {
       return this._sortsData;
@@ -42,10 +35,6 @@ export default class DataModel {
     }
   }
 
-  /**
-   * Принимает новый тип сортировки
-   * @param {string} newSortType
-   */
   changeCurrentSort(newSortType = SORTS[0].sortName) {
     if (newSortType === this._prevSortType) {
       this._isSortDirectionUp = !this._isSortDirectionUp;
@@ -64,33 +53,19 @@ export default class DataModel {
     this._callHandlers(this._sortsDataChangeHandlers);
   }
 
-  /**
-   * Возвращает тип текущей сортировки
-   * @returns string
-   */
   getCurrentSort() {
     const sort = this.getSorts().find((it)=>it.isChecked===true);
     return sort.sortName;
   }
 
-  /**
-   * Отключить все sorts
-   */
   disableSorts() {
     this.getSorts().forEach((it) => { it.isDisabled = true;});
   }
 
-  /**
-   * Включить все sorts
-   */
   enableSorts() {
     this.getSorts().forEach((it) => { it.isDisabled = false;});
   }
 
-  /**
-   *
-   * @returns Возвращает отфильтрованные и отсортированные данные всех точек
-   */
   getPoints() {
     return sortPointsData(this._filterPointsData(this._pointsData), this.getCurrentSort(), this._isSortDirectionUp);
   }
@@ -120,18 +95,10 @@ export default class DataModel {
     return this._pointsData.find((it)=>it.id===pointId)?.type;
   }
 
-  /**
-   *
-   * @returns Возвращает оригинальные данные
-   */
   getOriginalPoints() {
     return this._pointsData;
   }
 
-  /**
-   * Установить массив новых данных
-   * @param {Array} newPointsData
-   */
   setPoints(newPointsData) {
     this._pointsData = newPointsData;
     if (this._pointsData) {
@@ -143,20 +110,11 @@ export default class DataModel {
     this._destinations = destinationsData;
   }
 
-  /**
-   * Boolean показ loading..
-   * @param {boolean} state
-   */
   _setLoading(state) {
     this._listIsLoading = state;
     this._callHandlers(this._loadingWhatchHandlers);
   }
 
-  /**
-   *
-   * @param {Object} newPoint
-   * @returns Возвращает index поинта если ок и false если не нашел
-   */
   updatePoint(newPoint) {
     const index = this._pointsData.findIndex((it) => it.id === newPoint.id);
     if (index === -1) {
@@ -180,14 +138,9 @@ export default class DataModel {
     }
   }
 
-  /**
-   * Установить все доступные варианты эвентов \\ не маршруты!
-   * @param {array} events
-   */
   setEvents(events) {
     this._events = events;
   }
-
 
   getEventTypes() {
     return Object.keys(this._events);
@@ -212,10 +165,6 @@ export default class DataModel {
     return result;
   }
 
-  /**
-   *'everything' || 'future' || 'past'
-   * @param {string} filterType
-   */
   setActiveFilter(filterType) {
     switch (filterType) {
       case FILTERS.FUTURE:
@@ -232,19 +181,11 @@ export default class DataModel {
     this._callHandlers(this._filterChangeHandlers);
   }
 
-
-  /**
-   * Устанавливает дефолтный фильтр
-   */
   setActiveFilterDefault() {
     this._currentFilter = FILTERS.EVERYTHING;
     this._callHandlers(this._filterChangeHandlers);
   }
 
-  /**
-   * Принимает массив данных для фильтрации
-   * @param {Array} pointsData
-   */
   _filterPointsData(pointsData) {
     if(!pointsData){return null;}
     switch (this._currentFilter) {
@@ -265,11 +206,6 @@ export default class DataModel {
     return !this._pointsData || this._pointsData.length<1;
   }
 
-  /**
-   *
-   * Observer. Подписка на обновление данных
-   * @param {Function} handler
-   */
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
   }
@@ -286,10 +222,6 @@ export default class DataModel {
     this._loadingWhatchHandlers.push(handler);
   }
 
-  /**
-    * Массив колбэков
-    * @param {Array} Handlers
-    */
   _callHandlers(handlers) {
     if(handlers.length>0){handlers.forEach((it) => it());}
   }

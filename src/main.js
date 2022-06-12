@@ -1,10 +1,9 @@
-import TripPresenter from './controllers/trip-presenter';
+import Api from './api';
 import DataModel from './models/data-model';
 import Facade from './controllers/facade';
-import Api from './api';
-import Storage from './storage';
 import Provider from './provider';
-
+import Storage from './storage';
+import TripPresenter from './controllers/trip-presenter';
 
 const ADRESS = {
   URL: 'http://localhost:3001/api',
@@ -18,9 +17,10 @@ const ADRESS = {
   SYNC: '/sync'
 };
 
+const eventsContainer = document.querySelector('.trip-events');
 const headerContainer = document.querySelector('.trip-main');
 const filterContainer = document.querySelector('.trip-controls__filters');
-const eventsContainer = document.querySelector('.trip-events');
+
 
 const api = new Api(ADRESS);
 const storage = new Storage;
@@ -51,9 +51,6 @@ window.addEventListener('offline', () => {
 
 window.addEventListener('load', () => {
   navigator.serviceWorker.register('./sw.js');
-  // .then((reg) => { console.log('регистрация сработала', reg); }).catch((e) => {
-  //   console.log('ошибка', e);
-  // });
 });
 
 

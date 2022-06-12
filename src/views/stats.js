@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import localeData from 'dayjs/plugin/localeData';
 import { TYPES_OF_TRANSFER } from './../utils/const';
+
 dayjs.extend(duration);
 dayjs.extend(localeData);
 

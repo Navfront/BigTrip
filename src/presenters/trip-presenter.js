@@ -1,17 +1,17 @@
-import PointsListComponent from '../views/points-list';
 import AbstractPresenter from './abstract-presenter';
-import PointPresenter, { Mode } from './point-presenter';
-import { addComponent } from '../utils/render';
-import EmptyComponent from '../views/empty';
-import FilterComponent from './../views/filter';
-import SortComponent from './../views/sort';
 import AddButtonComponent from '../views/add-button';
+import FilterComponent from './../views/filter';
+import EmptyComponent from '../views/empty';
 import InfoComponent from '../views/info';
 import NavComponent from '../views/nav';
-import { POSITION_TYPES } from './../utils/render';
-import { generateInfoData } from './../utils/utils';
+import PointsListComponent from '../views/points-list';
+import PointPresenter, { Mode } from './point-presenter';
+import SortComponent from './../views/sort';
 import StatsComponent from './../views/stats';
 import uniqid from 'uniqid';
+import { addComponent } from '../utils/render';
+import { generateInfoData } from './../utils/utils';
+import { POSITION_TYPES } from './../utils/render';
 
 
 export default class TripPresenter extends AbstractPresenter {

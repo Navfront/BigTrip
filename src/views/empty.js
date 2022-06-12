@@ -1,6 +1,6 @@
 
-import { FILTERS } from '../utils/const';
 import AbstractComponent from './abstract-component';
+import { FILTERS } from '../utils/const';
 
 const getEmptyTemplate = (data = { isEmpty: true, isLoading: false, choosenFilter: FILTERS.EVERYTHING }) => {
 

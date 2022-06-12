@@ -1,6 +1,6 @@
 const express = require('express');
-const ServerModel = require('./model.js')
 const cors = require('cors');
+const ServerModel = require('./model.js')
 
 const serverModel = new ServerModel();
 
@@ -89,4 +89,4 @@ app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
 
-//node server/server.js to run this
+// "node server/server.js" to run this

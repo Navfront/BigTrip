@@ -25,7 +25,7 @@ export default class AbstractComponent {
   }
 
   rerender(data) {
-    console.log('Rerender:', this._element, this);
+    // console.log('Rerender:', this._element, this);
     const oldElement = this.getElement();
     const parent = oldElement?.parentElement;
     this._removeElement();
