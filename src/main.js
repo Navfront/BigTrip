@@ -1,9 +1,9 @@
 import Api from './api';
 import DataModel from './models/data-model';
-import Facade from './controllers/facade';
+import Facade from './presenters/facade';
 import Provider from './provider';
 import Storage from './storage';
-import TripPresenter from './controllers/trip-presenter';
+import TripPresenter from './presenters/trip-presenter';
 
 const ADRESS = {
   URL: 'http://localhost:3001/api',
