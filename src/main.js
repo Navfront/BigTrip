@@ -6,7 +6,7 @@ import Storage from './storage';
 import TripPresenter from './presenters/trip-presenter';
 
 const ADRESS = {
-  URL: 'http://localhost:3001/api',
+  URL: 'https://big-trip-server.herokuapp.com/api',
   POINTS: '/points',
   POINT_BY_ID: '/point',
   EVENTS: '/events',
