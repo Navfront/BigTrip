@@ -4,8 +4,7 @@ import uniqid from 'uniqid';
 
 
 export default class DataModel {
-  constructor(api) {
-    this._api = api;
+  constructor() {
     this._events = [];
     this._pointsData = [];
     this._destinations = [];
@@ -19,22 +18,6 @@ export default class DataModel {
     this._filterChangeHandlers = [];
     this._sortsDataChangeHandlers = [];
     this._loadingWhatchHandlers = [];
-
-
-  }
-
-  init() {
-    const points = this._api.getAllPoints();
-    const events = this._api.getEvents();
-    const destinations = this._api.getDestinations();
-
-    Promise.all([points, events, destinations]).then((datas) =>
-    {
-      this._events = datas[1].message;
-      this._destinations = datas[2].message;
-      this.setPoints(datas[0].message);
-    }
-    );
   }
 
   /**
@@ -157,6 +140,10 @@ export default class DataModel {
     }
   }
 
+  setDestinations(destinationsData) {
+    this._destinations = destinationsData;
+  }
+
   /**
    * Boolean показ loading..
    * @param {boolean} state
@@ -177,8 +164,6 @@ export default class DataModel {
       return false;
     }
     this._pointsData = [].concat(this._pointsData.slice(0, index), newPoint, this._pointsData.slice(index + 1));
-
-    this._api.updatePoint(newPoint);
     //notify all data change
     this._callHandlers(this._dataChangeHandlers);
     return index;
@@ -187,7 +172,6 @@ export default class DataModel {
   createPoint(newPoint) {
     const newData = { ...newPoint, id: uniqid() };
     this._pointsData.push(newData);
-    this._api.createPoint(newData);
   }
 
   deletePoint(deletePointId) {
@@ -195,7 +179,6 @@ export default class DataModel {
     if (index !== -1)
     {
       this._pointsData.splice(index, 1);
-      this._api.deletePoint(String(deletePointId));
     }
   }
 
