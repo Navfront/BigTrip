@@ -100,6 +100,11 @@ class ServerModel {
     };
     return result;
   }
+
+  syncPoints(points) {
+    //v.0.0.0.0.1
+    this._points = points;
+  }
 }
 
 module.exports = ServerModel

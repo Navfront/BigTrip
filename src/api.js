@@ -40,4 +40,8 @@ export default class Api {
   deletePoint(id) {
     return this._getFetch(this._endpoints.DELETE, { id });
   }
+
+  sync(points) {
+    this._getFetch(this._endpoints.SYNC, points);
+  }
 }

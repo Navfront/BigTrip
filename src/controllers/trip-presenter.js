@@ -11,15 +11,17 @@ import NavComponent from '../views/nav';
 import { POSITION_TYPES } from './../utils/render';
 import { generateInfoData } from './../utils/utils';
 import StatsComponent from './../views/stats';
+import uniqid from 'uniqid';
 
 
 export default class TripPresenter extends AbstractPresenter {
-  constructor(headerContainer, filterContainer, eventsContainer, dataModel) {
+  constructor(headerContainer, filterContainer, eventsContainer, dataModel, provider) {
     super(...arguments);
     this._headerContainer = headerContainer;
     this._eventsContainer = eventsContainer;
     this._filterContainer = filterContainer;
     this._dataModel = dataModel;
+    this._provider = provider;
     this._pointPresenters = new Map();
     this._infoComponent = new InfoComponent(generateInfoData(this._dataModel.getOriginalPoints()));
     this._navComponent = new NavComponent();
@@ -144,21 +146,21 @@ export default class TripPresenter extends AbstractPresenter {
 
 
   _onDataChange(newData) {
-    switch (typeof newData.id) {
-      //id is null
-      case 'object':
-        this._dataModel.createPoint(newData);
-        break;
-        //id is string
-      default:
-        // id = <random>--delete string
-        if (newData.id.includes('--delete')) {
-          this._dataModel.deletePoint(newData.id.split('--')[0]);
-        } else {
-          this._dataModel.updatePoint(newData);
-          break;}
-
+    if (newData.id === null) {
+      const newId = uniqid();
+      this._dataModel.createPoint({ ...newData, id: newId });
+      this._provider.createPoint({ ...newData, id: newId });
     }
+    else if (newData.id.includes('--delete')) {
+      const normalizedId = newData.id.split('--')[0];
+      this._dataModel.deletePoint(normalizedId);
+      this._provider.deletePoint(normalizedId);
+    } else {
+      this._dataModel.updatePoint(newData);
+      this._provider.updatePoint(newData);
+    }
+
+
     this._enableAddButton();
     this.renderPoints();
     this._infoComponent.rerender(generateInfoData(this._dataModel.getOriginalPoints()));

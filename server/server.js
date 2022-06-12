@@ -5,7 +5,7 @@ const cors = require('cors');
 const serverModel = new ServerModel();
 
 //искуственная задержка
-const TIMEOUT = 2000;
+const TIMEOUT = 1000;
 
 const whitelist = ["http://localhost:8080"]
 const corsOptions = {
@@ -69,6 +69,12 @@ app.post('/api/update', (req, res) => {
 app.post('/api/delete', (req, res) => {
   log(req, 'delete')
   setTimeout(() => {res.json({message: serverModel.deletePoint(req.body.id)})}, TIMEOUT)
+})
+
+//sync points
+app.post('/api/sync', (req, res) => {
+  log(req, 'sync')
+  setTimeout(() => {res.json({message: serverModel.syncPoints(req.body)})}, TIMEOUT)
 })
 
 app.post('*', (req, res) => {

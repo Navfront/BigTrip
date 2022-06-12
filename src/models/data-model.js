@@ -1,6 +1,5 @@
 import { FILTERS, SORTS } from '../utils/const';
 import { sortPointsData } from '../utils/sort-utils';
-import uniqid from 'uniqid';
 
 
 export default class DataModel {
@@ -170,8 +169,7 @@ export default class DataModel {
   }
 
   createPoint(newPoint) {
-    const newData = { ...newPoint, id: uniqid() };
-    this._pointsData.push(newData);
+    this._pointsData.push(newPoint);
   }
 
   deletePoint(deletePointId) {
