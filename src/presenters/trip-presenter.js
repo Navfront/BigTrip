@@ -116,6 +116,7 @@ export default class TripPresenter extends AbstractPresenter {
       this._emptyComponent.rerender(this._dataModel.getListData());
       this._sortsComponent.hide();
     }
+    this._infoComponent.rerender(generateInfoData(this._dataModel.getOriginalPoints()));
   }
 
   _disableAddButton() {
