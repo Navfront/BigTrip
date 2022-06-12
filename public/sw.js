@@ -1,5 +1,5 @@
-const CACHE_PREFIX = 'bigtrip-cache';
-const CACHE_VER = 'v1';
+const CACHE_PREFIX = 'my-btrip';
+const CACHE_VER = 'v13';
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 
 self.addEventListener('install', (evt) => {
