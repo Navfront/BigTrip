@@ -1,9 +1,9 @@
 import AbstractComponent from './abstract-component';
+import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { humanizeForEdit } from '../utils/utils';
 import { EVENT_TYPES } from '../mock/events';
-import dayjs from 'dayjs';
 
 
 const eventTypes = EVENT_TYPES;
@@ -155,6 +155,7 @@ export default class PointEditorComponent extends AbstractComponent {
   _recoveryListeners() {
     if (this._data.id !== null) {
       this.setOnRollDownHandler(this._onRollDownHandler);
+    } else if (this._data.id === null) {
       this.setOnCancelHandler(this._onCancelHandler);
     }
     this.setOnDeleteHandler(this._onDeleteHandler);
