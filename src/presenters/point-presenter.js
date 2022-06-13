@@ -173,7 +173,7 @@ export default class PointPresenter extends AbstractPresenter{
     this._pointEdit.rerender(this._buffer);
   };
 
-  _handleTimeClick = (isDateFrom,  dateStr) => {
+  _handleTimeClick = (isDateFrom, dateStr) => {
     if (isDateFrom) {
       this._buffer.dateFrom = dateToIso(dateStr);
     } else { this._buffer.dateTo = dateToIso(dateStr); }

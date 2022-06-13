@@ -3,6 +3,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { humanizeForEdit } from '../utils/utils';
 import { EVENT_TYPES } from '../mock/events';
+import dayjs from 'dayjs';
 
 
 const eventTypes = EVENT_TYPES;
@@ -87,7 +88,7 @@ const getPointEditorTemplate = (data = {}) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -229,16 +230,19 @@ export default class PointEditorComponent extends AbstractComponent {
     timeInputs.forEach((it) => {
       if (it.id.includes('end')) //если element - dateTo
       {
-        it.addEventListener('click', () => {
-          this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, false,  dateStr); });
+        it.addEventListener('click', (evt) => {
+          this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, false,  dateStr, evt);});
         });
+        it.addEventListener('change', ()=>{it.value = dayjs().format('DD/MM/YY mm:ss');});
       }
       else //если element - dateFrom
       {
-        it.addEventListener('click', () => {
-          this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, true,  dateStr); });
+        it.addEventListener('click', (evt) => {
+          this._initFlatPickr((selectedDates, dateStr) => { callback.call(null, true,  dateStr, evt); });
 
-        }); }
+        });
+        it.addEventListener('change', ()=>{it.value = dayjs().format('DD/MM/YY mm:ss');});
+      }
     });
   }
 
